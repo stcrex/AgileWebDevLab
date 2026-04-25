@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="csrf-token" content="{{ csrf_token() }}"/>
+  <title>Exams — AgileWebDevLab</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-dark text-light">
+  <nav class="navbar navbar-dark border-bottom border-secondary mb-4">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">AgileWebDevLab</span>
+      <div class="d-flex gap-2 align-items-center">
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('exams.exams_list') }}">Exams</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('group_book.group_page', group_id=1) }}">Group</a>
+        <form method="post" action="{{ url_for('auth.logout_post') }}" class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <div class="container pb-5">
+    <h2 class="h4 mb-3">My exam sessions</h2>
+    {% if not exams %}
+      <p class="text-secondary">No exams yet. Run the app once after install so seed data can create a sample session, or add exams via your own workflow.</p>
+    {% else %}
+      <div class="list-group">
+        {% for e in exams %}
+          <a class="list-group-item list-group-item-action list-group-item-dark d-flex justify-content-between align-items-center"
+             href="{{ url_for('exams.exam_detail', exam_id=e.id) }}">
+            <div>
+              <div class="fw-semibold">{{ e.title }}</div>
+              <div class="small text-secondary">{{ e.course_code or "—" }} · {{ e.starts_at.strftime("%Y-%m-%d %H:%M") }}</div>
+            </div>
+            <span class="badge bg-secondary">{{ e.resources.count() }} resources</span>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

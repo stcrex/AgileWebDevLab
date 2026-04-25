@@ -25,7 +25,7 @@ def login_post():
         flash("Invalid email or password.", "danger")
         return redirect(url_for("auth.login_page"))
     login_user(user, remember=True)
-    nxt = request.args.get("next") or url_for("group_book.group_page", group_id=1)
+    nxt = request.args.get("next") or url_for("exams.exams_list")
     return redirect(nxt)
 
 

@@ -2,11 +2,14 @@
 
 Repository for Agile Web Development coursework (lab submission).
 
-## Issue #1 slice: Book common free slot → calendar event
+## Application overview
 
-This branch adds a **minimal runnable Flask app** (not the full StudySync draft) that implements the group feature from **Issue #1**: members see **common free time** for the current week, and **Book** persists a `CalendarEvent` for the **logged-in user** only (`event_type=group_study`), with JSON APIs, **CSRF** on mutating requests, and **SQLAlchemy** on SQLite under `instance/lab.db` (created on first run; `instance/` is gitignored).
+A **minimal Flask + SQLAlchemy + SQLite** app (Bootstrap + jQuery on the client) demonstrating:
 
-Static UI mocks remain under `mock_pages/` for reference.
+1. **Study group common free time** — see merged free slots for the week and **book** a slot; the server stores a **`CalendarEvent`** for the signed-in user (`event_type=group_study`), with CSRF-protected JSON APIs.
+2. **Exam preparation resources** — each **exam session** can have **multiple structured links** (`exam_resources`: title + URL), with list/create/patch/delete JSON APIs, URL validation (`http`/`https` only), and an exam detail page to manage links.
+
+Static HTML mocks for early UI exploration remain under `mock_pages/`.
 
 ## Prerequisites
 
@@ -21,16 +24,16 @@ pip install -r requirements.txt
 python run.py
 ```
 
-Open **http://127.0.0.1:5000/** — you will be redirected to log in, then to **/group/1**.
+Open **http://127.0.0.1:5000/** — after sign-in you land on **Exams**. Use the navbar to open **Group** for the booking flow, or open an exam to add/remove resource links.
 
 ### Seeded demo accounts
 
-| Email            | Password   |
-|------------------|------------|
+| Email             | Password     |
+|-------------------|--------------|
 | `alice@lab.local` | `labdemo123` |
 | `bob@lab.local`   | `labdemo123` |
 
-Both users belong to **Demo Lab Group** (join code `LABDEMO1`). Seeded calendar events leave **common free slots** you can book from the UI.
+Alice has a sample **exam session** with one starter resource; both users belong to **Demo Lab Group** (join code `LABDEMO1`) with seeded calendar events so common free slots exist for booking.
 
 ## Tests
 

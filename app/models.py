@@ -25,6 +25,12 @@ class User(UserMixin, db.Model):
         lazy="dynamic",
         cascade="all, delete-orphan",
     )
+    exam_sessions = db.relationship(
+        "ExamSession",
+        backref="user",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+    )
 
     def set_password(self, password: str) -> None:
         from werkzeug.security import generate_password_hash
@@ -96,6 +102,56 @@ class GroupMember(db.Model):
     role = db.Column(db.String(20), nullable=False, default="member")
 
     group = db.relationship("StudyGroup", back_populates="members")
+
+
+class ExamSession(db.Model):
+    __tablename__ = "exam_sessions"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
+    title = db.Column(db.String(200), nullable=False)
+    course_code = db.Column(db.String(32), nullable=True)
+    starts_at = db.Column(db.DateTime, nullable=False, index=True)
+    ends_at = db.Column(db.DateTime, nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+
+    resources = db.relationship(
+        "ExamResource",
+        backref="exam",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+        order_by="ExamResource.sort_order",
+    )
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "course_code": self.course_code or "",
+            "starts_at": self.starts_at.isoformat(timespec="minutes"),
+            "ends_at": self.ends_at.isoformat(timespec="minutes"),
+            "notes": self.notes or "",
+        }
+
+
+class ExamResource(db.Model):
+    __tablename__ = "exam_resources"
+
+    id = db.Column(db.Integer, primary_key=True)
+    exam_id = db.Column(db.Integer, db.ForeignKey("exam_sessions.id"), nullable=False, index=True)
+    title = db.Column(db.String(200), nullable=False)
+    url = db.Column(db.String(2048), nullable=False)
+    sort_order = db.Column(db.Integer, nullable=False, default=0)
+    created_at = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "exam_id": self.exam_id,
+            "title": self.title,
+            "url": self.url,
+            "sort_order": self.sort_order,
+        }
 
 
 @login_manager.user_loader

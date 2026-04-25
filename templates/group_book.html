@@ -11,10 +11,14 @@
   <nav class="navbar navbar-dark border-bottom border-secondary mb-4">
     <div class="container-fluid">
       <span class="navbar-brand mb-0 h1">AgileWebDevLab</span>
-      <form method="post" action="{{ url_for('auth.logout_post') }}" class="d-inline">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
-      </form>
+      <div class="d-flex gap-2 align-items-center">
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('exams.exams_list') }}">Exams</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('group_book.group_page', group_id=1) }}">Group</a>
+        <form method="post" action="{{ url_for('auth.logout_post') }}" class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+        </form>
+      </div>
     </div>
   </nav>
 
@@ -23,7 +27,7 @@
       <div class="alert alert-warning">Group not found or you are not a member.</div>
     {% else %}
       <h2 class="h4 mb-1">{{ group.name }}</h2>
-      <p class="text-secondary small mb-4">Join code: <code>{{ group.join_code }}</code> — Issue #1: book a common free slot; it is saved as <strong>your</strong> calendar event (<code>event_type=group_study</code>).</p>
+      <p class="text-secondary small mb-4">Join code: <code>{{ group.join_code }}</code>. Book a common free slot; it is saved as <strong>your</strong> calendar event (<code>event_type=group_study</code>).</p>
 
       <div class="row g-4">
         <div class="col-lg-6">

@@ -56,6 +56,38 @@ def _seed_demo_data() -> None:
     db.session.commit()
 
 
+def _seed_exam_demo_if_empty() -> None:
+    from app.models import ExamResource, ExamSession, User
+
+    alice = User.query.filter_by(email="alice@lab.local").first()
+    if alice is None:
+        return
+    if ExamSession.query.filter_by(user_id=alice.id).first() is not None:
+        return
+    monday = date.today() - timedelta(days=date.today().weekday())
+    start = datetime.combine(monday + timedelta(days=10), time(9, 0))
+    end = start + timedelta(hours=2)
+    ex = ExamSession(
+        user_id=alice.id,
+        title="Practice exam (seed)",
+        course_code="LAB",
+        starts_at=start,
+        ends_at=end,
+        notes="Add preparation resources on the exam detail page.",
+    )
+    db.session.add(ex)
+    db.session.flush()
+    db.session.add(
+        ExamResource(
+            exam_id=ex.id,
+            title="Example reading (replace me)",
+            url="https://www.w3.org/",
+            sort_order=0,
+        )
+    )
+    db.session.commit()
+
+
 def create_app(config_object: type = Config) -> Flask:
     root = Path(__file__).resolve().parent.parent
     os.makedirs(root / "instance", exist_ok=True)
@@ -86,17 +118,20 @@ def create_app(config_object: type = Config) -> Flask:
     from app import models  # noqa: F401
 
     from app.blueprints.auth import bp as auth_bp
+    from app.blueprints.exams import bp as exams_bp
     from app.blueprints.group_book import bp as group_book_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(exams_bp)
     app.register_blueprint(group_book_bp)
 
     @app.get("/")
     def index():
-        return redirect(url_for("group_book.group_page", group_id=1))
+        return redirect(url_for("exams.exams_list"))
 
     with app.app_context():
         db.create_all()
         _seed_demo_data()
+        _seed_exam_demo_if_empty()
 
     return app
