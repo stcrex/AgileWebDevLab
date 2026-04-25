@@ -8,6 +8,7 @@ A **minimal Flask + SQLAlchemy + SQLite** app (Bootstrap + jQuery on the client)
 
 1. **Study group common free time** — see merged free slots for the week and **book** a slot; the server stores a **`CalendarEvent`** for the signed-in user (`event_type=group_study`), with CSRF-protected JSON APIs.
 2. **Exam preparation resources** — each **exam session** can have **multiple structured links** (`exam_resources`: title + URL), with list/create/patch/delete JSON APIs, URL validation (`http`/`https` only), and an exam detail page to manage links.
+3. **Exam sharing** — the owner can create or revoke an unguessable **`share_token`**. Visitors open a public path of the form **`/exams/shared/…`** (no login) to see a **read-only** summary and resource links; bad or revoked tokens return the same **404** message so URLs are not enumerated.
 
 Static HTML mocks for early UI exploration remain under `mock_pages/`.
 

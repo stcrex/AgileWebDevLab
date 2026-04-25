@@ -42,6 +42,30 @@
       {% endif %}
 
       <div class="card bg-secondary bg-opacity-25 border-secondary mb-4">
+        <div class="card-header border-secondary">Read-only share link</div>
+        <div class="card-body">
+          <p class="small text-secondary mb-3">
+            Anyone with the link can open a <strong>read-only</strong> page (no account). Revoking immediately invalidates the URL.
+          </p>
+          <div id="sharePanel" data-exam-id="{{ exam_id }}">
+            <div id="shareActive" class="{% if not share_url %}d-none{% endif %}">
+              <label class="form-label small mb-0" for="shareUrlInput">Share URL</label>
+              <div class="input-group input-group-sm mb-2">
+                <input type="text" class="form-control text-secondary" id="shareUrlInput" readonly
+                       value="{{ share_url or '' }}"/>
+                <button type="button" class="btn btn-outline-secondary" id="btnCopyShare">Copy</button>
+              </div>
+              <button type="button" class="btn btn-outline-warning btn-sm" id="btnRevokeShare">Revoke link</button>
+            </div>
+            <div id="shareInactive" class="{% if share_url %}d-none{% endif %}">
+              <button type="button" class="btn btn-outline-primary btn-sm" id="btnCreateShare">Create share link</button>
+            </div>
+            <p id="shareError" class="text-danger small d-none mb-0 mt-2"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-secondary bg-opacity-25 border-secondary mb-4">
         <div class="card-header border-secondary">Structured resources</div>
         <div class="card-body">
           <p class="small text-secondary">Multiple links per exam session (title + URL). Only <code>http</code> or <code>https</code> URLs are accepted.</p>
@@ -83,6 +107,7 @@
   {% if exam %}
   <script>window.__EXAM_ID__ = {{ exam_id|tojson }};</script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='js/exam_share.js') }}"></script>
   <script src="{{ url_for('static', filename='js/exam_resources.js') }}"></script>
   {% endif %}
 </body>

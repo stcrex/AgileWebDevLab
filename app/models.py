@@ -114,6 +114,7 @@ class ExamSession(db.Model):
     starts_at = db.Column(db.DateTime, nullable=False, index=True)
     ends_at = db.Column(db.DateTime, nullable=False)
     notes = db.Column(db.Text, nullable=True)
+    share_token = db.Column(db.String(64), nullable=True, unique=True, index=True)
 
     resources = db.relationship(
         "ExamResource",

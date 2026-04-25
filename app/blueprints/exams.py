@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import secrets
 from urllib.parse import urlparse
 
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, render_template, request, url_for
 from sqlalchemy import func
 from flask_login import current_user, login_required
 
@@ -13,6 +14,7 @@ bp = Blueprint("exams", __name__)
 
 MAX_TITLE = 200
 MAX_URL = 2048
+TOKEN_NBYTES = 32
 
 
 def _exam_owned(exam_id: int) -> ExamSession | None:
@@ -22,9 +24,43 @@ def _exam_owned(exam_id: int) -> ExamSession | None:
     return ex
 
 
+def _share_url_for_token(token: str) -> str:
+    root = (request.url_root or "/").rstrip("/")
+    return root + url_for("exams.exam_shared_public", token=token)
+
+
+def _exam_by_share_token(token: str | None) -> ExamSession | None:
+    if not token or len(token) > 72:
+        return None
+    return ExamSession.query.filter_by(share_token=token.strip()).first()
+
+
 def _valid_public_url(url: str) -> bool:
     p = urlparse(url.strip())
     return p.scheme in ("http", "https") and bool(p.netloc)
+
+
+@bp.get("/exams/shared/<string:token>")
+def exam_shared_public(token: str):
+    """Read-only exam summary for holders of an active share token (no login)."""
+    ex = _exam_by_share_token(token)
+    if ex is None:
+        return (
+            render_template(
+                "exam_shared_public.html",
+                ok=False,
+                exam=None,
+                resources=[],
+            ),
+            404,
+        )
+    rows = ex.resources.order_by(ExamResource.sort_order.asc(), ExamResource.id.asc()).all()
+    return render_template(
+        "exam_shared_public.html",
+        ok=True,
+        exam=ex,
+        resources=[{"title": r.title, "url": r.url} for r in rows],
+    )
 
 
 @bp.get("/exams")
@@ -45,7 +81,44 @@ def exam_detail(exam_id: int):
     if ex is None:
         return render_template("exam_detail.html", exam=None, exam_id=exam_id), 404
     resources = ex.resources.order_by(ExamResource.sort_order.asc(), ExamResource.id.asc()).all()
-    return render_template("exam_detail.html", exam=ex, exam_id=exam_id, resources=resources)
+    share_url = None
+    if ex.share_token:
+        share_url = _share_url_for_token(ex.share_token)
+    return render_template(
+        "exam_detail.html",
+        exam=ex,
+        exam_id=exam_id,
+        resources=resources,
+        share_url=share_url,
+    )
+
+
+@bp.post("/api/exams/<int:exam_id>/share-token")
+@login_required
+def api_create_or_rotate_share_token(exam_id: int):
+    """Create or replace the share token with a new cryptographically random value."""
+    ex = _exam_owned(exam_id)
+    if ex is None:
+        return jsonify({"error": "Not found."}), 404
+    ex.share_token = secrets.token_urlsafe(TOKEN_NBYTES)
+    db.session.commit()
+    return jsonify(
+        {
+            "share_token": ex.share_token,
+            "share_url": _share_url_for_token(ex.share_token),
+        }
+    ), 201
+
+
+@bp.delete("/api/exams/<int:exam_id>/share-token")
+@login_required
+def api_revoke_share_token(exam_id: int):
+    ex = _exam_owned(exam_id)
+    if ex is None:
+        return jsonify({"error": "Not found."}), 404
+    ex.share_token = None
+    db.session.commit()
+    return "", 204
 
 
 @bp.get("/api/exams/<int:exam_id>/resources")

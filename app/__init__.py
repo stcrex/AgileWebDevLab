@@ -88,6 +88,34 @@ def _seed_exam_demo_if_empty() -> None:
     db.session.commit()
 
 
+def _migrate_exam_share_token_column() -> None:
+    """SQLite: add share_token if DB was created before this column existed."""
+    from sqlalchemy import inspect, text
+
+    try:
+        insp = inspect(db.engine)
+        cols = [c["name"] for c in insp.get_columns("exam_sessions")]
+    except Exception:
+        return
+    if "share_token" in cols:
+        return
+    try:
+        with db.engine.begin() as conn:
+            conn.execute(text("ALTER TABLE exam_sessions ADD COLUMN share_token VARCHAR(64)"))
+    except Exception:
+        return
+    try:
+        with db.engine.begin() as conn:
+            conn.execute(
+                text(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS uq_exam_sessions_share_token "
+                    "ON exam_sessions (share_token)"
+                )
+            )
+    except Exception:
+        pass
+
+
 def create_app(config_object: type = Config) -> Flask:
     root = Path(__file__).resolve().parent.parent
     os.makedirs(root / "instance", exist_ok=True)
@@ -131,6 +159,7 @@ def create_app(config_object: type = Config) -> Flask:
 
     with app.app_context():
         db.create_all()
+        _migrate_exam_share_token_column()
         _seed_demo_data()
         _seed_exam_demo_if_empty()
 
