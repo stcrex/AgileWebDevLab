@@ -12,6 +12,12 @@ Before every push that touches Python code:
 pytest -v
 ```
 
+If you changed templates, auth, or navigation, also run **Selenium** locally when Chrome is available:
+
+```bash
+pytest tests/selenium -v
+```
+
 ## Git and GitHub hygiene
 
 1. **Configure Git identity** (must match how you want commits attributed on GitHub):

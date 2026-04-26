@@ -124,9 +124,14 @@ python run.py
 
 ## 4. How to run the tests
 
-The repository ships **automated tests** using **pytest** (see `tests/`). There is **no** Selenium suite in this tree yet; markers who expect browser automation should see this section as the single source of truth for what is automated here.
+There are two layers:
 
-### 4.1 Full test suite
+| Layer | Location | What it checks |
+|--------|----------|----------------|
+| **Unit / API** | `tests/test_*.py` | Flask test client, isolated SQLite per `tmp_path`, CSRF **disabled** for speed. |
+| **Browser (Selenium)** | `tests/selenium/` | A **real HTTP server** in a background thread + **Chrome** driving the UI (CSRF **enabled** on that app instance). |
+
+### 4.1 Unit and API tests (default, no browser)
 
 Activate the same `.venv` as in section 3, then from the repo root:
 
@@ -134,28 +139,51 @@ Activate the same `.venv` as in section 3, then from the repo root:
 pytest
 ```
 
-Equivalent with verbosity:
+Run only non-browser tests:
 
 ```bash
-pytest -v
+pytest -m "not selenium"
 ```
 
-Configuration lives in **`pytest.ini`** (`pythonpath = .` so `from app import create_app` resolves).
-
-### 4.2 Run a subset
+Single-file examples:
 
 ```bash
 pytest tests/test_exam_share.py -v
 pytest tests/test_group_book.py -v
 ```
 
-### 4.3 How tests isolate state
+`tests/conftest.py` builds the app with **`TESTING=True`**, **`WTF_CSRF_ENABLED=False`**, and a **temporary SQLite** file so tests never touch your personal `instance/lab.db`.
 
-`tests/conftest.py` builds the app with **`TESTING=True`**, **`WTF_CSRF_ENABLED=False`**, and a **temporary SQLite file** per session so tests do not touch your personal `instance/lab.db`.
+### 4.2 Selenium end-to-end tests (live server)
+
+**Prerequisites:** Google **Chrome** or **Chromium** installed on the machine running tests. Selenium **4.6+** resolves a matching **ChromeDriver** automatically in most setups.
+
+From the repo root:
+
+```bash
+pytest tests/selenium -v
+```
+
+What is covered today:
+
+- **Happy path:** open `/login`, sign in as `alice@lab.local` / `labdemo123`, expect the **Exams** page (`<title>` contains “Exams”, heading “My exam sessions”).
+- **Auth failure:** wrong password → **danger** flash on the login page; visiting **`/exams`** afterwards redirects to **`/login`** (still unauthenticated).
+
+Optional: run the browser **visibly** (debugging):
+
+```bash
+HEADLESS=0 pytest tests/selenium -v
+```
+
+If Chrome or the driver cannot start, the affected tests **`pytest.skip`** with a short reason so headless CI without a browser can still run **`pytest -m "not selenium"`** cleanly.
+
+### 4.3 Configuration
+
+**`pytest.ini`** sets `pythonpath = .` and registers the **`selenium`** marker (see `@pytest.mark.selenium` on browser tests).
 
 ### 4.4 Expected result
 
-All collected tests should **pass** on a clean checkout after `pip install -r requirements.txt`. If anything fails, capture the traceback and open an issue with the Python version and OS.
+After `pip install -r requirements.txt`, **`pytest -m "not selenium"`** should be fully green on any machine. **`pytest tests/selenium`** should be green on a workstation with Chrome available; otherwise those tests **skip** instead of failing the job, unless you treat skips as failures in your own CI policy.
 
 ---
 
@@ -166,7 +194,8 @@ All collected tests should **pass** on a clean checkout after `pip install -r re
 | `app/` | Application package (`create_app`, models, blueprints, services) |
 | `templates/` | Jinja HTML |
 | `static/js/` | Client scripts (jQuery + CSRF header on mutating calls) |
-| `tests/` | Pytest modules |
+| `tests/` | Pytest modules (API/unit) |
+| `tests/selenium/` | Selenium E2E tests (live `werkzeug` server + Chrome) |
 | `mock_pages/` | Static HTML mocks (not served by Flask by default) |
 | `run.py` | Dev entrypoint |
 | `requirements.txt` | Python dependencies |
@@ -187,3 +216,4 @@ For branching conventions, PR checklist, and Git attribution, see **[CONTRIBUTIN
 | `Address already in use` | Another process uses port 5000. Stop it or change the port in `run.py`. |
 | Old database missing new columns | Delete `instance/lab.db` and restart once, or rely on the small SQLite `ALTER` helpers in `app/__init__.py` where present. |
 | Login always fails | Use the **seeded** emails exactly (`alice@lab.local`), password `labdemo123`. |
+| Selenium tests skip | Install **Chrome**; run with `HEADLESS=0` to see errors; ensure no corporate proxy blocks driver download. |
