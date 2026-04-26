@@ -196,7 +196,7 @@ After `pip install -r requirements.txt`, **`pytest -m "not selenium"`** should b
 | `static/js/` | Client scripts (jQuery + CSRF header on mutating calls) |
 | `tests/` | Pytest modules (API/unit) |
 | `tests/selenium/` | Selenium E2E tests (live `werkzeug` server + Chrome) |
-| `mock_pages/` | Static HTML mocks (not served by Flask by default) |
+| `mock_pages/` | Static HTML mocks (open files in a browser; not served by Flask). Timetable mock uses **grid-only**: the list-view control is **disabled** with a clear hint so it is not mistaken for a broken click target. |
 | `run.py` | Dev entrypoint |
 | `requirements.txt` | Python dependencies |
 

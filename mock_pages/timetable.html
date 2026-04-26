@@ -120,7 +120,19 @@
       cursor: pointer;
       transition: all 0.2s;
     }
-    .view-btn.active { background: var(--accent); color: white; }
+    .view-btn.active { background: var(--accent); color: white; cursor: default; }
+    .view-btn:disabled,
+    .view-btn[disabled] {
+      cursor: not-allowed;
+      opacity: 0.42;
+      pointer-events: none;
+    }
+    .view-toggle-hint {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-left: 6px;
+      user-select: none;
+    }
 
     .nav-arrows { display: flex; align-items: center; gap: 6px; }
     .arrow-btn {
@@ -325,9 +337,21 @@
   <div class="topbar">
     <div class="topbar-left">
       <div class="page-title">Timetable</div>
-      <div class="view-toggle">
-        <button class="view-btn active"><i class="fas fa-th"></i></button>
-        <button class="view-btn"><i class="fas fa-bars"></i></button>
+      <div class="view-toggle" role="group" aria-label="Timetable layout">
+        <button type="button" class="view-btn active" aria-current="true" title="Weekly grid (current view)" aria-label="Weekly grid view, selected">
+          <i class="fas fa-th" aria-hidden="true"></i>
+        </button>
+        <button
+          type="button"
+          class="view-btn"
+          disabled
+          aria-disabled="true"
+          title="List view is not available in this prototype — only the weekly grid is shown."
+          aria-label="List view: not available"
+        >
+          <i class="fas fa-bars" aria-hidden="true"></i>
+        </button>
+        <span class="view-toggle-hint">Grid only</span>
       </div>
       <div class="nav-arrows">
         <button class="arrow-btn"><i class="fas fa-chevron-left"></i></button>
