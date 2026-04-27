@@ -4,6 +4,7 @@ from app.config import Config
 from app.extensions import csrf, db, login_manager
 from app.routes.auth import auth_bp
 from app.routes.main import main_bp
+from app.routes.timetable import timetable_bp
 
 
 def create_app():
@@ -22,11 +23,11 @@ def create_app():
         from app.models import User
         return User.query.get(int(user_id))
 
-    # Stage 3 simple auth pages are exempted from CSRF so login/register work reliably.
     csrf.exempt(auth_bp)
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(timetable_bp)
 
     @app.cli.command("init-db")
     def init_db_command():
