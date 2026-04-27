@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}StudySync{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">?? StudySync</div>
+
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+            <a class="nav-link active" href="/timetable">Timetable</a>
+            <a class="nav-link" href="/db-check">Database Check</a>
+            <a class="nav-link" href="/logout">Logout</a>
+
+            {% if current_user.is_authenticated %}
+                <p class="muted">
+                    Logged in as<br>
+                    <strong>{{ current_user.full_name }}</strong>
+                </p>
+            {% endif %}
+        </aside>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

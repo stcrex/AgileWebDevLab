@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Event Detail - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ event.title }}</h1>
+        <p>Event details from the database.</p>
+    </div>
+
+    <a class="btn" href="/timetable?start={{ event.start_time.date().isoformat() }}">Back to Timetable</a>
+</div>
+
+<div class="card">
+    <p><strong>Type:</strong> {{ event.event_type }}</p>
+    <p><strong>Location:</strong> {{ event.location or "No location added" }}</p>
+    <p><strong>Start:</strong> {{ event.start_time.strftime("%A, %d %B %Y %I:%M %p") }}</p>
+    <p><strong>End:</strong> {{ event.end_time.strftime("%A, %d %B %Y %I:%M %p") }}</p>
+
+    {% if event.course %}
+        <p><strong>Course:</strong> {{ event.course.code }} - {{ event.course.title }}</p>
+    {% else %}
+        <p><strong>Course:</strong> Not linked to a course</p>
+    {% endif %}
+
+    <form method="POST" action="/timetable/events/{{ event.id }}/delete">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-danger" type="submit">Delete Event</button>
+    </form>
+</div>
+{% endblock %}
