@@ -18,10 +18,19 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        # Temporary loader for Stage 1.
-        # We do not have real users yet, so return None.
-        return None
+        from app.models import User
+        return User.query.get(int(user_id))
 
     app.register_blueprint(main_bp)
+
+    @app.cli.command("init-db")
+    def init_db_command():
+        from app.seed import seed_demo_data
+
+        db.drop_all()
+        db.create_all()
+        seed_demo_data()
+
+        print("Database initialised successfully.")
 
     return app
