@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Group Chat - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Group Chat</h1>
+        <p>Send updates, invite members, and coordinate your group project.</p>
+    </div>
+
+    <a class="btn btn-primary" href="/dashboard">Dashboard</a>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h2>{{ group.name if group.name else "Study Group" }}</h2>
+        <p class="muted">Group code: {{ group.code if group.code else "GRP-3403-07" }}</p>
+
+        <h3>Invite a member</h3>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="badge">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/group-chat/invite">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>Student name</label>
+            <input class="form-input" type="text" name="full_name" placeholder="Example: Amy Kim">
+
+            <label>Student email</label>
+            <input class="form-input" type="email" name="email" placeholder="student@uwa.edu.au" required>
+
+            <br><br>
+            <button class="btn btn-primary" type="submit">Invite Member</button>
+        </form>
+
+        <h3>Members</h3>
+
+        {% for member in members %}
+            <div class="member-pill">
+                <strong>{{ member.full_name }}</strong>
+                <span>{{ member.email }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <h2>Messages</h2>
+
+        <div class="chat-window">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="chat-message {% if message.is_mine %}mine{% endif %}">
+                        <div class="chat-bubble">
+                            <div class="chat-meta">
+                                <strong>{{ message.sender_name }}</strong>
+                                {% if message.created_at %}
+                                    <span>{{ message.created_at.strftime("%d %b, %I:%M %p") }}</span>
+                                {% endif %}
+                            </div>
+
+                            <p>{{ message.text }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="muted">No messages yet. Start the discussion.</p>
+            {% endif %}
+        </div>
+
+        <form method="POST" class="chat-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input class="form-input" type="text" name="message" placeholder="Type your group message..." required>
+            <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
