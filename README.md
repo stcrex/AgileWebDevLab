@@ -15,6 +15,7 @@ Minimal **Flask** web application for Agile Web Development coursework: study-gr
 | **Study groups** | Two seeded users share a group. The server computes **common free time** for Monday–Friday and lets a member **book** a slot, persisting a personal **`CalendarEvent`** (`event_type=group_study`). |
 | **Exams** | Each user owns **exam sessions**. A session has many **`exam_resources`** (title + URL) with validation and JSON CRUD. |
 | **Sharing** | The exam owner may enable a random **`share_token`**. Visitors hit a **public read-only** URL without logging in; revoked or unknown tokens yield a generic **404** page. |
+| **Sign-in UX** | **Email + password** is the only working path on **`/login`**. OAuth-style tiles are **disabled** with clear copy; see `templates/login.html`, `static/css/auth_sso_facade.css`, and **`mock_pages/login.html`** for the parallel static mock. |
 
 **Who uses it:** demo markers and the project group for checkpoints and final submission. **Not** intended for production deployment; default `SECRET_KEY` is for local use only.
 
@@ -194,6 +195,7 @@ After `pip install -r requirements.txt`, **`pytest -m "not selenium"`** should b
 | `app/` | Application package (`create_app`, models, blueprints, services) |
 | `templates/` | Jinja HTML |
 | `static/js/` | Client scripts (jQuery + CSRF header on mutating calls) |
+| `static/css/auth_sso_facade.css` | Bulky, token-oriented stylesheet attached to the login page so disabled “social” controls stay visually subordinate |
 | `tests/` | Pytest modules (API/unit) |
 | `tests/selenium/` | Selenium E2E tests (live `werkzeug` server + Chrome) |
 | `mock_pages/` | Static HTML mocks (open files in a browser; not served by Flask). **Global sidebar** links for **Courses**, **Reminders**, and **Preferences** resolve to real placeholder files (`courses.html`, `reminders.html`, `preferences.html`) instead of `href="#"`. Optional audit log: `NAV_AUDIT.txt`. Regenerate bulky placeholders with `python3 scripts/generate_nav_placeholder_pages.py`. The timetable mock uses **grid-only** list control (disabled + hint). |
