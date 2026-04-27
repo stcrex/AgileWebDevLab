@@ -199,6 +199,9 @@ After `pip install -r requirements.txt`, **`pytest -m "not selenium"`** should b
 | `tests/` | Pytest modules (API/unit) |
 | `tests/selenium/` | Selenium E2E tests (live `werkzeug` server + Chrome) |
 | `mock_pages/` | Static HTML mocks (open files in a browser; not served by Flask). **Global sidebar** links for **Courses**, **Reminders**, and **Preferences** resolve to real placeholder files (`courses.html`, `reminders.html`, `preferences.html`) instead of `href="#"`. Optional audit log: `NAV_AUDIT.txt`. Regenerate bulky placeholders with `python3 scripts/generate_nav_placeholder_pages.py`. The timetable mock uses **grid-only** list control (disabled + hint). |
+| `source_pages/` | **Alias / audit hub** for brief terminology: points to the same static story as `mock_pages/`; see `source_pages/README.md` and the drift appendix. |
+| `docs/SOURCE_PAGES_DRIFT_AUDIT.md` | **Bulk drift matrix** (`mock_pages` ↔ `templates`) + synthetic checklist rows; regenerate via `python3 scripts/generate_source_pages_drift_audit.py`. |
+| `scripts/` | Helper generators (`generate_nav_placeholder_pages.py`, `generate_source_pages_drift_audit.py`, …). |
 | `run.py` | Dev entrypoint |
 | `requirements.txt` | Python dependencies |
 
