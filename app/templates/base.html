@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}StudySync{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="logo">?? StudySync</div>
+
+            <div class="nav-section-title">Main</div>
+            <a class="nav-link active" href="/dashboard">Dashboard</a>
+            <a class="nav-link" href="/db-check">Database Check</a>
+            <a class="nav-link" href="/">Home</a>
+
+            <div class="nav-section-title">Coming Next</div>
+            <a class="nav-link" href="#">Timetable</a>
+            <a class="nav-link" href="#">Courses</a>
+            <a class="nav-link" href="#">Group Chat</a>
+            <a class="nav-link" href="#">AI Planner</a>
+
+            <div class="nav-section-title">Account</div>
+            <a class="nav-link" href="/logout">Logout</a>
+
+            {% if current_user.is_authenticated %}
+                <div class="sidebar-user">
+                    <strong>{{ current_user.full_name }}</strong>
+                    <span>{{ current_user.email }}</span>
+                </div>
+            {% endif %}
+        </aside>
+
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

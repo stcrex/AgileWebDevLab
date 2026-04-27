@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back, {{ current_user.full_name }}. Your dashboard is connected to database records.</p>
+    </div>
+
+    <a href="/logout" class="btn btn-danger">Logout</a>
+</div>
+
+<div class="grid grid-3">
+    <div class="card">
+        <span class="badge">Courses</span>
+        <div class="stat-number">{{ course_count }}</div>
+        <div class="stat-label">Enrolled units linked to this student</div>
+    </div>
+
+    <div class="card">
+        <span class="badge">Timetable</span>
+        <div class="stat-number">{{ event_count }}</div>
+        <div class="stat-label">Scheduled lectures, labs and study events</div>
+    </div>
+
+    <div class="card">
+        <span class="badge">Exams</span>
+        <div class="stat-number">{{ exam_count }}</div>
+        <div class="stat-label">Upcoming assessments stored in the database</div>
+    </div>
+</div>
+
+<br>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h2>Student Profile</h2>
+
+        <div class="list-item">
+            <strong>Name</strong>
+            <p class="muted">{{ current_user.full_name }}</p>
+        </div>
+
+        <div class="list-item">
+            <strong>Email</strong>
+            <p class="muted">{{ current_user.email }}</p>
+        </div>
+
+        <div class="list-item">
+            <strong>Program</strong>
+            <p class="muted">{{ current_user.program or "Not added yet" }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Project Progress</h2>
+
+        <div class="list-item">
+            <strong class="success-text">Stage 1 Complete</strong>
+            <p class="muted">Initial Flask project structure is working.</p>
+        </div>
+
+        <div class="list-item">
+            <strong class="success-text">Stage 2 Complete</strong>
+            <p class="muted">Database models and seed data are working.</p>
+        </div>
+
+        <div class="list-item">
+            <strong class="success-text">Stage 3 Complete</strong>
+            <p class="muted">Login, register and logout flow is working.</p>
+        </div>
+
+        <div class="list-item">
+            <strong class="warning-text">Stage 4 In Progress</strong>
+            <p class="muted">Shared layout and polished dashboard UI.</p>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="card">
+    <h2>Database Summary</h2>
+    <p class="muted">These values are loaded from SQLite using SQLAlchemy queries.</p>
+
+    <div class="grid grid-3">
+        <div>
+            <p class="stat-number">{{ user_count }}</p>
+            <p class="stat-label">Users</p>
+        </div>
+
+        <div>
+            <p class="stat-number">{{ group_count }}</p>
+            <p class="stat-label">Study Groups</p>
+        </div>
+
+        <div>
+            <p class="stat-number">{{ message_count }}</p>
+            <p class="stat-label">Group Messages</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
