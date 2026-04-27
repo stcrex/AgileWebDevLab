@@ -34,7 +34,6 @@ def _seed_demo_data() -> None:
     )
 
     monday = date.today() - timedelta(days=date.today().weekday())
-    # Bob busy Mon 10:00–12:00; Alice busy Mon 14:00–16:00 → common free includes Mon 12:00–14:00 etc.
     db.session.add(
         CalendarEvent(
             user_id=bob.id,
@@ -148,10 +147,12 @@ def create_app(config_object: type = Config) -> Flask:
     from app.blueprints.auth import bp as auth_bp
     from app.blueprints.exams import bp as exams_bp
     from app.blueprints.group_book import bp as group_book_bp
+    from app.routes.main import main_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(exams_bp)
     app.register_blueprint(group_book_bp)
+    app.register_blueprint(main_bp)
 
     @app.get("/")
     def index():
