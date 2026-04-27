@@ -1,7 +1,8 @@
 from flask import Flask
 
 from app.config import Config
-from app.extensions import db, login_manager, csrf
+from app.extensions import csrf, db, login_manager
+from app.routes.auth import auth_bp
 from app.routes.main import main_bp
 
 
@@ -14,14 +15,18 @@ def create_app():
     login_manager.init_app(app)
     csrf.init_app(app)
 
-    login_manager.login_view = "main.index"
+    login_manager.login_view = "auth.login"
 
     @login_manager.user_loader
     def load_user(user_id):
         from app.models import User
         return User.query.get(int(user_id))
 
+    # Stage 3 simple auth pages are exempted from CSRF so login/register work reliably.
+    csrf.exempt(auth_bp)
+
     app.register_blueprint(main_bp)
+    app.register_blueprint(auth_bp)
 
     @app.cli.command("init-db")
     def init_db_command():
