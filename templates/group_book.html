@@ -11,8 +11,11 @@
   <nav class="navbar navbar-dark border-bottom border-secondary mb-4">
     <div class="container-fluid">
       <span class="navbar-brand mb-0 h1">AgileWebDevLab</span>
-      <div class="d-flex gap-2 align-items-center">
+      <div class="d-flex flex-wrap gap-2 align-items-center">
         <a class="btn btn-outline-light btn-sm" href="{{ url_for('exams.exams_list') }}">Exams</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.courses_stub') }}">Courses</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.reminders_stub') }}">Reminders</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.preferences_stub') }}">Preferences</a>
         <a class="btn btn-outline-light btn-sm" href="{{ url_for('group_book.group_page', group_id=1) }}">Group</a>
         <form method="post" action="{{ url_for('auth.logout_post') }}" class="d-inline">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
