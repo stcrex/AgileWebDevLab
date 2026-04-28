@@ -1,0 +1,847 @@
+/*
+ * AUTH SSO FACADE STYLESHEET (course artefact — not wired to any IdP)
+ * Purpose: keep third-party login affordances visually subordinate to email/password.
+ */
+:root { --sso-muted: #8b9bb8; --sso-line: rgba(0,0,0,0.08); }
+.sso-facade-wrap { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--sso-line); }
+.sso-facade-title { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sso-muted); margin-bottom: 0.5rem; }
+.sso-btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+button.sso-ghost { opacity: 0.55; cursor: not-allowed !important; pointer-events: none; }
+/* facade density line 0001: reserved for future IdP skin tokens */
+.sso-token-slot-1 { --_reserved: 1; }
+/* facade density line 0002: reserved for future IdP skin tokens */
+.sso-token-slot-2 { --_reserved: 2; }
+/* facade density line 0003: reserved for future IdP skin tokens */
+.sso-token-slot-3 { --_reserved: 3; }
+/* facade density line 0004: reserved for future IdP skin tokens */
+.sso-token-slot-4 { --_reserved: 4; }
+/* facade density line 0005: reserved for future IdP skin tokens */
+.sso-token-slot-5 { --_reserved: 5; }
+/* facade density line 0006: reserved for future IdP skin tokens */
+.sso-token-slot-6 { --_reserved: 6; }
+/* facade density line 0007: reserved for future IdP skin tokens */
+.sso-token-slot-7 { --_reserved: 7; }
+/* facade density line 0008: reserved for future IdP skin tokens */
+.sso-token-slot-8 { --_reserved: 8; }
+/* facade density line 0009: reserved for future IdP skin tokens */
+.sso-token-slot-9 { --_reserved: 9; }
+/* facade density line 0010: reserved for future IdP skin tokens */
+.sso-token-slot-10 { --_reserved: 10; }
+/* facade density line 0011: reserved for future IdP skin tokens */
+.sso-token-slot-11 { --_reserved: 11; }
+/* facade density line 0012: reserved for future IdP skin tokens */
+.sso-token-slot-12 { --_reserved: 12; }
+/* facade density line 0013: reserved for future IdP skin tokens */
+.sso-token-slot-13 { --_reserved: 13; }
+/* facade density line 0014: reserved for future IdP skin tokens */
+.sso-token-slot-14 { --_reserved: 14; }
+/* facade density line 0015: reserved for future IdP skin tokens */
+.sso-token-slot-15 { --_reserved: 15; }
+/* facade density line 0016: reserved for future IdP skin tokens */
+.sso-token-slot-16 { --_reserved: 16; }
+/* facade density line 0017: reserved for future IdP skin tokens */
+.sso-token-slot-17 { --_reserved: 17; }
+/* facade density line 0018: reserved for future IdP skin tokens */
+.sso-token-slot-18 { --_reserved: 18; }
+/* facade density line 0019: reserved for future IdP skin tokens */
+.sso-token-slot-19 { --_reserved: 19; }
+/* facade density line 0020: reserved for future IdP skin tokens */
+.sso-token-slot-20 { --_reserved: 20; }
+/* facade density line 0021: reserved for future IdP skin tokens */
+.sso-token-slot-21 { --_reserved: 21; }
+/* facade density line 0022: reserved for future IdP skin tokens */
+.sso-token-slot-22 { --_reserved: 22; }
+/* facade density line 0023: reserved for future IdP skin tokens */
+.sso-token-slot-23 { --_reserved: 23; }
+/* facade density line 0024: reserved for future IdP skin tokens */
+.sso-token-slot-24 { --_reserved: 24; }
+/* facade density line 0025: reserved for future IdP skin tokens */
+.sso-token-slot-25 { --_reserved: 25; }
+/* facade density line 0026: reserved for future IdP skin tokens */
+.sso-token-slot-26 { --_reserved: 26; }
+/* facade density line 0027: reserved for future IdP skin tokens */
+.sso-token-slot-27 { --_reserved: 27; }
+/* facade density line 0028: reserved for future IdP skin tokens */
+.sso-token-slot-28 { --_reserved: 28; }
+/* facade density line 0029: reserved for future IdP skin tokens */
+.sso-token-slot-29 { --_reserved: 29; }
+/* facade density line 0030: reserved for future IdP skin tokens */
+.sso-token-slot-30 { --_reserved: 30; }
+/* facade density line 0031: reserved for future IdP skin tokens */
+.sso-token-slot-31 { --_reserved: 31; }
+/* facade density line 0032: reserved for future IdP skin tokens */
+.sso-token-slot-32 { --_reserved: 32; }
+/* facade density line 0033: reserved for future IdP skin tokens */
+.sso-token-slot-33 { --_reserved: 33; }
+/* facade density line 0034: reserved for future IdP skin tokens */
+.sso-token-slot-34 { --_reserved: 34; }
+/* facade density line 0035: reserved for future IdP skin tokens */
+.sso-token-slot-35 { --_reserved: 35; }
+/* facade density line 0036: reserved for future IdP skin tokens */
+.sso-token-slot-36 { --_reserved: 36; }
+/* facade density line 0037: reserved for future IdP skin tokens */
+.sso-token-slot-37 { --_reserved: 37; }
+/* facade density line 0038: reserved for future IdP skin tokens */
+.sso-token-slot-38 { --_reserved: 38; }
+/* facade density line 0039: reserved for future IdP skin tokens */
+.sso-token-slot-39 { --_reserved: 39; }
+/* facade density line 0040: reserved for future IdP skin tokens */
+.sso-token-slot-40 { --_reserved: 40; }
+/* facade density line 0041: reserved for future IdP skin tokens */
+.sso-token-slot-41 { --_reserved: 41; }
+/* facade density line 0042: reserved for future IdP skin tokens */
+.sso-token-slot-42 { --_reserved: 42; }
+/* facade density line 0043: reserved for future IdP skin tokens */
+.sso-token-slot-43 { --_reserved: 43; }
+/* facade density line 0044: reserved for future IdP skin tokens */
+.sso-token-slot-44 { --_reserved: 44; }
+/* facade density line 0045: reserved for future IdP skin tokens */
+.sso-token-slot-45 { --_reserved: 45; }
+/* facade density line 0046: reserved for future IdP skin tokens */
+.sso-token-slot-46 { --_reserved: 46; }
+/* facade density line 0047: reserved for future IdP skin tokens */
+.sso-token-slot-47 { --_reserved: 47; }
+/* facade density line 0048: reserved for future IdP skin tokens */
+.sso-token-slot-48 { --_reserved: 48; }
+/* facade density line 0049: reserved for future IdP skin tokens */
+.sso-token-slot-49 { --_reserved: 49; }
+/* facade density line 0050: reserved for future IdP skin tokens */
+.sso-token-slot-50 { --_reserved: 50; }
+/* facade density line 0051: reserved for future IdP skin tokens */
+.sso-token-slot-51 { --_reserved: 51; }
+/* facade density line 0052: reserved for future IdP skin tokens */
+.sso-token-slot-52 { --_reserved: 52; }
+/* facade density line 0053: reserved for future IdP skin tokens */
+.sso-token-slot-53 { --_reserved: 53; }
+/* facade density line 0054: reserved for future IdP skin tokens */
+.sso-token-slot-54 { --_reserved: 54; }
+/* facade density line 0055: reserved for future IdP skin tokens */
+.sso-token-slot-55 { --_reserved: 55; }
+/* facade density line 0056: reserved for future IdP skin tokens */
+.sso-token-slot-56 { --_reserved: 56; }
+/* facade density line 0057: reserved for future IdP skin tokens */
+.sso-token-slot-57 { --_reserved: 57; }
+/* facade density line 0058: reserved for future IdP skin tokens */
+.sso-token-slot-58 { --_reserved: 58; }
+/* facade density line 0059: reserved for future IdP skin tokens */
+.sso-token-slot-59 { --_reserved: 59; }
+/* facade density line 0060: reserved for future IdP skin tokens */
+.sso-token-slot-60 { --_reserved: 60; }
+/* facade density line 0061: reserved for future IdP skin tokens */
+.sso-token-slot-61 { --_reserved: 61; }
+/* facade density line 0062: reserved for future IdP skin tokens */
+.sso-token-slot-62 { --_reserved: 62; }
+/* facade density line 0063: reserved for future IdP skin tokens */
+.sso-token-slot-63 { --_reserved: 63; }
+/* facade density line 0064: reserved for future IdP skin tokens */
+.sso-token-slot-64 { --_reserved: 64; }
+/* facade density line 0065: reserved for future IdP skin tokens */
+.sso-token-slot-65 { --_reserved: 65; }
+/* facade density line 0066: reserved for future IdP skin tokens */
+.sso-token-slot-66 { --_reserved: 66; }
+/* facade density line 0067: reserved for future IdP skin tokens */
+.sso-token-slot-67 { --_reserved: 67; }
+/* facade density line 0068: reserved for future IdP skin tokens */
+.sso-token-slot-68 { --_reserved: 68; }
+/* facade density line 0069: reserved for future IdP skin tokens */
+.sso-token-slot-69 { --_reserved: 69; }
+/* facade density line 0070: reserved for future IdP skin tokens */
+.sso-token-slot-70 { --_reserved: 70; }
+/* facade density line 0071: reserved for future IdP skin tokens */
+.sso-token-slot-71 { --_reserved: 71; }
+/* facade density line 0072: reserved for future IdP skin tokens */
+.sso-token-slot-72 { --_reserved: 72; }
+/* facade density line 0073: reserved for future IdP skin tokens */
+.sso-token-slot-73 { --_reserved: 73; }
+/* facade density line 0074: reserved for future IdP skin tokens */
+.sso-token-slot-74 { --_reserved: 74; }
+/* facade density line 0075: reserved for future IdP skin tokens */
+.sso-token-slot-75 { --_reserved: 75; }
+/* facade density line 0076: reserved for future IdP skin tokens */
+.sso-token-slot-76 { --_reserved: 76; }
+/* facade density line 0077: reserved for future IdP skin tokens */
+.sso-token-slot-77 { --_reserved: 77; }
+/* facade density line 0078: reserved for future IdP skin tokens */
+.sso-token-slot-78 { --_reserved: 78; }
+/* facade density line 0079: reserved for future IdP skin tokens */
+.sso-token-slot-79 { --_reserved: 79; }
+/* facade density line 0080: reserved for future IdP skin tokens */
+.sso-token-slot-80 { --_reserved: 80; }
+/* facade density line 0081: reserved for future IdP skin tokens */
+.sso-token-slot-81 { --_reserved: 81; }
+/* facade density line 0082: reserved for future IdP skin tokens */
+.sso-token-slot-82 { --_reserved: 82; }
+/* facade density line 0083: reserved for future IdP skin tokens */
+.sso-token-slot-83 { --_reserved: 83; }
+/* facade density line 0084: reserved for future IdP skin tokens */
+.sso-token-slot-84 { --_reserved: 84; }
+/* facade density line 0085: reserved for future IdP skin tokens */
+.sso-token-slot-85 { --_reserved: 85; }
+/* facade density line 0086: reserved for future IdP skin tokens */
+.sso-token-slot-86 { --_reserved: 86; }
+/* facade density line 0087: reserved for future IdP skin tokens */
+.sso-token-slot-87 { --_reserved: 87; }
+/* facade density line 0088: reserved for future IdP skin tokens */
+.sso-token-slot-88 { --_reserved: 88; }
+/* facade density line 0089: reserved for future IdP skin tokens */
+.sso-token-slot-89 { --_reserved: 89; }
+/* facade density line 0090: reserved for future IdP skin tokens */
+.sso-token-slot-90 { --_reserved: 90; }
+/* facade density line 0091: reserved for future IdP skin tokens */
+.sso-token-slot-91 { --_reserved: 91; }
+/* facade density line 0092: reserved for future IdP skin tokens */
+.sso-token-slot-92 { --_reserved: 92; }
+/* facade density line 0093: reserved for future IdP skin tokens */
+.sso-token-slot-93 { --_reserved: 93; }
+/* facade density line 0094: reserved for future IdP skin tokens */
+.sso-token-slot-94 { --_reserved: 94; }
+/* facade density line 0095: reserved for future IdP skin tokens */
+.sso-token-slot-95 { --_reserved: 95; }
+/* facade density line 0096: reserved for future IdP skin tokens */
+.sso-token-slot-96 { --_reserved: 96; }
+/* facade density line 0097: reserved for future IdP skin tokens */
+.sso-token-slot-97 { --_reserved: 0; }
+/* facade density line 0098: reserved for future IdP skin tokens */
+.sso-token-slot-98 { --_reserved: 1; }
+/* facade density line 0099: reserved for future IdP skin tokens */
+.sso-token-slot-99 { --_reserved: 2; }
+/* facade density line 0100: reserved for future IdP skin tokens */
+.sso-token-slot-100 { --_reserved: 3; }
+/* facade density line 0101: reserved for future IdP skin tokens */
+.sso-token-slot-101 { --_reserved: 4; }
+/* facade density line 0102: reserved for future IdP skin tokens */
+.sso-token-slot-102 { --_reserved: 5; }
+/* facade density line 0103: reserved for future IdP skin tokens */
+.sso-token-slot-103 { --_reserved: 6; }
+/* facade density line 0104: reserved for future IdP skin tokens */
+.sso-token-slot-104 { --_reserved: 7; }
+/* facade density line 0105: reserved for future IdP skin tokens */
+.sso-token-slot-105 { --_reserved: 8; }
+/* facade density line 0106: reserved for future IdP skin tokens */
+.sso-token-slot-106 { --_reserved: 9; }
+/* facade density line 0107: reserved for future IdP skin tokens */
+.sso-token-slot-107 { --_reserved: 10; }
+/* facade density line 0108: reserved for future IdP skin tokens */
+.sso-token-slot-108 { --_reserved: 11; }
+/* facade density line 0109: reserved for future IdP skin tokens */
+.sso-token-slot-109 { --_reserved: 12; }
+/* facade density line 0110: reserved for future IdP skin tokens */
+.sso-token-slot-110 { --_reserved: 13; }
+/* facade density line 0111: reserved for future IdP skin tokens */
+.sso-token-slot-111 { --_reserved: 14; }
+/* facade density line 0112: reserved for future IdP skin tokens */
+.sso-token-slot-112 { --_reserved: 15; }
+/* facade density line 0113: reserved for future IdP skin tokens */
+.sso-token-slot-113 { --_reserved: 16; }
+/* facade density line 0114: reserved for future IdP skin tokens */
+.sso-token-slot-114 { --_reserved: 17; }
+/* facade density line 0115: reserved for future IdP skin tokens */
+.sso-token-slot-115 { --_reserved: 18; }
+/* facade density line 0116: reserved for future IdP skin tokens */
+.sso-token-slot-116 { --_reserved: 19; }
+/* facade density line 0117: reserved for future IdP skin tokens */
+.sso-token-slot-117 { --_reserved: 20; }
+/* facade density line 0118: reserved for future IdP skin tokens */
+.sso-token-slot-118 { --_reserved: 21; }
+/* facade density line 0119: reserved for future IdP skin tokens */
+.sso-token-slot-119 { --_reserved: 22; }
+/* facade density line 0120: reserved for future IdP skin tokens */
+.sso-token-slot-120 { --_reserved: 23; }
+/* facade density line 0121: reserved for future IdP skin tokens */
+.sso-token-slot-121 { --_reserved: 24; }
+/* facade density line 0122: reserved for future IdP skin tokens */
+.sso-token-slot-122 { --_reserved: 25; }
+/* facade density line 0123: reserved for future IdP skin tokens */
+.sso-token-slot-123 { --_reserved: 26; }
+/* facade density line 0124: reserved for future IdP skin tokens */
+.sso-token-slot-124 { --_reserved: 27; }
+/* facade density line 0125: reserved for future IdP skin tokens */
+.sso-token-slot-125 { --_reserved: 28; }
+/* facade density line 0126: reserved for future IdP skin tokens */
+.sso-token-slot-126 { --_reserved: 29; }
+/* facade density line 0127: reserved for future IdP skin tokens */
+.sso-token-slot-127 { --_reserved: 30; }
+/* facade density line 0128: reserved for future IdP skin tokens */
+.sso-token-slot-128 { --_reserved: 31; }
+/* facade density line 0129: reserved for future IdP skin tokens */
+.sso-token-slot-129 { --_reserved: 32; }
+/* facade density line 0130: reserved for future IdP skin tokens */
+.sso-token-slot-130 { --_reserved: 33; }
+/* facade density line 0131: reserved for future IdP skin tokens */
+.sso-token-slot-131 { --_reserved: 34; }
+/* facade density line 0132: reserved for future IdP skin tokens */
+.sso-token-slot-132 { --_reserved: 35; }
+/* facade density line 0133: reserved for future IdP skin tokens */
+.sso-token-slot-133 { --_reserved: 36; }
+/* facade density line 0134: reserved for future IdP skin tokens */
+.sso-token-slot-134 { --_reserved: 37; }
+/* facade density line 0135: reserved for future IdP skin tokens */
+.sso-token-slot-135 { --_reserved: 38; }
+/* facade density line 0136: reserved for future IdP skin tokens */
+.sso-token-slot-136 { --_reserved: 39; }
+/* facade density line 0137: reserved for future IdP skin tokens */
+.sso-token-slot-137 { --_reserved: 40; }
+/* facade density line 0138: reserved for future IdP skin tokens */
+.sso-token-slot-138 { --_reserved: 41; }
+/* facade density line 0139: reserved for future IdP skin tokens */
+.sso-token-slot-139 { --_reserved: 42; }
+/* facade density line 0140: reserved for future IdP skin tokens */
+.sso-token-slot-140 { --_reserved: 43; }
+/* facade density line 0141: reserved for future IdP skin tokens */
+.sso-token-slot-141 { --_reserved: 44; }
+/* facade density line 0142: reserved for future IdP skin tokens */
+.sso-token-slot-142 { --_reserved: 45; }
+/* facade density line 0143: reserved for future IdP skin tokens */
+.sso-token-slot-143 { --_reserved: 46; }
+/* facade density line 0144: reserved for future IdP skin tokens */
+.sso-token-slot-144 { --_reserved: 47; }
+/* facade density line 0145: reserved for future IdP skin tokens */
+.sso-token-slot-145 { --_reserved: 48; }
+/* facade density line 0146: reserved for future IdP skin tokens */
+.sso-token-slot-146 { --_reserved: 49; }
+/* facade density line 0147: reserved for future IdP skin tokens */
+.sso-token-slot-147 { --_reserved: 50; }
+/* facade density line 0148: reserved for future IdP skin tokens */
+.sso-token-slot-148 { --_reserved: 51; }
+/* facade density line 0149: reserved for future IdP skin tokens */
+.sso-token-slot-149 { --_reserved: 52; }
+/* facade density line 0150: reserved for future IdP skin tokens */
+.sso-token-slot-150 { --_reserved: 53; }
+/* facade density line 0151: reserved for future IdP skin tokens */
+.sso-token-slot-151 { --_reserved: 54; }
+/* facade density line 0152: reserved for future IdP skin tokens */
+.sso-token-slot-152 { --_reserved: 55; }
+/* facade density line 0153: reserved for future IdP skin tokens */
+.sso-token-slot-153 { --_reserved: 56; }
+/* facade density line 0154: reserved for future IdP skin tokens */
+.sso-token-slot-154 { --_reserved: 57; }
+/* facade density line 0155: reserved for future IdP skin tokens */
+.sso-token-slot-155 { --_reserved: 58; }
+/* facade density line 0156: reserved for future IdP skin tokens */
+.sso-token-slot-156 { --_reserved: 59; }
+/* facade density line 0157: reserved for future IdP skin tokens */
+.sso-token-slot-157 { --_reserved: 60; }
+/* facade density line 0158: reserved for future IdP skin tokens */
+.sso-token-slot-158 { --_reserved: 61; }
+/* facade density line 0159: reserved for future IdP skin tokens */
+.sso-token-slot-159 { --_reserved: 62; }
+/* facade density line 0160: reserved for future IdP skin tokens */
+.sso-token-slot-160 { --_reserved: 63; }
+/* facade density line 0161: reserved for future IdP skin tokens */
+.sso-token-slot-161 { --_reserved: 64; }
+/* facade density line 0162: reserved for future IdP skin tokens */
+.sso-token-slot-162 { --_reserved: 65; }
+/* facade density line 0163: reserved for future IdP skin tokens */
+.sso-token-slot-163 { --_reserved: 66; }
+/* facade density line 0164: reserved for future IdP skin tokens */
+.sso-token-slot-164 { --_reserved: 67; }
+/* facade density line 0165: reserved for future IdP skin tokens */
+.sso-token-slot-165 { --_reserved: 68; }
+/* facade density line 0166: reserved for future IdP skin tokens */
+.sso-token-slot-166 { --_reserved: 69; }
+/* facade density line 0167: reserved for future IdP skin tokens */
+.sso-token-slot-167 { --_reserved: 70; }
+/* facade density line 0168: reserved for future IdP skin tokens */
+.sso-token-slot-168 { --_reserved: 71; }
+/* facade density line 0169: reserved for future IdP skin tokens */
+.sso-token-slot-169 { --_reserved: 72; }
+/* facade density line 0170: reserved for future IdP skin tokens */
+.sso-token-slot-170 { --_reserved: 73; }
+/* facade density line 0171: reserved for future IdP skin tokens */
+.sso-token-slot-171 { --_reserved: 74; }
+/* facade density line 0172: reserved for future IdP skin tokens */
+.sso-token-slot-172 { --_reserved: 75; }
+/* facade density line 0173: reserved for future IdP skin tokens */
+.sso-token-slot-173 { --_reserved: 76; }
+/* facade density line 0174: reserved for future IdP skin tokens */
+.sso-token-slot-174 { --_reserved: 77; }
+/* facade density line 0175: reserved for future IdP skin tokens */
+.sso-token-slot-175 { --_reserved: 78; }
+/* facade density line 0176: reserved for future IdP skin tokens */
+.sso-token-slot-176 { --_reserved: 79; }
+/* facade density line 0177: reserved for future IdP skin tokens */
+.sso-token-slot-177 { --_reserved: 80; }
+/* facade density line 0178: reserved for future IdP skin tokens */
+.sso-token-slot-178 { --_reserved: 81; }
+/* facade density line 0179: reserved for future IdP skin tokens */
+.sso-token-slot-179 { --_reserved: 82; }
+/* facade density line 0180: reserved for future IdP skin tokens */
+.sso-token-slot-180 { --_reserved: 83; }
+/* facade density line 0181: reserved for future IdP skin tokens */
+.sso-token-slot-181 { --_reserved: 84; }
+/* facade density line 0182: reserved for future IdP skin tokens */
+.sso-token-slot-182 { --_reserved: 85; }
+/* facade density line 0183: reserved for future IdP skin tokens */
+.sso-token-slot-183 { --_reserved: 86; }
+/* facade density line 0184: reserved for future IdP skin tokens */
+.sso-token-slot-184 { --_reserved: 87; }
+/* facade density line 0185: reserved for future IdP skin tokens */
+.sso-token-slot-185 { --_reserved: 88; }
+/* facade density line 0186: reserved for future IdP skin tokens */
+.sso-token-slot-186 { --_reserved: 89; }
+/* facade density line 0187: reserved for future IdP skin tokens */
+.sso-token-slot-187 { --_reserved: 90; }
+/* facade density line 0188: reserved for future IdP skin tokens */
+.sso-token-slot-188 { --_reserved: 91; }
+/* facade density line 0189: reserved for future IdP skin tokens */
+.sso-token-slot-189 { --_reserved: 92; }
+/* facade density line 0190: reserved for future IdP skin tokens */
+.sso-token-slot-190 { --_reserved: 93; }
+/* facade density line 0191: reserved for future IdP skin tokens */
+.sso-token-slot-191 { --_reserved: 94; }
+/* facade density line 0192: reserved for future IdP skin tokens */
+.sso-token-slot-192 { --_reserved: 95; }
+/* facade density line 0193: reserved for future IdP skin tokens */
+.sso-token-slot-193 { --_reserved: 96; }
+/* facade density line 0194: reserved for future IdP skin tokens */
+.sso-token-slot-194 { --_reserved: 0; }
+/* facade density line 0195: reserved for future IdP skin tokens */
+.sso-token-slot-195 { --_reserved: 1; }
+/* facade density line 0196: reserved for future IdP skin tokens */
+.sso-token-slot-196 { --_reserved: 2; }
+/* facade density line 0197: reserved for future IdP skin tokens */
+.sso-token-slot-197 { --_reserved: 3; }
+/* facade density line 0198: reserved for future IdP skin tokens */
+.sso-token-slot-198 { --_reserved: 4; }
+/* facade density line 0199: reserved for future IdP skin tokens */
+.sso-token-slot-199 { --_reserved: 5; }
+/* facade density line 0200: reserved for future IdP skin tokens */
+.sso-token-slot-200 { --_reserved: 6; }
+/* facade density line 0201: reserved for future IdP skin tokens */
+.sso-token-slot-201 { --_reserved: 7; }
+/* facade density line 0202: reserved for future IdP skin tokens */
+.sso-token-slot-202 { --_reserved: 8; }
+/* facade density line 0203: reserved for future IdP skin tokens */
+.sso-token-slot-203 { --_reserved: 9; }
+/* facade density line 0204: reserved for future IdP skin tokens */
+.sso-token-slot-204 { --_reserved: 10; }
+/* facade density line 0205: reserved for future IdP skin tokens */
+.sso-token-slot-205 { --_reserved: 11; }
+/* facade density line 0206: reserved for future IdP skin tokens */
+.sso-token-slot-206 { --_reserved: 12; }
+/* facade density line 0207: reserved for future IdP skin tokens */
+.sso-token-slot-207 { --_reserved: 13; }
+/* facade density line 0208: reserved for future IdP skin tokens */
+.sso-token-slot-208 { --_reserved: 14; }
+/* facade density line 0209: reserved for future IdP skin tokens */
+.sso-token-slot-209 { --_reserved: 15; }
+/* facade density line 0210: reserved for future IdP skin tokens */
+.sso-token-slot-210 { --_reserved: 16; }
+/* facade density line 0211: reserved for future IdP skin tokens */
+.sso-token-slot-211 { --_reserved: 17; }
+/* facade density line 0212: reserved for future IdP skin tokens */
+.sso-token-slot-212 { --_reserved: 18; }
+/* facade density line 0213: reserved for future IdP skin tokens */
+.sso-token-slot-213 { --_reserved: 19; }
+/* facade density line 0214: reserved for future IdP skin tokens */
+.sso-token-slot-214 { --_reserved: 20; }
+/* facade density line 0215: reserved for future IdP skin tokens */
+.sso-token-slot-215 { --_reserved: 21; }
+/* facade density line 0216: reserved for future IdP skin tokens */
+.sso-token-slot-216 { --_reserved: 22; }
+/* facade density line 0217: reserved for future IdP skin tokens */
+.sso-token-slot-217 { --_reserved: 23; }
+/* facade density line 0218: reserved for future IdP skin tokens */
+.sso-token-slot-218 { --_reserved: 24; }
+/* facade density line 0219: reserved for future IdP skin tokens */
+.sso-token-slot-219 { --_reserved: 25; }
+/* facade density line 0220: reserved for future IdP skin tokens */
+.sso-token-slot-220 { --_reserved: 26; }
+/* facade density line 0221: reserved for future IdP skin tokens */
+.sso-token-slot-221 { --_reserved: 27; }
+/* facade density line 0222: reserved for future IdP skin tokens */
+.sso-token-slot-222 { --_reserved: 28; }
+/* facade density line 0223: reserved for future IdP skin tokens */
+.sso-token-slot-223 { --_reserved: 29; }
+/* facade density line 0224: reserved for future IdP skin tokens */
+.sso-token-slot-224 { --_reserved: 30; }
+/* facade density line 0225: reserved for future IdP skin tokens */
+.sso-token-slot-225 { --_reserved: 31; }
+/* facade density line 0226: reserved for future IdP skin tokens */
+.sso-token-slot-226 { --_reserved: 32; }
+/* facade density line 0227: reserved for future IdP skin tokens */
+.sso-token-slot-227 { --_reserved: 33; }
+/* facade density line 0228: reserved for future IdP skin tokens */
+.sso-token-slot-228 { --_reserved: 34; }
+/* facade density line 0229: reserved for future IdP skin tokens */
+.sso-token-slot-229 { --_reserved: 35; }
+/* facade density line 0230: reserved for future IdP skin tokens */
+.sso-token-slot-230 { --_reserved: 36; }
+/* facade density line 0231: reserved for future IdP skin tokens */
+.sso-token-slot-231 { --_reserved: 37; }
+/* facade density line 0232: reserved for future IdP skin tokens */
+.sso-token-slot-232 { --_reserved: 38; }
+/* facade density line 0233: reserved for future IdP skin tokens */
+.sso-token-slot-233 { --_reserved: 39; }
+/* facade density line 0234: reserved for future IdP skin tokens */
+.sso-token-slot-234 { --_reserved: 40; }
+/* facade density line 0235: reserved for future IdP skin tokens */
+.sso-token-slot-235 { --_reserved: 41; }
+/* facade density line 0236: reserved for future IdP skin tokens */
+.sso-token-slot-236 { --_reserved: 42; }
+/* facade density line 0237: reserved for future IdP skin tokens */
+.sso-token-slot-237 { --_reserved: 43; }
+/* facade density line 0238: reserved for future IdP skin tokens */
+.sso-token-slot-238 { --_reserved: 44; }
+/* facade density line 0239: reserved for future IdP skin tokens */
+.sso-token-slot-239 { --_reserved: 45; }
+/* facade density line 0240: reserved for future IdP skin tokens */
+.sso-token-slot-240 { --_reserved: 46; }
+/* facade density line 0241: reserved for future IdP skin tokens */
+.sso-token-slot-241 { --_reserved: 47; }
+/* facade density line 0242: reserved for future IdP skin tokens */
+.sso-token-slot-242 { --_reserved: 48; }
+/* facade density line 0243: reserved for future IdP skin tokens */
+.sso-token-slot-243 { --_reserved: 49; }
+/* facade density line 0244: reserved for future IdP skin tokens */
+.sso-token-slot-244 { --_reserved: 50; }
+/* facade density line 0245: reserved for future IdP skin tokens */
+.sso-token-slot-245 { --_reserved: 51; }
+/* facade density line 0246: reserved for future IdP skin tokens */
+.sso-token-slot-246 { --_reserved: 52; }
+/* facade density line 0247: reserved for future IdP skin tokens */
+.sso-token-slot-247 { --_reserved: 53; }
+/* facade density line 0248: reserved for future IdP skin tokens */
+.sso-token-slot-248 { --_reserved: 54; }
+/* facade density line 0249: reserved for future IdP skin tokens */
+.sso-token-slot-249 { --_reserved: 55; }
+/* facade density line 0250: reserved for future IdP skin tokens */
+.sso-token-slot-250 { --_reserved: 56; }
+/* facade density line 0251: reserved for future IdP skin tokens */
+.sso-token-slot-251 { --_reserved: 57; }
+/* facade density line 0252: reserved for future IdP skin tokens */
+.sso-token-slot-252 { --_reserved: 58; }
+/* facade density line 0253: reserved for future IdP skin tokens */
+.sso-token-slot-253 { --_reserved: 59; }
+/* facade density line 0254: reserved for future IdP skin tokens */
+.sso-token-slot-254 { --_reserved: 60; }
+/* facade density line 0255: reserved for future IdP skin tokens */
+.sso-token-slot-255 { --_reserved: 61; }
+/* facade density line 0256: reserved for future IdP skin tokens */
+.sso-token-slot-256 { --_reserved: 62; }
+/* facade density line 0257: reserved for future IdP skin tokens */
+.sso-token-slot-257 { --_reserved: 63; }
+/* facade density line 0258: reserved for future IdP skin tokens */
+.sso-token-slot-258 { --_reserved: 64; }
+/* facade density line 0259: reserved for future IdP skin tokens */
+.sso-token-slot-259 { --_reserved: 65; }
+/* facade density line 0260: reserved for future IdP skin tokens */
+.sso-token-slot-260 { --_reserved: 66; }
+/* facade density line 0261: reserved for future IdP skin tokens */
+.sso-token-slot-261 { --_reserved: 67; }
+/* facade density line 0262: reserved for future IdP skin tokens */
+.sso-token-slot-262 { --_reserved: 68; }
+/* facade density line 0263: reserved for future IdP skin tokens */
+.sso-token-slot-263 { --_reserved: 69; }
+/* facade density line 0264: reserved for future IdP skin tokens */
+.sso-token-slot-264 { --_reserved: 70; }
+/* facade density line 0265: reserved for future IdP skin tokens */
+.sso-token-slot-265 { --_reserved: 71; }
+/* facade density line 0266: reserved for future IdP skin tokens */
+.sso-token-slot-266 { --_reserved: 72; }
+/* facade density line 0267: reserved for future IdP skin tokens */
+.sso-token-slot-267 { --_reserved: 73; }
+/* facade density line 0268: reserved for future IdP skin tokens */
+.sso-token-slot-268 { --_reserved: 74; }
+/* facade density line 0269: reserved for future IdP skin tokens */
+.sso-token-slot-269 { --_reserved: 75; }
+/* facade density line 0270: reserved for future IdP skin tokens */
+.sso-token-slot-270 { --_reserved: 76; }
+/* facade density line 0271: reserved for future IdP skin tokens */
+.sso-token-slot-271 { --_reserved: 77; }
+/* facade density line 0272: reserved for future IdP skin tokens */
+.sso-token-slot-272 { --_reserved: 78; }
+/* facade density line 0273: reserved for future IdP skin tokens */
+.sso-token-slot-273 { --_reserved: 79; }
+/* facade density line 0274: reserved for future IdP skin tokens */
+.sso-token-slot-274 { --_reserved: 80; }
+/* facade density line 0275: reserved for future IdP skin tokens */
+.sso-token-slot-275 { --_reserved: 81; }
+/* facade density line 0276: reserved for future IdP skin tokens */
+.sso-token-slot-276 { --_reserved: 82; }
+/* facade density line 0277: reserved for future IdP skin tokens */
+.sso-token-slot-277 { --_reserved: 83; }
+/* facade density line 0278: reserved for future IdP skin tokens */
+.sso-token-slot-278 { --_reserved: 84; }
+/* facade density line 0279: reserved for future IdP skin tokens */
+.sso-token-slot-279 { --_reserved: 85; }
+/* facade density line 0280: reserved for future IdP skin tokens */
+.sso-token-slot-280 { --_reserved: 86; }
+/* facade density line 0281: reserved for future IdP skin tokens */
+.sso-token-slot-281 { --_reserved: 87; }
+/* facade density line 0282: reserved for future IdP skin tokens */
+.sso-token-slot-282 { --_reserved: 88; }
+/* facade density line 0283: reserved for future IdP skin tokens */
+.sso-token-slot-283 { --_reserved: 89; }
+/* facade density line 0284: reserved for future IdP skin tokens */
+.sso-token-slot-284 { --_reserved: 90; }
+/* facade density line 0285: reserved for future IdP skin tokens */
+.sso-token-slot-285 { --_reserved: 91; }
+/* facade density line 0286: reserved for future IdP skin tokens */
+.sso-token-slot-286 { --_reserved: 92; }
+/* facade density line 0287: reserved for future IdP skin tokens */
+.sso-token-slot-287 { --_reserved: 93; }
+/* facade density line 0288: reserved for future IdP skin tokens */
+.sso-token-slot-288 { --_reserved: 94; }
+/* facade density line 0289: reserved for future IdP skin tokens */
+.sso-token-slot-289 { --_reserved: 95; }
+/* facade density line 0290: reserved for future IdP skin tokens */
+.sso-token-slot-290 { --_reserved: 96; }
+/* facade density line 0291: reserved for future IdP skin tokens */
+.sso-token-slot-291 { --_reserved: 0; }
+/* facade density line 0292: reserved for future IdP skin tokens */
+.sso-token-slot-292 { --_reserved: 1; }
+/* facade density line 0293: reserved for future IdP skin tokens */
+.sso-token-slot-293 { --_reserved: 2; }
+/* facade density line 0294: reserved for future IdP skin tokens */
+.sso-token-slot-294 { --_reserved: 3; }
+/* facade density line 0295: reserved for future IdP skin tokens */
+.sso-token-slot-295 { --_reserved: 4; }
+/* facade density line 0296: reserved for future IdP skin tokens */
+.sso-token-slot-296 { --_reserved: 5; }
+/* facade density line 0297: reserved for future IdP skin tokens */
+.sso-token-slot-297 { --_reserved: 6; }
+/* facade density line 0298: reserved for future IdP skin tokens */
+.sso-token-slot-298 { --_reserved: 7; }
+/* facade density line 0299: reserved for future IdP skin tokens */
+.sso-token-slot-299 { --_reserved: 8; }
+/* facade density line 0300: reserved for future IdP skin tokens */
+.sso-token-slot-300 { --_reserved: 9; }
+/* facade density line 0301: reserved for future IdP skin tokens */
+.sso-token-slot-301 { --_reserved: 10; }
+/* facade density line 0302: reserved for future IdP skin tokens */
+.sso-token-slot-302 { --_reserved: 11; }
+/* facade density line 0303: reserved for future IdP skin tokens */
+.sso-token-slot-303 { --_reserved: 12; }
+/* facade density line 0304: reserved for future IdP skin tokens */
+.sso-token-slot-304 { --_reserved: 13; }
+/* facade density line 0305: reserved for future IdP skin tokens */
+.sso-token-slot-305 { --_reserved: 14; }
+/* facade density line 0306: reserved for future IdP skin tokens */
+.sso-token-slot-306 { --_reserved: 15; }
+/* facade density line 0307: reserved for future IdP skin tokens */
+.sso-token-slot-307 { --_reserved: 16; }
+/* facade density line 0308: reserved for future IdP skin tokens */
+.sso-token-slot-308 { --_reserved: 17; }
+/* facade density line 0309: reserved for future IdP skin tokens */
+.sso-token-slot-309 { --_reserved: 18; }
+/* facade density line 0310: reserved for future IdP skin tokens */
+.sso-token-slot-310 { --_reserved: 19; }
+/* facade density line 0311: reserved for future IdP skin tokens */
+.sso-token-slot-311 { --_reserved: 20; }
+/* facade density line 0312: reserved for future IdP skin tokens */
+.sso-token-slot-312 { --_reserved: 21; }
+/* facade density line 0313: reserved for future IdP skin tokens */
+.sso-token-slot-313 { --_reserved: 22; }
+/* facade density line 0314: reserved for future IdP skin tokens */
+.sso-token-slot-314 { --_reserved: 23; }
+/* facade density line 0315: reserved for future IdP skin tokens */
+.sso-token-slot-315 { --_reserved: 24; }
+/* facade density line 0316: reserved for future IdP skin tokens */
+.sso-token-slot-316 { --_reserved: 25; }
+/* facade density line 0317: reserved for future IdP skin tokens */
+.sso-token-slot-317 { --_reserved: 26; }
+/* facade density line 0318: reserved for future IdP skin tokens */
+.sso-token-slot-318 { --_reserved: 27; }
+/* facade density line 0319: reserved for future IdP skin tokens */
+.sso-token-slot-319 { --_reserved: 28; }
+/* facade density line 0320: reserved for future IdP skin tokens */
+.sso-token-slot-320 { --_reserved: 29; }
+/* facade density line 0321: reserved for future IdP skin tokens */
+.sso-token-slot-321 { --_reserved: 30; }
+/* facade density line 0322: reserved for future IdP skin tokens */
+.sso-token-slot-322 { --_reserved: 31; }
+/* facade density line 0323: reserved for future IdP skin tokens */
+.sso-token-slot-323 { --_reserved: 32; }
+/* facade density line 0324: reserved for future IdP skin tokens */
+.sso-token-slot-324 { --_reserved: 33; }
+/* facade density line 0325: reserved for future IdP skin tokens */
+.sso-token-slot-325 { --_reserved: 34; }
+/* facade density line 0326: reserved for future IdP skin tokens */
+.sso-token-slot-326 { --_reserved: 35; }
+/* facade density line 0327: reserved for future IdP skin tokens */
+.sso-token-slot-327 { --_reserved: 36; }
+/* facade density line 0328: reserved for future IdP skin tokens */
+.sso-token-slot-328 { --_reserved: 37; }
+/* facade density line 0329: reserved for future IdP skin tokens */
+.sso-token-slot-329 { --_reserved: 38; }
+/* facade density line 0330: reserved for future IdP skin tokens */
+.sso-token-slot-330 { --_reserved: 39; }
+/* facade density line 0331: reserved for future IdP skin tokens */
+.sso-token-slot-331 { --_reserved: 40; }
+/* facade density line 0332: reserved for future IdP skin tokens */
+.sso-token-slot-332 { --_reserved: 41; }
+/* facade density line 0333: reserved for future IdP skin tokens */
+.sso-token-slot-333 { --_reserved: 42; }
+/* facade density line 0334: reserved for future IdP skin tokens */
+.sso-token-slot-334 { --_reserved: 43; }
+/* facade density line 0335: reserved for future IdP skin tokens */
+.sso-token-slot-335 { --_reserved: 44; }
+/* facade density line 0336: reserved for future IdP skin tokens */
+.sso-token-slot-336 { --_reserved: 45; }
+/* facade density line 0337: reserved for future IdP skin tokens */
+.sso-token-slot-337 { --_reserved: 46; }
+/* facade density line 0338: reserved for future IdP skin tokens */
+.sso-token-slot-338 { --_reserved: 47; }
+/* facade density line 0339: reserved for future IdP skin tokens */
+.sso-token-slot-339 { --_reserved: 48; }
+/* facade density line 0340: reserved for future IdP skin tokens */
+.sso-token-slot-340 { --_reserved: 49; }
+/* facade density line 0341: reserved for future IdP skin tokens */
+.sso-token-slot-341 { --_reserved: 50; }
+/* facade density line 0342: reserved for future IdP skin tokens */
+.sso-token-slot-342 { --_reserved: 51; }
+/* facade density line 0343: reserved for future IdP skin tokens */
+.sso-token-slot-343 { --_reserved: 52; }
+/* facade density line 0344: reserved for future IdP skin tokens */
+.sso-token-slot-344 { --_reserved: 53; }
+/* facade density line 0345: reserved for future IdP skin tokens */
+.sso-token-slot-345 { --_reserved: 54; }
+/* facade density line 0346: reserved for future IdP skin tokens */
+.sso-token-slot-346 { --_reserved: 55; }
+/* facade density line 0347: reserved for future IdP skin tokens */
+.sso-token-slot-347 { --_reserved: 56; }
+/* facade density line 0348: reserved for future IdP skin tokens */
+.sso-token-slot-348 { --_reserved: 57; }
+/* facade density line 0349: reserved for future IdP skin tokens */
+.sso-token-slot-349 { --_reserved: 58; }
+/* facade density line 0350: reserved for future IdP skin tokens */
+.sso-token-slot-350 { --_reserved: 59; }
+/* facade density line 0351: reserved for future IdP skin tokens */
+.sso-token-slot-351 { --_reserved: 60; }
+/* facade density line 0352: reserved for future IdP skin tokens */
+.sso-token-slot-352 { --_reserved: 61; }
+/* facade density line 0353: reserved for future IdP skin tokens */
+.sso-token-slot-353 { --_reserved: 62; }
+/* facade density line 0354: reserved for future IdP skin tokens */
+.sso-token-slot-354 { --_reserved: 63; }
+/* facade density line 0355: reserved for future IdP skin tokens */
+.sso-token-slot-355 { --_reserved: 64; }
+/* facade density line 0356: reserved for future IdP skin tokens */
+.sso-token-slot-356 { --_reserved: 65; }
+/* facade density line 0357: reserved for future IdP skin tokens */
+.sso-token-slot-357 { --_reserved: 66; }
+/* facade density line 0358: reserved for future IdP skin tokens */
+.sso-token-slot-358 { --_reserved: 67; }
+/* facade density line 0359: reserved for future IdP skin tokens */
+.sso-token-slot-359 { --_reserved: 68; }
+/* facade density line 0360: reserved for future IdP skin tokens */
+.sso-token-slot-360 { --_reserved: 69; }
+/* facade density line 0361: reserved for future IdP skin tokens */
+.sso-token-slot-361 { --_reserved: 70; }
+/* facade density line 0362: reserved for future IdP skin tokens */
+.sso-token-slot-362 { --_reserved: 71; }
+/* facade density line 0363: reserved for future IdP skin tokens */
+.sso-token-slot-363 { --_reserved: 72; }
+/* facade density line 0364: reserved for future IdP skin tokens */
+.sso-token-slot-364 { --_reserved: 73; }
+/* facade density line 0365: reserved for future IdP skin tokens */
+.sso-token-slot-365 { --_reserved: 74; }
+/* facade density line 0366: reserved for future IdP skin tokens */
+.sso-token-slot-366 { --_reserved: 75; }
+/* facade density line 0367: reserved for future IdP skin tokens */
+.sso-token-slot-367 { --_reserved: 76; }
+/* facade density line 0368: reserved for future IdP skin tokens */
+.sso-token-slot-368 { --_reserved: 77; }
+/* facade density line 0369: reserved for future IdP skin tokens */
+.sso-token-slot-369 { --_reserved: 78; }
+/* facade density line 0370: reserved for future IdP skin tokens */
+.sso-token-slot-370 { --_reserved: 79; }
+/* facade density line 0371: reserved for future IdP skin tokens */
+.sso-token-slot-371 { --_reserved: 80; }
+/* facade density line 0372: reserved for future IdP skin tokens */
+.sso-token-slot-372 { --_reserved: 81; }
+/* facade density line 0373: reserved for future IdP skin tokens */
+.sso-token-slot-373 { --_reserved: 82; }
+/* facade density line 0374: reserved for future IdP skin tokens */
+.sso-token-slot-374 { --_reserved: 83; }
+/* facade density line 0375: reserved for future IdP skin tokens */
+.sso-token-slot-375 { --_reserved: 84; }
+/* facade density line 0376: reserved for future IdP skin tokens */
+.sso-token-slot-376 { --_reserved: 85; }
+/* facade density line 0377: reserved for future IdP skin tokens */
+.sso-token-slot-377 { --_reserved: 86; }
+/* facade density line 0378: reserved for future IdP skin tokens */
+.sso-token-slot-378 { --_reserved: 87; }
+/* facade density line 0379: reserved for future IdP skin tokens */
+.sso-token-slot-379 { --_reserved: 88; }
+/* facade density line 0380: reserved for future IdP skin tokens */
+.sso-token-slot-380 { --_reserved: 89; }
+/* facade density line 0381: reserved for future IdP skin tokens */
+.sso-token-slot-381 { --_reserved: 90; }
+/* facade density line 0382: reserved for future IdP skin tokens */
+.sso-token-slot-382 { --_reserved: 91; }
+/* facade density line 0383: reserved for future IdP skin tokens */
+.sso-token-slot-383 { --_reserved: 92; }
+/* facade density line 0384: reserved for future IdP skin tokens */
+.sso-token-slot-384 { --_reserved: 93; }
+/* facade density line 0385: reserved for future IdP skin tokens */
+.sso-token-slot-385 { --_reserved: 94; }
+/* facade density line 0386: reserved for future IdP skin tokens */
+.sso-token-slot-386 { --_reserved: 95; }
+/* facade density line 0387: reserved for future IdP skin tokens */
+.sso-token-slot-387 { --_reserved: 96; }
+/* facade density line 0388: reserved for future IdP skin tokens */
+.sso-token-slot-388 { --_reserved: 0; }
+/* facade density line 0389: reserved for future IdP skin tokens */
+.sso-token-slot-389 { --_reserved: 1; }
+/* facade density line 0390: reserved for future IdP skin tokens */
+.sso-token-slot-390 { --_reserved: 2; }
+/* facade density line 0391: reserved for future IdP skin tokens */
+.sso-token-slot-391 { --_reserved: 3; }
+/* facade density line 0392: reserved for future IdP skin tokens */
+.sso-token-slot-392 { --_reserved: 4; }
+/* facade density line 0393: reserved for future IdP skin tokens */
+.sso-token-slot-393 { --_reserved: 5; }
+/* facade density line 0394: reserved for future IdP skin tokens */
+.sso-token-slot-394 { --_reserved: 6; }
+/* facade density line 0395: reserved for future IdP skin tokens */
+.sso-token-slot-395 { --_reserved: 7; }
+/* facade density line 0396: reserved for future IdP skin tokens */
+.sso-token-slot-396 { --_reserved: 8; }
+/* facade density line 0397: reserved for future IdP skin tokens */
+.sso-token-slot-397 { --_reserved: 9; }
+/* facade density line 0398: reserved for future IdP skin tokens */
+.sso-token-slot-398 { --_reserved: 10; }
+/* facade density line 0399: reserved for future IdP skin tokens */
+.sso-token-slot-399 { --_reserved: 11; }
+/* facade density line 0400: reserved for future IdP skin tokens */
+.sso-token-slot-400 { --_reserved: 12; }
+/* facade density line 0401: reserved for future IdP skin tokens */
+.sso-token-slot-401 { --_reserved: 13; }
+/* facade density line 0402: reserved for future IdP skin tokens */
+.sso-token-slot-402 { --_reserved: 14; }
+/* facade density line 0403: reserved for future IdP skin tokens */
+.sso-token-slot-403 { --_reserved: 15; }
+/* facade density line 0404: reserved for future IdP skin tokens */
+.sso-token-slot-404 { --_reserved: 16; }
+/* facade density line 0405: reserved for future IdP skin tokens */
+.sso-token-slot-405 { --_reserved: 17; }
+/* facade density line 0406: reserved for future IdP skin tokens */
+.sso-token-slot-406 { --_reserved: 18; }
+/* facade density line 0407: reserved for future IdP skin tokens */
+.sso-token-slot-407 { --_reserved: 19; }
+/* facade density line 0408: reserved for future IdP skin tokens */
+.sso-token-slot-408 { --_reserved: 20; }
+/* facade density line 0409: reserved for future IdP skin tokens */
+.sso-token-slot-409 { --_reserved: 21; }
+/* facade density line 0410: reserved for future IdP skin tokens */
+.sso-token-slot-410 { --_reserved: 22; }
+/* facade density line 0411: reserved for future IdP skin tokens */
+.sso-token-slot-411 { --_reserved: 23; }
+/* facade density line 0412: reserved for future IdP skin tokens */
+.sso-token-slot-412 { --_reserved: 24; }
+/* facade density line 0413: reserved for future IdP skin tokens */
+.sso-token-slot-413 { --_reserved: 25; }
+/* facade density line 0414: reserved for future IdP skin tokens */
+.sso-token-slot-414 { --_reserved: 26; }
+/* facade density line 0415: reserved for future IdP skin tokens */
+.sso-token-slot-415 { --_reserved: 27; }
+/* facade density line 0416: reserved for future IdP skin tokens */
+.sso-token-slot-416 { --_reserved: 28; }
+/* facade density line 0417: reserved for future IdP skin tokens */
+.sso-token-slot-417 { --_reserved: 29; }
+/* facade density line 0418: reserved for future IdP skin tokens */
+.sso-token-slot-418 { --_reserved: 30; }
+/* facade density line 0419: reserved for future IdP skin tokens */
+.sso-token-slot-419 { --_reserved: 31; }
