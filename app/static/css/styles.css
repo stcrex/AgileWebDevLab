@@ -1,0 +1,159 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+a {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #08111f;
+    border-right: 1px solid #243047;
+    padding: 24px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: #8ab4ff;
+    margin-bottom: 30px;
+}
+
+.nav-link {
+    display: block;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    color: #cbd5e1;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #1e3a8a;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 36px;
+    background:
+        radial-gradient(circle at top right, rgba(124, 58, 237, 0.25), transparent 35%),
+        #0f172a;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #243047;
+    padding-bottom: 22px;
+    margin-bottom: 24px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 11px 16px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #111827;
+    color: white;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #7c3aed);
+    border: none;
+}
+
+.btn-danger {
+    background: #dc2626;
+    border: none;
+}
+
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.card {
+    background: #111827;
+    border: 1px solid #243047;
+    border-radius: 18px;
+    padding: 22px;
+}
+
+.list-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #243047;
+}
+
+.muted {
+    color: #94a3b8;
+}
+
+.badge {
+    display: inline-block;
+    background: #172554;
+    color: #93c5fd;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+}
+
+label {
+    display: block;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    color: #bfdbfe;
+    font-weight: bold;
+}
+
+.form-input {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: white;
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.stat-number {
+    font-size: 42px;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 8px;
+}
+
+.success-text {
+    color: #86efac;
+}
+
+.warning-text {
+    color: #facc15;
+}
+
+@media (max-width: 900px) {
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+}

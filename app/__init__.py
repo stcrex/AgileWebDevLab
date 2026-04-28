@@ -23,9 +23,14 @@ def _seed_demo_data() -> None:
     db.session.add_all([alice, bob])
     db.session.flush()
 
-    g = StudyGroup(name="Demo Lab Group", join_code="LABDEMO1", created_by_user_id=alice.id)
+    g = StudyGroup(
+        name="Demo Lab Group",
+        join_code="LABDEMO1",
+        created_by_user_id=alice.id,
+    )
     db.session.add(g)
     db.session.flush()
+
     db.session.add_all(
         [
             GroupMember(group_id=g.id, user_id=alice.id, role="owner"),
@@ -34,6 +39,7 @@ def _seed_demo_data() -> None:
     )
 
     monday = date.today() - timedelta(days=date.today().weekday())
+
     db.session.add(
         CalendarEvent(
             user_id=bob.id,
@@ -43,6 +49,7 @@ def _seed_demo_data() -> None:
             end_at=datetime.combine(monday, time(12, 0)),
         )
     )
+
     db.session.add(
         CalendarEvent(
             user_id=alice.id,
@@ -52,6 +59,7 @@ def _seed_demo_data() -> None:
             end_at=datetime.combine(monday, time(16, 0)),
         )
     )
+
     db.session.commit()
 
 
@@ -61,11 +69,14 @@ def _seed_exam_demo_if_empty() -> None:
     alice = User.query.filter_by(email="alice@lab.local").first()
     if alice is None:
         return
+
     if ExamSession.query.filter_by(user_id=alice.id).first() is not None:
         return
+
     monday = date.today() - timedelta(days=date.today().weekday())
     start = datetime.combine(monday + timedelta(days=10), time(9, 0))
     end = start + timedelta(hours=2)
+
     ex = ExamSession(
         user_id=alice.id,
         title="Practice exam (seed)",
@@ -74,8 +85,10 @@ def _seed_exam_demo_if_empty() -> None:
         ends_at=end,
         notes="Add preparation resources on the exam detail page.",
     )
+
     db.session.add(ex)
     db.session.flush()
+
     db.session.add(
         ExamResource(
             exam_id=ex.id,
@@ -84,6 +97,7 @@ def _seed_exam_demo_if_empty() -> None:
             sort_order=0,
         )
     )
+
     db.session.commit()
 
 
@@ -96,13 +110,16 @@ def _migrate_exam_share_token_column() -> None:
         cols = [c["name"] for c in insp.get_columns("exam_sessions")]
     except Exception:
         return
+
     if "share_token" in cols:
         return
+
     try:
         with db.engine.begin() as conn:
             conn.execute(text("ALTER TABLE exam_sessions ADD COLUMN share_token VARCHAR(64)"))
     except Exception:
         return
+
     try:
         with db.engine.begin() as conn:
             conn.execute(
@@ -125,11 +142,13 @@ def create_app(config_object: type = Config) -> Flask:
         template_folder=str(root / "templates"),
         static_folder=str(root / "static"),
     )
+
     app.config.from_object(config_object)
 
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+
     login_manager.login_view = "auth.login_page"
 
     from flask import jsonify, request
@@ -138,7 +157,6 @@ def create_app(config_object: type = Config) -> Flask:
     def _unauthorized():
         if request.path.startswith("/api/"):
             return jsonify({"error": "Unauthorized"}), 401
-        from flask import redirect, url_for
 
         return redirect(url_for("auth.login_page", next=request.url))
 
@@ -149,12 +167,23 @@ def create_app(config_object: type = Config) -> Flask:
     from app.blueprints.group_book import bp as group_book_bp
     from app.blueprints.sidebar_stubs import bp as sidebar_stubs_bp
     from app.routes.main import main_bp
+    from app.routes.timetable import timetable_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(exams_bp)
     app.register_blueprint(group_book_bp)
     app.register_blueprint(sidebar_stubs_bp)
     app.register_blueprint(main_bp)
+    app.register_blueprint(timetable_bp)
+
+    @app.cli.command("init-db")
+    def init_db_command():
+        from app.seed import seed_demo_data
+
+        db.drop_all()
+        db.create_all()
+        seed_demo_data()
+        print("Database initialised successfully.")
 
     @app.get("/")
     def index():

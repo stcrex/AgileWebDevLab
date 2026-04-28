@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Create Event - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Create Event</h1>
+        <p>Add a lecture, lab, tutorial, exam or study session.</p>
+    </div>
+
+    <a class="btn" href="/timetable">Back to Timetable</a>
+</div>
+
+<div class="card">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="muted">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>Title</label>
+        <input class="form-input" type="text" name="title" placeholder="CITS3403 Lecture" required>
+
+        <label>Type</label>
+        <select class="form-input" name="event_type" required>
+            <option value="Lecture">Lecture</option>
+            <option value="Laboratory">Laboratory</option>
+            <option value="Tutorial">Tutorial</option>
+            <option value="Exam">Exam</option>
+            <option value="Assignment">Assignment</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Study">Study</option>
+        </select>
+
+        <label>Course</label>
+        <select class="form-input" name="course_id">
+            <option value="">No course selected</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.code }} - {{ course.title }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Location</label>
+        <input class="form-input" type="text" name="location" placeholder="Room 106">
+
+        <label>Start time</label>
+        <input class="form-input" type="datetime-local" name="start_time" required>
+
+        <label>End time</label>
+        <input class="form-input" type="datetime-local" name="end_time" required>
+
+        <br><br>
+        <button class="btn btn-primary" type="submit">Save Event</button>
+    </form>
+</div>
+{% endblock %}

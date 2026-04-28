@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Dashboard</h1>
+        <p>Welcome back, {{ current_user.full_name }}. Your StudySync dashboard is connected to the database.</p>
+    </div>
+
+    <a href="/logout" class="btn btn-danger">Logout</a>
+</div>
+
+<div class="grid grid-3">
+    <div class="card">
+        <span class="badge">Courses</span>
+        <div class="stat-number">{{ course_count }}</div>
+        <div class="muted">Enrolled units stored in database</div>
+    </div>
+
+    <div class="card">
+        <span class="badge">Timetable</span>
+        <div class="stat-number">{{ event_count }}</div>
+        <div class="muted">Scheduled lectures, labs and study events</div>
+    </div>
+
+    <div class="card">
+        <span class="badge">Exams</span>
+        <div class="stat-number">{{ exam_count }}</div>
+        <div class="muted">Upcoming assessments</div>
+    </div>
+</div>
+
+<br>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h2>Student Profile</h2>
+
+        <div class="list-item">
+            <strong>Name</strong>
+            <p class="muted">{{ current_user.full_name }}</p>
+        </div>
+
+        <div class="list-item">
+            <strong>Email</strong>
+            <p class="muted">{{ current_user.email }}</p>
+        </div>
+
+        <div class="list-item">
+            <strong>Program</strong>
+            <p class="muted">{{ current_user.program or "Not added yet" }}</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Quick Actions</h2>
+
+        <div class="list-item">
+            <a class="btn btn-primary" href="/timetable">Open Timetable</a>
+        </div>
+
+        <div class="list-item">
+            <a class="btn btn-primary" href="/timetable/events/new">Create Event</a>
+        </div>
+
+        <div class="list-item">
+            <a class="btn" href="/db-check">Check Database</a>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="card">
+    <h2>Project Progress</h2>
+
+    <div class="list-item">
+        <strong class="success-text">Stage 1 Complete</strong>
+        <p class="muted">Initial Flask project structure is working.</p>
+    </div>
+
+    <div class="list-item">
+        <strong class="success-text">Stage 2 Complete</strong>
+        <p class="muted">Database models and seed data are working.</p>
+    </div>
+
+    <div class="list-item">
+        <strong class="success-text">Stage 3 Complete</strong>
+        <p class="muted">Login, register and logout flow is working.</p>
+    </div>
+
+    <div class="list-item">
+        <strong class="success-text">Stage 4 Complete</strong>
+        <p class="muted">Shared layout and dashboard styling added.</p>
+    </div>
+
+    <div class="list-item">
+        <strong class="warning-text">Stage 5 In Progress</strong>
+        <p class="muted">Timetable events are being connected.</p>
+    </div>
+</div>
+{% endblock %}

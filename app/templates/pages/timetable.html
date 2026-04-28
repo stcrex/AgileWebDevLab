@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Timetable - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Timetable</h1>
+        <p>{{ week_start.strftime("%d %b %Y") }} - {{ week_end.strftime("%d %b %Y") }}</p>
+    </div>
+
+    <div>
+        <a class="btn" href="/timetable?start={{ previous_week.isoformat() }}">? Previous Week</a>
+        <a class="btn" href="/timetable?start={{ next_week.isoformat() }}">Next Week ?</a>
+        <a class="btn btn-primary" href="/timetable/events/new">+ Create Event</a>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    {% for day in days %}
+        <div class="card">
+            <h2>{{ day.label }}</h2>
+            <p class="muted">{{ day.date.strftime("%d %B %Y") }}</p>
+
+            {% if day.events %}
+                {% for event in day.events %}
+                    <a href="/timetable/events/{{ event.id }}">
+                        <div class="list-item">
+                            <strong>{{ event.title }}</strong>
+                            <p class="muted">
+                                {{ event.start_time.strftime("%I:%M %p") }}
+                                -
+                                {{ event.end_time.strftime("%I:%M %p") }}
+                            </p>
+                            <span class="badge">{{ event.event_type }}</span>
+                            {% if event.location %}
+                                <p class="muted">?? {{ event.location }}</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p class="muted">No events for this day.</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
