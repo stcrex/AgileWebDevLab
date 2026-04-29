@@ -327,3 +327,12 @@ label {
     color: #94a3b8;
     font-size: 13px;
 }
+
+.reminder-card form {
+    margin-top: 12px;
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 120px;
+}

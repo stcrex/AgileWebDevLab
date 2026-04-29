@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Create Reminder - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Create Reminder</h1>
+        <p>Add a reminder for your study plan, assignment or exam preparation.</p>
+    </div>
+
+    <a class="btn" href="/exams-tasks">Back to Exams & Tasks</a>
+</div>
+
+<div class="card">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="badge">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>Reminder title</label>
+        <input class="form-input" type="text" name="title" placeholder="Study for CITS3403 mid-sem" required>
+
+        <label>Note</label>
+        <textarea class="form-input" name="note" rows="5" placeholder="Optional note"></textarea>
+
+        <label>Reminder date and time</label>
+        <input class="form-input" type="datetime-local" name="remind_at" required>
+
+        <br><br>
+        <button class="btn btn-primary" type="submit">Save Reminder</button>
+    </form>
+</div>
+{% endblock %}
