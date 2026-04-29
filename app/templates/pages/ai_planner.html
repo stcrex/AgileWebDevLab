@@ -1,0 +1,129 @@
+﻿{% extends "base.html" %}
+
+{% block title %}AI Planner - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>AI Planner</h1>
+        <p>Ask StudySync for a smart study plan based on your timetable, exams and reminders.</p>
+    </div>
+
+    <form method="POST" action="/ai-planner/clear-history">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn" type="submit">Clear History</button>
+    </form>
+</div>
+
+<div class="grid grid-3">
+    <div class="card">
+        <span class="badge">Next Exam</span>
+        <div class="stat-number-small">{{ upcoming_exam_title if upcoming_exam_title else "None" }}</div>
+        <p class="muted">{{ upcoming_exam_date }}</p>
+    </div>
+
+    <div class="card">
+        <span class="badge">This Week</span>
+        <div class="stat-number-small">{{ week_event_count }}</div>
+        <p class="muted">Upcoming timetable events in the next 7 days</p>
+    </div>
+
+    <div class="card">
+        <span class="badge">Reminders</span>
+        <div class="stat-number-small">{{ reminder_count }}</div>
+        <p class="muted">Upcoming reminders saved in your planner</p>
+    </div>
+</div>
+
+<br>
+
+<div class="card">
+    <h2>Quick prompts</h2>
+
+    <div class="quick-prompt-row">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="prompt" value="Build a study plan for this week">
+            <button class="btn" type="submit">Study plan</button>
+        </form>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="prompt" value="What does my timetable look like this week?">
+            <button class="btn" type="submit">This week</button>
+        </form>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="prompt" value="How should I prepare for my next exam?">
+            <button class="btn" type="submit">Exam prep</button>
+        </form>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="prompt" value="Show my upcoming reminders and tasks">
+            <button class="btn" type="submit">Tasks</button>
+        </form>
+    </div>
+</div>
+
+<br>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h2>Ask StudySync AI</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="badge">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>Your question</label>
+            <textarea class="form-input" name="prompt" rows="6" placeholder="Example: Build a study plan for my next exam"></textarea>
+
+            <br><br>
+            <button class="btn btn-primary" type="submit">Generate Plan</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Recent AI history</h2>
+
+        {% if history %}
+            {% for item in history %}
+                <div class="history-item">
+                    <strong>{{ item.heading }}</strong>
+                    <p>{{ item.prompt }}</p>
+                    <span class="muted">{{ item.created_at }}</span>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No AI planner history yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<br>
+
+{% if response %}
+<div class="card planner-response">
+    <h2>{{ response.heading }}</h2>
+    <p>{{ response.summary }}</p>
+
+    {% if response.bullets %}
+        <ul class="planner-list">
+            {% for bullet in response.bullets %}
+                <li>{{ bullet }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
