@@ -1,7 +1,8 @@
-from flask import Flask
+﻿from flask import Flask
 
 from app.config import Config
 from app.extensions import csrf, db, login_manager
+from app.routes.ai_planner import ai_planner_bp
 from app.routes.auth import auth_bp
 from app.routes.courses import courses_bp
 from app.routes.exams_tasks import exams_tasks_bp
@@ -34,6 +35,7 @@ def create_app():
     app.register_blueprint(group_bp)
     app.register_blueprint(courses_bp)
     app.register_blueprint(exams_tasks_bp)
+    app.register_blueprint(ai_planner_bp)
 
     @app.cli.command("init-db")
     def init_db_command():
@@ -46,3 +48,4 @@ def create_app():
         print("Database initialised successfully.")
 
     return app
+
