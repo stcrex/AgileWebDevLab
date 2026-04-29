@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Add Course Exam - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Add Exam</h1>
+        <p>Create an exam record for {{ course.code }} - {{ course.title }}.</p>
+    </div>
+
+    <a class="btn" href="/courses/{{ course.id }}">Back to Course</a>
+</div>
+
+<div class="card">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="badge">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>Exam title</label>
+        <input class="form-input" type="text" name="title" value="{{ course.code }} Final Exam" required>
+
+        <label>Exam date and time</label>
+        <input class="form-input" type="datetime-local" name="exam_time" required>
+
+        <label>Location</label>
+        <input class="form-input" type="text" name="location" placeholder="Exam room">
+
+        <label>Weight percentage</label>
+        <input class="form-input" type="number" step="0.1" name="weight" placeholder="Example: 40">
+
+        <br><br>
+        <button class="btn btn-primary" type="submit">Save Exam</button>
+    </form>
+</div>
+{% endblock %}

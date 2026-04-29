@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Courses</h1>
+        <p>Your enrolled units and their linked timetable events.</p>
+    </div>
+
+    <a class="btn btn-primary" href="/timetable">Open Timetable</a>
+</div>
+
+<div class="grid grid-3">
+    {% for item in course_cards %}
+        <div class="card course-card">
+            <span class="badge">{{ item.course.code }}</span>
+            <h2>{{ item.course.title }}</h2>
+
+            <p class="muted">
+                Events and exams connected to this unit appear in your timetable and planner.
+            </p>
+
+            <div class="course-stats">
+                <div>
+                    <strong>{{ item.event_count }}</strong>
+                    <span>Events</span>
+                </div>
+
+                <div>
+                    <strong>{{ item.exam_count }}</strong>
+                    <span>Exams</span>
+                </div>
+            </div>
+
+            <br>
+
+            <a class="btn" href="/courses/{{ item.course.id }}">Details</a>
+            <a class="btn btn-primary" href="/courses/{{ item.course.id }}/event">Add Event</a>
+            <a class="btn" href="/courses/{{ item.course.id }}/exam">Add Exam</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

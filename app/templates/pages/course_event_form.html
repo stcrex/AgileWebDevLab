@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Add Course Event - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Add Event</h1>
+        <p>Create a timetable item for {{ course.code }} - {{ course.title }}.</p>
+    </div>
+
+    <a class="btn" href="/courses/{{ course.id }}">Back to Course</a>
+</div>
+
+<div class="card">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p class="badge">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <label>Title</label>
+        <input class="form-input" type="text" name="title" value="{{ course.code }} Lecture" required>
+
+        <label>Type</label>
+        <select class="form-input" name="event_type" required>
+            <option value="Lecture">Lecture</option>
+            <option value="Laboratory">Laboratory</option>
+            <option value="Tutorial">Tutorial</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Study">Study Session</option>
+        </select>
+
+        <label>Location</label>
+        <input class="form-input" type="text" name="location" placeholder="Room / Lab">
+
+        <label>Start time</label>
+        <input class="form-input" type="datetime-local" name="start_time" required>
+
+        <label>End time</label>
+        <input class="form-input" type="datetime-local" name="end_time" required>
+
+        <br><br>
+        <button class="btn btn-primary" type="submit">Save Event</button>
+    </form>
+</div>
+{% endblock %}

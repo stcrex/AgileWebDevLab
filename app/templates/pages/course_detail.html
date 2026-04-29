@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Course Detail - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <span class="badge">{{ course.code }}</span>
+        <h1>{{ course.title }}</h1>
+        <p>Course details, linked timetable events, and exams.</p>
+    </div>
+
+    <div>
+        <a class="btn" href="/courses">Back to Courses</a>
+        <a class="btn btn-primary" href="/courses/{{ course.id }}/event">Add Event</a>
+        <a class="btn" href="/courses/{{ course.id }}/exam">Add Exam</a>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h2>Linked Timetable Events</h2>
+
+        {% if events %}
+            {% for event in events %}
+                <div class="list-item">
+                    <strong>{{ event.title }}</strong>
+                    <p class="muted">
+                        {{ event.start_time.strftime("%A, %d %B %Y") }}
+                        |
+                        {{ event.start_time.strftime("%I:%M %p") }}
+                        -
+                        {{ event.end_time.strftime("%I:%M %p") }}
+                    </p>
+                    <span class="badge">{{ event.event_type }}</span>
+                    {% if event.location %}
+                        <p class="muted">Location: {{ event.location }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No timetable events linked yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Linked Exams</h2>
+
+        {% if exams %}
+            {% for exam in exams %}
+                <div class="list-item">
+                    <strong>{{ exam.title }}</strong>
+
+                    {% if exam.exam_date %}
+                        <p class="muted">{{ exam.exam_date.strftime("%A, %d %B %Y %I:%M %p") }}</p>
+                    {% endif %}
+
+                    {% if exam.location %}
+                        <p class="muted">Location: {{ exam.location }}</p>
+                    {% endif %}
+
+                    {% if exam.weight %}
+                        <span class="badge">{{ exam.weight }}% final grade</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No exams linked yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
