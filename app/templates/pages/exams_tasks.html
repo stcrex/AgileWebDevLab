@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Exams & Tasks - StudySync{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Exams & Tasks</h1>
+        <p>Track upcoming exams and personal reminders in one page.</p>
+    </div>
+
+    <a class="btn btn-primary" href="/reminders/new">+ Add Reminder</a>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h2>Upcoming Exams</h2>
+
+        {% if exams %}
+            {% for exam in exams %}
+                <div class="list-item">
+                    <strong>{{ exam.title }}</strong>
+                    <p class="muted">{{ exam.course_name }}</p>
+
+                    {% if exam.exam_date %}
+                        <p class="muted">{{ exam.exam_date.strftime("%A, %d %B %Y %I:%M %p") }}</p>
+                    {% endif %}
+
+                    {% if exam.location %}
+                        <p class="muted">Location: {{ exam.location }}</p>
+                    {% endif %}
+
+                    {% if exam.weight is not none %}
+                        <span class="badge">{{ exam.weight }}%</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No exams available yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Reminders</h2>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="badge">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if reminders %}
+            {% for reminder in reminders %}
+                <div class="list-item reminder-card">
+                    <strong>{{ reminder.title }}</strong>
+
+                    {% if reminder.note %}
+                        <p class="muted">{{ reminder.note }}</p>
+                    {% endif %}
+
+                    {% if reminder.remind_at %}
+                        <p class="muted">{{ reminder.remind_at.strftime("%A, %d %B %Y %I:%M %p") }}</p>
+                    {% endif %}
+
+                    <form method="POST" action="/reminders/{{ reminder.id }}/delete">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="muted">No reminders yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
