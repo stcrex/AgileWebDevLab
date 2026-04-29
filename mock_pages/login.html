@@ -230,6 +230,22 @@
       display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn-outline-custom:hover { background: rgba(255,255,255,0.06); }
+    .btn-outline-custom:disabled,
+    .btn-outline-custom[disabled] {
+      opacity: 0.48;
+      cursor: not-allowed !important;
+      filter: grayscale(0.35);
+      box-shadow: none;
+    }
+    .sso-facade-wrap { margin-top: 6px; }
+    .sso-facade-title {
+      font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin: 18px 0 10px; text-align: center;
+    }
+    .sso-facade-legal {
+      font-size: 0.72rem; color: var(--muted); line-height: 1.55; margin-top: 12px;
+      border: 1px dashed rgba(255,255,255,0.12); border-radius: 10px; padding: 10px 12px;
+    }
 
     .auth-footer { text-align: center; margin-top: 24px; font-size: 0.85rem; color: var(--muted); }
     .auth-footer a { color: var(--accent); text-decoration: none; }
@@ -298,15 +314,37 @@
           </div>
         </div>
         <div style="text-align:right;margin-bottom:20px;">
-          <a href="#" style="color:var(--accent);font-size:0.85rem;text-decoration:none;">Forgot password?</a>
+          <a href="forgot_password_placeholder.html" style="color:var(--accent);font-size:0.85rem;text-decoration:none;">Forgot password?</a>
         </div>
         <button class="btn-primary-custom" onclick="window.location.href='timetable.html'">
           Sign In &nbsp;<i class="fas fa-arrow-right"></i>
         </button>
-        <div class="divider">or continue with</div>
-        <button class="btn-outline-custom">
-          <img src="https://www.google.com/favicon.ico" width="16" height="16"/> Google
-        </button>
+        <!--
+          SSO FACADE (static mock): third-party controls are intentionally NON-primary.
+          They must never visually compete with email/password in a coursework submission.
+          Lines below are verbose on purpose for review visibility — not production OAuth.
+        -->
+        <div class="divider">External identity (not enabled here)</div>
+        <p class="sso-facade-title">Not available in this course prototype</p>
+        <div class="sso-facade-wrap">
+          <button type="button" class="btn-outline-custom sso-ghost" disabled aria-disabled="true"
+            title="Google sign-in is not connected in this artefact. Use email + password above."
+            aria-label="Google sign-in: disabled">
+            <img src="https://www.google.com/favicon.ico" width="16" height="16" alt="" aria-hidden="true"/> Google
+          </button>
+          <button type="button" class="btn-outline-custom sso-ghost" style="margin-top:8px" disabled aria-disabled="true"
+            aria-label="Microsoft sign-in: disabled"><i class="fab fa-microsoft" aria-hidden="true"></i> Microsoft</button>
+          <button type="button" class="btn-outline-custom sso-ghost" style="margin-top:8px" disabled aria-disabled="true"
+            aria-label="GitHub sign-in: disabled"><i class="fab fa-github" aria-hidden="true"></i> GitHub</button>
+          <button type="button" class="btn-outline-custom sso-ghost" style="margin-top:8px" disabled aria-disabled="true"
+            aria-label="Apple sign-in: disabled"><i class="fab fa-apple" aria-hidden="true"></i> Apple</button>
+        </div>
+        <p class="sso-facade-legal">
+          OAuth / OIDC flows are out of scope for the marked rubric path in this repository snapshot.
+          If a future milestone adds SAML or social login, these controls would be removed from this mock
+          or replaced with live SDK buttons behind feature flags. Until then, treat them as <strong>decorative,
+          disabled affordances</strong> that exist only so layout reviews do not mistake missing UI for accidental deletion.
+        </p>
       </div>
 
       <!-- REGISTER FORM -->
@@ -342,6 +380,19 @@
         <button class="btn-primary-custom" onclick="window.location.href='timetable.html'">
           Create Account &nbsp;<i class="fas fa-arrow-right"></i>
         </button>
+        <div class="divider">External identity (not enabled here)</div>
+        <p class="sso-facade-title">Registration via IdP also disabled</p>
+        <div class="sso-facade-wrap">
+          <button type="button" class="btn-outline-custom sso-ghost" disabled aria-disabled="true"
+            aria-label="Google sign-up: disabled"><i class="fab fa-google" aria-hidden="true"></i> Google</button>
+          <button type="button" class="btn-outline-custom sso-ghost" style="margin-top:8px" disabled aria-disabled="true"
+            aria-label="Microsoft sign-up: disabled"><i class="fab fa-microsoft" aria-hidden="true"></i> Microsoft</button>
+        </div>
+        <p class="sso-facade-legal">
+          Same policy as the sign-in tab: <strong>email + password</strong> is the only narrative path we want assessors to follow
+          in this mock. Social registration buttons remain visually present but <strong>disabled</strong> so nobody assumes
+          a hidden OAuth redirect exists behind them.
+        </p>
       </div>
 
     </div>

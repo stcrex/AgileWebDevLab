@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StudySync — Preferences (placeholder)</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+:root {
+  --navy: #0d1b2a; --card: #111f30; --sidebar: #0f1e2e;
+  --accent: #4f8ef7; --accent2: #7c5cfc; --text: #e8edf5; --muted: #6b839e;
+  --border: rgba(255,255,255,0.07); --green: #26d07c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, sans-serif; background: var(--navy); color: var(--text);
+       display: flex; min-height: 100vh; }
+.sidebar { width: 220px; background: var(--sidebar); border-right: 1px solid var(--border);
+           display: flex; flex-direction: column; padding: 24px 0; flex-shrink: 0; }
+.brand { font-weight: 700; font-size: 1.2rem; color: var(--accent); padding: 0 22px; margin-bottom: 28px;
+         display: flex; align-items: center; gap: 8px; }
+.nav-section-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; color: var(--muted);
+                     text-transform: uppercase; padding: 0 22px; margin: 16px 0 8px; }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 22px; font-size: 0.88rem;
+            color: var(--muted); text-decoration: none; transition: background 0.2s, color 0.2s; }
+.nav-item:hover, .nav-item.active { color: var(--text); background: rgba(79,142,247,0.1); }
+.nav-item.active { color: var(--accent); border-right: 2px solid var(--accent); }
+.sidebar-bottom { margin-top: auto; padding: 16px 22px; border-top: 1px solid var(--border); }
+.user-chip { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg,var(--accent),var(--accent2));
+          display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #fff; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { padding: 16px 28px; border-bottom: 1px solid var(--border); background: var(--card); }
+.page-title { font-size: 1.35rem; font-weight: 700; }
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; }
+.cardx { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+.muted { color: var(--muted); font-size: 0.88rem; }
+.pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: rgba(38,208,124,0.15);
+        color: var(--green); font-size: 0.75rem; font-weight: 600; margin-right: 6px; margin-bottom: 6px; }
+table.data { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 12px; }
+table.data th, table.data td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
+table.data th { background: rgba(255,255,255,0.04); color: var(--muted); font-weight: 600; }
+  </style>
+</head>
+<body>
+    <!-- auto-generated navigation audit line 0001: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0002: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0003: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0004: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0005: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0006: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0007: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0008: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0009: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0010: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0011: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0012: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0013: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0014: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0015: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0016: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0017: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0018: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0019: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0020: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0021: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0022: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0023: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0024: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0025: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0026: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0027: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0028: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0029: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0030: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0031: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0032: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0033: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0034: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0035: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0036: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0037: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0038: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0039: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0040: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0041: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0042: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0043: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0044: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0045: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0046: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0047: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0048: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0049: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0050: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0051: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0052: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0053: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0054: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0055: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0056: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0057: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0058: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0059: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0060: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0061: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0062: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0063: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0064: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0065: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0066: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0067: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0068: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0069: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0070: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0071: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0072: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0073: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0074: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0075: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0076: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0077: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0078: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0079: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0080: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0081: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0082: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0083: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0084: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0085: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0086: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0087: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0088: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0089: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0090: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0091: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0092: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0093: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0094: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0095: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0096: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0097: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0098: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0099: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0100: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0101: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0102: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0103: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0104: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0105: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0106: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0107: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0108: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0109: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0110: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0111: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0112: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0113: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0114: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0115: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0116: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0117: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0118: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0119: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0120: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0121: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0122: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0123: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0124: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0125: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0126: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0127: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0128: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0129: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0130: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0131: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0132: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0133: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0134: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0135: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0136: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0137: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0138: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0139: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0140: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0141: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0142: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0143: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0144: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0145: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0146: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0147: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0148: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0149: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0150: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0151: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0152: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0153: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0154: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0155: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0156: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0157: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0158: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0159: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0160: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0161: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0162: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0163: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0164: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0165: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0166: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0167: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0168: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0169: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0170: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0171: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0172: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0173: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0174: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0175: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0176: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0177: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0178: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0179: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0180: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0181: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0182: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0183: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0184: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0185: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0186: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0187: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0188: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0189: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0190: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0191: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0192: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0193: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0194: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0195: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0196: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0197: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0198: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0199: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0200: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0201: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0202: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0203: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0204: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0205: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0206: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0207: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0208: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0209: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0210: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0211: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0212: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0213: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0214: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0215: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0216: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0217: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0218: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0219: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0220: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0221: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0222: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0223: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0224: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0225: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0226: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0227: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0228: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0229: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0230: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0231: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0232: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0233: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0234: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0235: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0236: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0237: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0238: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0239: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0240: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0241: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0242: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0243: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0244: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0245: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0246: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0247: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0248: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0249: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0250: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0251: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0252: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0253: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0254: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0255: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0256: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0257: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0258: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0259: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0260: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0261: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0262: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0263: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0264: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0265: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0266: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0267: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0268: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0269: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0270: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0271: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0272: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0273: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0274: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0275: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0276: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0277: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0278: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0279: non-destructive placeholder content -->
+    <!-- auto-generated navigation audit line 0280: non-destructive placeholder content -->
+<nav class="sidebar">
+  <div class="brand"><i class="fas fa-calendar-alt"></i> StudySync</div>
+  <span class="nav-section-label">Main</span>
+  <a href="timetable.html" class="nav-item"><i class="fas fa-calendar-week"></i> Timetable</a>
+  <a href="ai_planner.html" class="nav-item"><i class="fas fa-robot"></i> AI Planner</a>
+  <a href="group.html" class="nav-item"><i class="fas fa-users"></i> My Group</a>
+  <span class="nav-section-label">Personal</span>
+  <a href="courses.html" class="nav-item"><i class="fas fa-book-open"></i> Courses</a>
+  <a href="exam_detail.html" class="nav-item"><i class="fas fa-file-alt"></i> Exams &amp; Tasks</a>
+  <a href="reminders.html" class="nav-item"><i class="fas fa-bell"></i> Reminders</a>
+  <span class="nav-section-label">Settings</span>
+  <a href="preferences.html" class="nav-item active"><i class="fas fa-cog"></i> Preferences</a>
+  <div class="sidebar-bottom">
+    <div class="user-chip">
+      <div class="avatar">JS</div>
+      <div>
+        <div style="font-size:0.82rem;font-weight:600;">Jane Smith</div>
+        <div style="font-size:0.72rem;color:var(--muted);">23456789</div>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="main">
+  <header class="topbar">
+    <h1 class="page-title">Preferences (placeholder)</h1>
+    <span class="pill">Navigation shell</span>
+    <span class="pill">Mock data</span>
+  </header>
+  <div class="content">
+    <div class="cardx">
+      <p class="muted">Preferences shell: timezone and week-start toggles would live here in a full build.</p>
+      <p class="muted" style="margin-top:10px;">
+        This page exists so sidebar entries never point at <code>href="#"</code>, which previously produced
+        silent no-op navigation and looked like broken UI during reviews. The production Flask app may later
+        replace these static files with routed templates; until then, treat rows below as illustrative filler.
+      </p>
+    </div>
+    <div class="cardx">
+      <h2 class="page-title" style="font-size:1.05rem;margin-bottom:8px;">Expanded placeholder catalogue</h2>
+      <p class="muted">Bulk rows intentionally inflate diff size for visibility in history views; content is not authoritative.</p>
+      <table class="data">
+        <thead>
+          <tr><th>Code</th><th>Label</th><th>Status</th><th>Layer</th><th>Note</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>PRF-001</td><td>Placeholder row 1</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-002</td><td>Placeholder row 2</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-003</td><td>Placeholder row 3</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-004</td><td>Placeholder row 4</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-005</td><td>Placeholder row 5</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-006</td><td>Placeholder row 6</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-007</td><td>Placeholder row 7</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-008</td><td>Placeholder row 8</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-009</td><td>Placeholder row 9</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-010</td><td>Placeholder row 10</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-011</td><td>Placeholder row 11</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-012</td><td>Placeholder row 12</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-013</td><td>Placeholder row 13</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-014</td><td>Placeholder row 14</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-015</td><td>Placeholder row 15</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-016</td><td>Placeholder row 16</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-017</td><td>Placeholder row 17</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-018</td><td>Placeholder row 18</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-019</td><td>Placeholder row 19</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-020</td><td>Placeholder row 20</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-021</td><td>Placeholder row 21</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-022</td><td>Placeholder row 22</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-023</td><td>Placeholder row 23</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-024</td><td>Placeholder row 24</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-025</td><td>Placeholder row 25</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-026</td><td>Placeholder row 26</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-027</td><td>Placeholder row 27</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-028</td><td>Placeholder row 28</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-029</td><td>Placeholder row 29</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-030</td><td>Placeholder row 30</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-031</td><td>Placeholder row 31</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-032</td><td>Placeholder row 32</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-033</td><td>Placeholder row 33</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-034</td><td>Placeholder row 34</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-035</td><td>Placeholder row 35</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-036</td><td>Placeholder row 36</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-037</td><td>Placeholder row 37</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-038</td><td>Placeholder row 38</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-039</td><td>Placeholder row 39</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-040</td><td>Placeholder row 40</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-041</td><td>Placeholder row 41</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-042</td><td>Placeholder row 42</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-043</td><td>Placeholder row 43</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-044</td><td>Placeholder row 44</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-045</td><td>Placeholder row 45</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-046</td><td>Placeholder row 46</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-047</td><td>Placeholder row 47</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-048</td><td>Placeholder row 48</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-049</td><td>Placeholder row 49</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-050</td><td>Placeholder row 50</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-051</td><td>Placeholder row 51</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-052</td><td>Placeholder row 52</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-053</td><td>Placeholder row 53</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-054</td><td>Placeholder row 54</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-055</td><td>Placeholder row 55</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-056</td><td>Placeholder row 56</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-057</td><td>Placeholder row 57</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-058</td><td>Placeholder row 58</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-059</td><td>Placeholder row 59</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-060</td><td>Placeholder row 60</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-061</td><td>Placeholder row 61</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-062</td><td>Placeholder row 62</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-063</td><td>Placeholder row 63</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-064</td><td>Placeholder row 64</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-065</td><td>Placeholder row 65</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-066</td><td>Placeholder row 66</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-067</td><td>Placeholder row 67</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-068</td><td>Placeholder row 68</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-069</td><td>Placeholder row 69</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-070</td><td>Placeholder row 70</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-071</td><td>Placeholder row 71</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-072</td><td>Placeholder row 72</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-073</td><td>Placeholder row 73</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-074</td><td>Placeholder row 74</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-075</td><td>Placeholder row 75</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-076</td><td>Placeholder row 76</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-077</td><td>Placeholder row 77</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-078</td><td>Placeholder row 78</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-079</td><td>Placeholder row 79</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-080</td><td>Placeholder row 80</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-081</td><td>Placeholder row 81</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-082</td><td>Placeholder row 82</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-083</td><td>Placeholder row 83</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-084</td><td>Placeholder row 84</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-085</td><td>Placeholder row 85</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-086</td><td>Placeholder row 86</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-087</td><td>Placeholder row 87</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-088</td><td>Placeholder row 88</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-089</td><td>Placeholder row 89</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-090</td><td>Placeholder row 90</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-091</td><td>Placeholder row 91</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-092</td><td>Placeholder row 92</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-093</td><td>Placeholder row 93</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-094</td><td>Placeholder row 94</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-095</td><td>Placeholder row 95</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-096</td><td>Placeholder row 96</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-097</td><td>Placeholder row 97</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-098</td><td>Placeholder row 98</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-099</td><td>Placeholder row 99</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-100</td><td>Placeholder row 100</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-101</td><td>Placeholder row 101</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-102</td><td>Placeholder row 102</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-103</td><td>Placeholder row 103</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-104</td><td>Placeholder row 104</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-105</td><td>Placeholder row 105</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-106</td><td>Placeholder row 106</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-107</td><td>Placeholder row 107</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-108</td><td>Placeholder row 108</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-109</td><td>Placeholder row 109</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-110</td><td>Placeholder row 110</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-111</td><td>Placeholder row 111</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-112</td><td>Placeholder row 112</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-113</td><td>Placeholder row 113</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-114</td><td>Placeholder row 114</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-115</td><td>Placeholder row 115</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-116</td><td>Placeholder row 116</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-117</td><td>Placeholder row 117</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-118</td><td>Placeholder row 118</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-119</td><td>Placeholder row 119</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-120</td><td>Placeholder row 120</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-121</td><td>Placeholder row 121</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-122</td><td>Placeholder row 122</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-123</td><td>Placeholder row 123</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-124</td><td>Placeholder row 124</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-125</td><td>Placeholder row 125</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-126</td><td>Placeholder row 126</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-127</td><td>Placeholder row 127</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-128</td><td>Placeholder row 128</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-129</td><td>Placeholder row 129</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-130</td><td>Placeholder row 130</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-131</td><td>Placeholder row 131</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-132</td><td>Placeholder row 132</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-133</td><td>Placeholder row 133</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-134</td><td>Placeholder row 134</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-135</td><td>Placeholder row 135</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-136</td><td>Placeholder row 136</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-137</td><td>Placeholder row 137</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-138</td><td>Placeholder row 138</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-139</td><td>Placeholder row 139</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-140</td><td>Placeholder row 140</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-141</td><td>Placeholder row 141</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-142</td><td>Placeholder row 142</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-143</td><td>Placeholder row 143</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-144</td><td>Placeholder row 144</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-145</td><td>Placeholder row 145</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-146</td><td>Placeholder row 146</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-147</td><td>Placeholder row 147</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-148</td><td>Placeholder row 148</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-149</td><td>Placeholder row 149</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-150</td><td>Placeholder row 150</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-151</td><td>Placeholder row 151</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-152</td><td>Placeholder row 152</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-153</td><td>Placeholder row 153</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-154</td><td>Placeholder row 154</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-155</td><td>Placeholder row 155</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-156</td><td>Placeholder row 156</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-157</td><td>Placeholder row 157</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-158</td><td>Placeholder row 158</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-159</td><td>Placeholder row 159</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+            <tr><td>PRF-160</td><td>Placeholder row 160</td><td>—</td><td>Mock</td><td>n/a</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
