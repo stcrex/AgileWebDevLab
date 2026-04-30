@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write bulky Jinja placeholder pages for Reminders / Preferences (courses uses templates/courses.html)."""
+"""Write bulky Jinja placeholder for Preferences only (courses + reminders are real templates)."""
 
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ def shell(title: str, active: str) -> str:
         '      <span class="navbar-brand mb-0 h1 me-auto">AgileWebDevLab</span>',
         btn(active, "exams", "Exams", "{{ url_for('exams.exams_list') }}"),
         btn(active, "courses", "Courses", "{{ url_for('sidebar_stubs.courses_stub') }}"),
-        btn(active, "reminders", "Reminders", "{{ url_for('sidebar_stubs.reminders_stub') }}"),
+        btn(active, "reminders", "Reminders", "{{ url_for('reminders.reminders_list') }}"),
         btn(active, "preferences", "Preferences", "{{ url_for('sidebar_stubs.preferences_stub') }}"),
         btn(active, "group", "Group", "{{ url_for('group_book.group_page', group_id=1) }}"),
         '      <form method="post" action="{{ url_for(\'auth.logout_post\') }}" class="d-inline">',
@@ -60,9 +60,8 @@ def shell(title: str, active: str) -> str:
 
 def main() -> None:
     TPL.mkdir(parents=True, exist_ok=True)
-    (TPL / "reminders_stub.html").write_text(shell("Reminders (stub)", "reminders"), encoding="utf-8")
     (TPL / "preferences_stub.html").write_text(shell("Preferences (stub)", "preferences"), encoding="utf-8")
-    print("Wrote reminders_stub, preferences_stub (courses: edit templates/courses.html)")
+    print("Wrote preferences_stub (reminders: templates/reminders.html; courses: templates/courses.html)")
 
 
 if __name__ == "__main__":

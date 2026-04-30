@@ -1,10 +1,3 @@
- feature/ai-planner
-﻿from flask import Flask
-
-from app.config import Config
-from app.extensions import csrf, db, login_manager
-from app.routes.ai_planner import ai_planner_bp
-
 from __future__ import annotations
 
 import os
@@ -15,19 +8,6 @@ from flask import Flask, redirect, url_for
 
 from app.config import Config
 from app.extensions import csrf, db, login_manager
-feat-courses
-
- feature/group-chat
-main
-from app.routes.auth import auth_bp
-from app.routes.courses import courses_bp
-from app.routes.exams_tasks import exams_tasks_bp
-from app.routes.group import group_bp
-from app.routes.main import main_bp
-from app.routes.timetable import timetable_bp
-
-main
-main
 
 
 def _seed_demo_data() -> None:
@@ -147,6 +127,35 @@ def _seed_default_courses_if_missing() -> None:
     db.session.commit()
 
 
+def _seed_demo_reminders_if_empty() -> None:
+    """Optional starter reminders for the demo Alice account."""
+    from datetime import datetime, timedelta
+
+    from app.models import Reminder, User
+
+    alice = User.query.filter_by(email="alice@lab.local").first()
+    if alice is None or Reminder.query.filter_by(owner_id=alice.id).first() is not None:
+        return
+    due = datetime.utcnow() + timedelta(days=4)
+    db.session.add_all(
+        [
+            Reminder(
+                title="Review exam resources before your next session",
+                due_at=due,
+                is_done=False,
+                owner_id=alice.id,
+            ),
+            Reminder(
+                title="Coordinate a group study slot with teammates",
+                due_at=None,
+                is_done=False,
+                owner_id=alice.id,
+            ),
+        ]
+    )
+    db.session.commit()
+
+
 def _migrate_exam_share_token_column() -> None:
     """SQLite: add share_token if DB was created before this column existed."""
     from sqlalchemy import inspect, text
@@ -211,22 +220,16 @@ def create_app(config_object: type = Config) -> Flask:
     from app.blueprints.auth import bp as auth_bp
     from app.blueprints.exams import bp as exams_bp
     from app.blueprints.group_book import bp as group_book_bp
+    from app.blueprints.reminders import bp as reminders_bp
     from app.blueprints.sidebar_stubs import bp as sidebar_stubs_bp
     from app.routes.main import main_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(exams_bp)
     app.register_blueprint(group_book_bp)
+    app.register_blueprint(reminders_bp)
     app.register_blueprint(sidebar_stubs_bp)
     app.register_blueprint(main_bp)
-feat-courses
-
-    app.register_blueprint(timetable_bp)
-    app.register_blueprint(group_bp)
-    app.register_blueprint(courses_bp)
-    app.register_blueprint(exams_tasks_bp)
-    app.register_blueprint(ai_planner_bp)
-main
 
     @app.cli.command("init-db")
     def init_db_command():
@@ -236,10 +239,6 @@ main
         db.create_all()
         seed_demo_data()
         print("Database initialised successfully.")
-
- feature/ai-planner
-    return app
-
 
     @app.get("/")
     def index():
@@ -251,6 +250,6 @@ main
         _seed_demo_data()
         _seed_exam_demo_if_empty()
         _seed_default_courses_if_missing()
+        _seed_demo_reminders_if_empty()
 
     return app
-main

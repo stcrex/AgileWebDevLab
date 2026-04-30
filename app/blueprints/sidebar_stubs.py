@@ -51,12 +51,6 @@ def courses_stub():
     )
 
 
-@bp.get("/reminders")
-@login_required
-def reminders_stub():
-    return render_template("reminders_stub.html")
-
-
 @bp.get("/preferences")
 @login_required
 def preferences_stub():
