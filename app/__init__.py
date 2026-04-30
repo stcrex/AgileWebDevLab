@@ -15,6 +15,8 @@ from flask import Flask, redirect, url_for
 
 from app.config import Config
 from app.extensions import csrf, db, login_manager
+feat-courses
+
  feature/group-chat
 main
 from app.routes.auth import auth_bp
@@ -24,6 +26,7 @@ from app.routes.group import group_bp
 from app.routes.main import main_bp
 from app.routes.timetable import timetable_bp
 
+main
 main
 
 
@@ -118,6 +121,32 @@ def _seed_exam_demo_if_empty() -> None:
     db.session.commit()
 
 
+def _seed_default_courses_if_missing() -> None:
+    """Lightweight catalog rows so /courses is not empty on demo accounts."""
+    from app.models import Course, User
+
+    alice = User.query.filter_by(email="alice@lab.local").first()
+    if alice is None or Course.query.filter_by(owner_id=alice.id).first() is not None:
+        return
+    db.session.add_all(
+        [
+            Course(
+                code="CITS3403",
+                title="Agile Web Development",
+                description="Flask, HTML, JSON APIs, and testing patterns used in this lab.",
+                owner_id=alice.id,
+            ),
+            Course(
+                code="LAB",
+                title="Practical lab block",
+                description="Aligns with course codes on seeded exam sessions (e.g. LAB).",
+                owner_id=alice.id,
+            ),
+        ]
+    )
+    db.session.commit()
+
+
 def _migrate_exam_share_token_column() -> None:
     """SQLite: add share_token if DB was created before this column existed."""
     from sqlalchemy import inspect, text
@@ -184,18 +213,20 @@ def create_app(config_object: type = Config) -> Flask:
     from app.blueprints.group_book import bp as group_book_bp
     from app.blueprints.sidebar_stubs import bp as sidebar_stubs_bp
     from app.routes.main import main_bp
-    from app.routes.timetable import timetable_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(exams_bp)
     app.register_blueprint(group_book_bp)
     app.register_blueprint(sidebar_stubs_bp)
     app.register_blueprint(main_bp)
+feat-courses
+
     app.register_blueprint(timetable_bp)
     app.register_blueprint(group_bp)
     app.register_blueprint(courses_bp)
     app.register_blueprint(exams_tasks_bp)
     app.register_blueprint(ai_planner_bp)
+main
 
     @app.cli.command("init-db")
     def init_db_command():
@@ -219,6 +250,7 @@ def create_app(config_object: type = Config) -> Flask:
         _migrate_exam_share_token_column()
         _seed_demo_data()
         _seed_exam_demo_if_empty()
+        _seed_default_courses_if_missing()
 
     return app
 main

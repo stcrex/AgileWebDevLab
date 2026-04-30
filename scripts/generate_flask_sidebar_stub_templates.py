@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write bulky Jinja placeholder pages for Courses / Reminders / Preferences (live app nav fix)."""
+"""Write bulky Jinja placeholder pages for Reminders / Preferences (courses uses templates/courses.html)."""
 
 from __future__ import annotations
 
@@ -60,10 +60,9 @@ def shell(title: str, active: str) -> str:
 
 def main() -> None:
     TPL.mkdir(parents=True, exist_ok=True)
-    (TPL / "courses_stub.html").write_text(shell("Courses (stub)", "courses"), encoding="utf-8")
     (TPL / "reminders_stub.html").write_text(shell("Reminders (stub)", "reminders"), encoding="utf-8")
     (TPL / "preferences_stub.html").write_text(shell("Preferences (stub)", "preferences"), encoding="utf-8")
-    print("Wrote courses_stub, reminders_stub, preferences_stub templates")
+    print("Wrote reminders_stub, preferences_stub (courses: edit templates/courses.html)")
 
 
 if __name__ == "__main__":

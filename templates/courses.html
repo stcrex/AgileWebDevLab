@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="csrf-token" content="{{ csrf_token() }}"/>
+  <title>Courses — AgileWebDevLab</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-dark text-light">
+  <nav class="navbar navbar-dark border-bottom border-secondary mb-4">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">AgileWebDevLab</span>
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('exams.exams_list') }}">Exams</a>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('sidebar_stubs.courses_stub') }}">Courses</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.reminders_stub') }}">Reminders</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.preferences_stub') }}">Preferences</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('group_book.group_page', group_id=1) }}">Group</a>
+        <form method="post" action="{{ url_for('auth.logout_post') }}" class="d-inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+          <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container pb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+      <div>
+        <h1 class="h3 mb-1">Courses</h1>
+        <p class="text-secondary mb-0 small">
+          Cross-check <strong>exam sessions</strong> by course code and keep a lightweight <strong>saved catalog</strong> for this account.
+        </p>
+      </div>
+      <a class="btn btn-outline-info btn-sm" href="{{ url_for('exams.exams_list') }}">Go to exams</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card bg-dark border-secondary h-100">
+          <div class="card-header border-secondary d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">From your exam planner</span>
+            <span class="badge bg-secondary">live</span>
+          </div>
+          <div class="card-body">
+            {% if not from_exams %}
+              <p class="text-secondary small mb-0">No exam sessions yet. Add one under <a href="{{ url_for('exams.exams_list') }}" class="link-info">Exams</a> and set a <strong>course code</strong> so it appears here.</p>
+            {% else %}
+              <div class="table-responsive">
+                <table class="table table-dark table-hover table-sm align-middle mb-0">
+                  <thead>
+                    <tr class="text-secondary small">
+                      <th scope="col">Code</th>
+                      <th scope="col">Sessions</th>
+                      <th scope="col">Next start</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for row in from_exams %}
+                      <tr>
+                        <td class="fw-semibold text-nowrap">{{ row.code }}</td>
+                        <td>{{ row.exam_count }}</td>
+                        <td class="text-secondary small">{{ row.next_starts.strftime("%Y-%m-%d %H:%M") }}</td>
+                        <td class="text-end">
+                          <a class="btn btn-sm btn-outline-light" href="{{ url_for('exams.exam_detail', exam_id=row.next_exam_id) }}">Open</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="card bg-dark border-secondary mb-4">
+          <div class="card-header border-secondary fw-semibold">Saved catalog</div>
+          <div class="card-body">
+            {% if not catalog_courses %}
+              <p class="text-secondary small mb-2">No saved courses on file for your account.</p>
+              <p class="small text-muted mb-0">Demo installs seed a few units for <code>alice@lab.local</code> automatically. Your catalog is private to your login.</p>
+            {% else %}
+              <ul class="list-group list-group-flush">
+                {% for c in catalog_courses %}
+                  <li class="list-group-item list-group-item-dark border-secondary px-0 bg-transparent">
+                    <div class="fw-semibold">{{ c.code }}</div>
+                    <div>{{ c.title }}</div>
+                    {% if c.description %}
+                      <div class="small text-secondary mt-1">{{ c.description[:180] }}{% if c.description|length > 180 %}…{% endif %}</div>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="card bg-dark border-secondary">
+          <div class="card-header border-secondary fw-semibold">Shortcuts</div>
+          <div class="card-body d-grid gap-2">
+            <a class="btn btn-outline-secondary btn-sm text-start" href="{{ url_for('exams.exams_list') }}">Exam sessions &amp; resources</a>
+            <a class="btn btn-outline-secondary btn-sm text-start" href="{{ url_for('group_book.group_page', group_id=1) }}">Group availability &amp; booking</a>
+            <a class="btn btn-outline-secondary btn-sm text-start" href="{{ url_for('sidebar_stubs.reminders_stub') }}">Reminders (stub)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
