@@ -1,3 +1,10 @@
+ feature/ai-planner
+﻿from flask import Flask
+
+from app.config import Config
+from app.extensions import csrf, db, login_manager
+from app.routes.ai_planner import ai_planner_bp
+
 from __future__ import annotations
 
 import os
@@ -8,6 +15,19 @@ from flask import Flask, redirect, url_for
 
 from app.config import Config
 from app.extensions import csrf, db, login_manager
+feat-courses
+
+ feature/group-chat
+main
+from app.routes.auth import auth_bp
+from app.routes.courses import courses_bp
+from app.routes.exams_tasks import exams_tasks_bp
+from app.routes.group import group_bp
+from app.routes.main import main_bp
+from app.routes.timetable import timetable_bp
+
+main
+main
 
 
 def _seed_demo_data() -> None:
@@ -199,6 +219,14 @@ def create_app(config_object: type = Config) -> Flask:
     app.register_blueprint(group_book_bp)
     app.register_blueprint(sidebar_stubs_bp)
     app.register_blueprint(main_bp)
+feat-courses
+
+    app.register_blueprint(timetable_bp)
+    app.register_blueprint(group_bp)
+    app.register_blueprint(courses_bp)
+    app.register_blueprint(exams_tasks_bp)
+    app.register_blueprint(ai_planner_bp)
+main
 
     @app.cli.command("init-db")
     def init_db_command():
@@ -208,6 +236,10 @@ def create_app(config_object: type = Config) -> Flask:
         db.create_all()
         seed_demo_data()
         print("Database initialised successfully.")
+
+ feature/ai-planner
+    return app
+
 
     @app.get("/")
     def index():
@@ -221,3 +253,4 @@ def create_app(config_object: type = Config) -> Flask:
         _seed_default_courses_if_missing()
 
     return app
+main
