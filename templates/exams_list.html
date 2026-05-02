@@ -14,7 +14,7 @@
       <div class="d-flex flex-wrap gap-2 align-items-center">
         <a class="btn btn-outline-light btn-sm" href="{{ url_for('exams.exams_list') }}">Exams</a>
         <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.courses_stub') }}">Courses</a>
-        <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.reminders_stub') }}">Reminders</a>
+        <a class="btn btn-outline-light btn-sm" href="{{ url_for('reminders.reminders_list') }}">Reminders</a>
         <a class="btn btn-outline-light btn-sm" href="{{ url_for('sidebar_stubs.preferences_stub') }}">Preferences</a>
         <a class="btn btn-outline-light btn-sm" href="{{ url_for('group_book.group_page', group_id=1) }}">Group</a>
         <form method="post" action="{{ url_for('auth.logout_post') }}" class="d-inline">

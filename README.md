@@ -100,6 +100,8 @@ Alice owns a sample exam with one starter link; both users are in **Demo Lab Gro
 |------|-------------|
 | `/exams` | List of your exam sessions |
 | `/exams/<id>` | Exam detail: resources + share link controls |
+| `/courses` | Courses hub: exam course-code rollup + saved catalog |
+| `/reminders` | Personal reminders (create, due optional, mark done, delete) |
 | `/group/1` | Group workspace for the seeded group |
 | `/exams/shared/<token>` | **Public** read-only exam (only when a share token exists) |
 
