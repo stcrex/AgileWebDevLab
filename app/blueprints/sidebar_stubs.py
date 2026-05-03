@@ -1,4 +1,4 @@
-"""Sidebar-linked pages (courses, reminders, preferences)."""
+"""Sidebar-linked pages (courses only; reminders and preferences have dedicated blueprints)."""
 
 from __future__ import annotations
 
@@ -49,9 +49,3 @@ def courses_stub():
         catalog_courses=catalog,
         from_exams=from_exams,
     )
-
-
-@bp.get("/preferences")
-@login_required
-def preferences_stub():
-    return render_template("preferences_stub.html")
