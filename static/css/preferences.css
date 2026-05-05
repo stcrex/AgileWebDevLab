@@ -1,0 +1,57 @@
+/**
+ * Preferences page: accent preview swatches (matches ALLOWED_AVATAR_COLOURS in code).
+ * Loaded only from templates/preferences.html to avoid affecting global bundle size.
+ */
+
+.accent-swatch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.accent-swatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+}
+
+.accent-swatch--purple {
+  background: #a855f7;
+}
+.accent-swatch--blue {
+  background: #3b82f6;
+}
+.accent-swatch--green {
+  background: #22c55e;
+}
+.accent-swatch--orange {
+  background: #f97316;
+}
+.accent-swatch--teal {
+  background: #14b8a6;
+}
+.accent-swatch--pink {
+  background: #ec4899;
+}
+.accent-swatch--slate {
+  background: #64748b;
+}
+.accent-swatch--red {
+  background: #ef4444;
+}
+
+.profile-progress {
+  height: 0.5rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.profile-progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #22d3ee);
+  transition: width 0.35s ease;
+}
