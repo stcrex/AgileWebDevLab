@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}AI Planner | StudySync{% endblock %}
+{% block content %}
+<div class="chat-shell">
+    <header class="chat-header">
+        <div class="bot-icon"><i class="bi bi-robot"></i></div>
+        <div><h1>StudySync AI</h1><p><span class="online-dot"></span> Online · Context-aware planner with optional Ollama/LM Studio support</p></div>
+        <div class="ms-auto d-flex gap-2">
+            <button class="btn btn-sm btn-outline-light" type="button" id="clearAiHistory"><i class="bi bi-trash"></i> Clear</button>
+            <button class="btn btn-sm btn-outline-light" type="button" id="showAiHistory" data-bs-toggle="modal" data-bs-target="#historyModal"><i class="bi bi-clock-history"></i> History</button>
+        </div>
+    </header>
+    <main class="chat-messages" id="chatMessages">
+        {% for message in messages %}
+            <div class="chat-row {{ message.role }}">
+                <div class="message-bubble"><pre>{{ message.content }}</pre></div>
+            </div>
+        {% endfor %}
+        <div class="suggestion-chips">
+            <button data-suggest="Generate my study plan from my timetable and weak topics">🧠 Smart study plan</button>
+            <button data-suggest="What are my weak exam topics?">📊 Weak topics</button>
+            <button data-suggest="Give me one MCQ practice question">📝 Practice MCQ</button>
+            <button data-suggest="What group project tasks are pending?">👥 Group tasks</button>
+            <button data-suggest="Explain SQLAlchemy relationships quickly">🔗 SQLAlchemy</button>
+        </div>
+    </main>
+    <form class="chat-input" id="chatForm">
+        <input id="chatText" placeholder="Ask about your timetable, exams, or study plan..." autocomplete="off">
+        <button class="btn btn-primary" type="submit"><i class="bi bi-send-fill"></i></button>
+    </form>
+    <div class="chat-footer">StudySync AI can see your timetable and exam schedule through the backend database.</div>
+</div>
+
+
+<div class="modal fade" id="historyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content glass-modal">
+            <div class="modal-header border-0">
+                <h5 class="modal-title"><i class="bi bi-clock-history"></i> AI Planner History</h5>
+                <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body" id="aiHistoryList">
+                <p class="muted">Click History to load your saved planner messages.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/ai.js') }}"></script>{% endblock %}

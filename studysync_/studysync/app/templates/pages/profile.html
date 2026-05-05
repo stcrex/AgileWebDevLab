@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}My Profile · StudySync{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div>
+        <h1>My Student Profile</h1>
+        <p class="muted mb-0">Keep your study profile, skills, availability and contact preferences up to date.</p>
+    </div>
+    <a class="btn btn-outline-light ms-auto" href="{{ url_for('main.students') }}"><i class="bi bi-people"></i> Student Directory</a>
+</div>
+
+<div class="profile-layout">
+    <section class="card-panel profile-summary">
+        <div class="profile-hero">
+            <div class="avatar profile-avatar avatar-{{ current_user.avatar_color }}">{{ current_user.initials }}</div>
+            <div>
+                <h2>{{ current_user.name }}</h2>
+                <p class="muted mb-1">{{ current_user.program or 'Program not added yet' }}</p>
+                <span class="status-pill status-in-progress">{{ membership.role if membership else 'Student' }}</span>
+            </div>
+        </div>
+
+        <div class="profile-stat-grid mt-4">
+            <div><strong>{{ stats.courses_count }}</strong><span>Courses</span></div>
+            <div><strong>{{ stats.completed_tasks }}/{{ stats.total_tasks }}</strong><span>Tasks done</span></div>
+            <div><strong>{{ stats.messages_sent }}</strong><span>Messages</span></div>
+        </div>
+
+        <div class="profile-section">
+            <h3>Public Preview</h3>
+            <p>{{ current_user.bio or 'Add a short bio so group members know what you are working on.' }}</p>
+            <div class="skill-chip-row">
+                {% for skill in current_user.skill_list %}
+                    <span class="skill-chip">{{ skill }}</span>
+                {% else %}
+                    <span class="muted">No skills added yet.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h3>Study Goal</h3>
+            <p>{{ current_user.study_goal or 'No goal added yet.' }}</p>
+        </div>
+
+        <div class="profile-section">
+            <h3>Availability</h3>
+            <p><i class="bi bi-clock"></i> {{ current_user.availability or 'Availability not set yet.' }}</p>
+            <p><i class="bi bi-chat-dots"></i> {{ current_user.preferred_contact or 'StudySync Messenger' }}</p>
+        </div>
+
+        <div class="profile-section">
+            <h3>My Courses</h3>
+            {% for course in courses %}
+                <span class="course-pill">{{ course.code }}</span>
+            {% else %}
+                <span class="muted">No courses selected yet.</span>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="card-panel">
+        <div class="section-heading-inline">
+            <div>
+                <h2>Edit profile</h2>
+                <p class="muted mb-0">This information is visible to your project group members.</p>
+            </div>
+            <span id="profile-save-status" class="muted small"></span>
+        </div>
+
+        <form id="profile-form" method="post" action="{{ url_for('main.profile') }}" class="profile-form mt-4">
+            {{ form.hidden_tag() }}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control", id="profile-name") }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.uwa_id.label(class="form-label") }}
+                    {{ form.uwa_id(class="form-control", id="profile-uwa-id") }}
+                </div>
+                <div class="col-md-8">
+                    {{ form.program.label(class="form-label") }}
+                    {{ form.program(class="form-control", id="profile-program") }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.year_level.label(class="form-label") }}
+                    {{ form.year_level(class="form-select", id="profile-year-level") }}
+                </div>
+                <div class="col-12">
+                    {{ form.bio.label(class="form-label") }}
+                    {{ form.bio(class="form-control", rows="4", id="profile-bio", placeholder="Example: I enjoy backend development and can help with Flask routes, models and testing.") }}
+                </div>
+                <div class="col-12">
+                    {{ form.skills.label(class="form-label") }}
+                    {{ form.skills(class="form-control", id="profile-skills", placeholder="Python, Flask, HTML, CSS, testing") }}
+                    <small class="muted">Separate skills using commas.</small>
+                </div>
+                <div class="col-md-6">
+                    {{ form.study_goal.label(class="form-label") }}
+                    {{ form.study_goal(class="form-control", id="profile-study-goal") }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.availability.label(class="form-label") }}
+                    {{ form.availability(class="form-control", id="profile-availability", placeholder="Weekdays after 5pm, Sunday afternoon") }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.preferred_contact.label(class="form-label") }}
+                    {{ form.preferred_contact(class="form-control", id="profile-preferred-contact") }}
+                </div>
+                <div class="col-md-6">
+                    {{ form.avatar_color.label(class="form-label") }}
+                    {{ form.avatar_color(class="form-select", id="profile-avatar-color") }}
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        {{ form.show_email(class="form-check-input", id="profile-show-email") }}
+                        {{ form.show_email.label(class="form-check-label") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                {{ form.submit(class="btn btn-gradient") }}
+                <button class="btn btn-outline-light" type="button" id="ajax-save-profile"><i class="bi bi-lightning-charge"></i> Quick AJAX Save</button>
+            </div>
+        </form>
+
+        <div class="profile-section">
+            <h3>Assigned group tasks</h3>
+            <div class="task-list">
+                {% for task in assigned_tasks %}
+                    <div class="task-item">
+                        <i class="bi bi-check2-square"></i>
+                        <div class="flex-grow-1">
+                            <strong>{{ task.title }}</strong>
+                            <small class="d-block muted">Due {{ task.due_date.strftime('%d %b %Y') if task.due_date else 'No due date' }}</small>
+                        </div>
+                        <span class="status-pill status-{{ task.status|lower|replace(' ', '-') }}">{{ task.status }}</span>
+                    </div>
+                {% else %}
+                    <p class="muted">No assigned tasks yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}

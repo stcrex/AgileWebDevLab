@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}UWA Handbook | StudySync{% endblock %}
+{% block content %}
+<header class="topbar">
+    <div>
+        <p class="breadcrumb-text"><i class="bi bi-book-half"></i> StudySync › UWA Handbook</p>
+        <h1>UWA Handbook Subjects</h1>
+        <p class="muted">Search official UWA units, filter by semester/school, and add selected subjects to your StudySync courses.</p>
+    </div>
+    <a class="btn btn-primary" href="https://handbooks.uwa.edu.au/search/?searchtext=&type=units" target="_blank" rel="noopener">
+        <i class="bi bi-box-arrow-up-right"></i> Open UWA Handbook
+    </a>
+</header>
+
+<section class="card-panel mb-4">
+    <form class="row g-3 align-items-end" method="get" action="{{ url_for('main.handbook') }}">
+        <div class="col-md-4">
+            <label class="form-label">Search unit code, title, coordinator or field</label>
+            <input class="form-control" name="q" value="{{ query_text }}" placeholder="e.g. CITS, Data Science, Finance">
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Semester</label>
+            <select class="form-select" name="semester">
+                <option value="">All</option>
+                <option value="Semester 1" {{ 'selected' if semester == 'Semester 1' }}>Semester 1</option>
+                <option value="Semester 2" {{ 'selected' if semester == 'Semester 2' }}>Semester 2</option>
+                <option value="Non-standard" {{ 'selected' if semester == 'Non-standard' }}>Non-standard</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">Level</label>
+            <select class="form-select" name="level">
+                <option value="">All</option>
+                <option value="Undergraduate" {{ 'selected' if level == 'Undergraduate' }}>Undergraduate</option>
+                <option value="Postgraduate" {{ 'selected' if level == 'Postgraduate' }}>Postgraduate</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">School</label>
+            <select class="form-select" name="school">
+                <option value="">All schools</option>
+                {% for option in schools %}
+                    <option value="{{ option }}" {{ 'selected' if school == option }}>{{ option }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-1 d-grid">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
+</section>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <p class="muted mb-0">Showing {{ subjects|length }} subject{{ '' if subjects|length == 1 else 's' }} from the local Handbook catalogue.</p>
+    <a class="btn btn-sm btn-outline-light" href="{{ url_for('main.handbook') }}">Clear filters</a>
+</div>
+
+<section class="row g-4" id="handbookGrid">
+    {% for subject in subjects %}
+    <div class="col-xl-4 col-md-6">
+        <article class="card-panel handbook-card h-100" data-subject-card>
+            <div class="d-flex justify-content-between gap-3">
+                <span class="course-badge">{{ subject.code }}</span>
+                <span class="small-pill">{{ subject.credit_points }} pts</span>
+            </div>
+            <h2>{{ subject.title }}</h2>
+            <p class="muted handbook-description">{{ subject.description or 'No description imported yet. Open the Handbook link for full details.' }}</p>
+            <div class="handbook-meta">
+                <span><i class="bi bi-calendar-event"></i> {{ subject.availability or 'Check Handbook' }}</span>
+                <span><i class="bi bi-building"></i> {{ subject.school or 'School not listed' }}</span>
+                <span><i class="bi bi-person-badge"></i> {{ subject.coordinator or 'Coordinator not listed' }}</span>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <button
+                    class="btn btn-sm {{ 'btn-success' if subject.code in my_course_codes else 'btn-primary' }} add-handbook-course"
+                    data-subject-id="{{ subject.id }}"
+                    {{ 'disabled' if subject.code in my_course_codes }}>
+                    <i class="bi {{ 'bi-check2-circle' if subject.code in my_course_codes else 'bi-plus-circle' }}"></i>
+                    {{ 'Added' if subject.code in my_course_codes else 'Add to Courses' }}
+                </button>
+                <a class="btn btn-sm btn-outline-light" href="{{ subject.handbook_url }}" target="_blank" rel="noopener">Details</a>
+            </div>
+        </article>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="card-panel text-center py-5">
+            <i class="bi bi-search fs-1 text-primary"></i>
+            <h2>No matching subjects found</h2>
+            <p class="muted">Try a broader keyword such as CITS, ECON, Engineering, or Semester 2.</p>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/handbook.js') }}"></script>
+{% endblock %}

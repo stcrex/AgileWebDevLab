@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{% block title %}StudySync{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="aurora-bg" aria-hidden="true"><span class="orb orb-one"></span><span class="orb orb-two"></span><span class="orb orb-three"></span></div>
+<div class="grain-overlay" aria-hidden="true"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<div class="app-shell">
+    <aside class="sidebar">
+        <a class="brand" href="{{ url_for('main.timetable') }}"><i class="bi bi-calendar2-week"></i><span>StudySync</span></a>
+        <nav class="nav-block">
+            <div class="nav-heading">Main</div>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.timetable' }}" href="{{ url_for('main.timetable') }}"><i class="bi bi-calendar3"></i> Timetable</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.ai_planner' }}" href="{{ url_for('main.ai_planner') }}"><i class="bi bi-robot"></i> AI Planner</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.group' }}" href="{{ url_for('main.group') }}"><i class="bi bi-people"></i> My Group</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.messages' }}" href="{{ url_for('main.messages') }}"><i class="bi bi-chat-dots"></i> Messenger</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.group_chat' }}" href="{{ url_for('main.group_chat') }}"><i class="bi bi-chat-square-text"></i> Group Chat</a>
+            <a class="nav-link {{ 'active' if request.endpoint in ['main.students','main.student_profile'] }}" href="{{ url_for('main.students') }}"><i class="bi bi-person-lines-fill"></i> Students</a>
+        </nav>
+        <nav class="nav-block">
+            <div class="nav-heading">Personal</div>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.profile' }}" href="{{ url_for('main.profile') }}"><i class="bi bi-person-circle"></i> My Profile</a>
+            <a class="nav-link {{ 'active' if request.endpoint in ['main.courses','main.course_detail'] }}" href="{{ url_for('main.courses') }}"><i class="bi bi-book"></i> Courses</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.handbook' }}" href="{{ url_for('main.handbook') }}"><i class="bi bi-book-half"></i> UWA Handbook</a>
+            <a class="nav-link {{ 'active' if request.endpoint in ['main.exams','main.exam_detail'] }}" href="{{ url_for('main.exams') }}"><i class="bi bi-file-earmark-check"></i> Exams & Tasks</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.reminders' }}" href="{{ url_for('main.reminders') }}"><i class="bi bi-bell"></i> Reminders</a>
+        </nav>
+        <nav class="nav-block">
+            <div class="nav-heading">Settings</div>
+            <a class="nav-link {{ 'active' if request.endpoint == 'main.preferences' }}" href="{{ url_for('main.preferences') }}"><i class="bi bi-gear"></i> Preferences</a>
+            <a class="nav-link {{ 'active' if request.endpoint == 'auth.logout' }}" href="{{ url_for('auth.logout') }}"><i class="bi bi-box-arrow-right"></i> Log Out</a>
+        </nav>
+        <a class="sidebar-user sidebar-user-link" href="{{ url_for('main.profile') }}">
+            <div class="avatar avatar-{{ current_user.avatar_color }}">{{ current_user.initials }}</div>
+            <div>
+                <strong>{{ current_user.name }}</strong><br>
+                <small>{{ current_user.uwa_id }}</small>
+            </div>
+        </a>
+    </aside>
+
+    <main class="content-area page-enter">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

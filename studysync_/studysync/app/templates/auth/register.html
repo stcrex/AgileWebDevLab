@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create StudySync Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+</head>
+<body class="auth-body">
+<div class="aurora-bg" aria-hidden="true"><span class="orb orb-one"></span><span class="orb orb-two"></span><span class="orb orb-three"></span></div>
+<div class="grain-overlay" aria-hidden="true"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<div class="auth-grid auth-grid-single page-enter">
+    <section class="hero-panel auth-copy-panel">
+        <a class="brand brand-auth" href="{{ url_for('auth.login') }}"><i class="bi bi-calendar2-week"></i><span>StudySync</span></a>
+        <h1>Create your<br><span>student workspace.</span></h1>
+        <p>Register once, then keep your timetable, exams, revision topics, messages and group project work saved between sessions.</p>
+        <div class="feature-pill"><i class="bi bi-shield-check"></i> Passwords are stored as salted hashes</div>
+        <div class="feature-pill"><i class="bi bi-database-check"></i> Your profile and study data persist in SQLite</div>
+        <div class="feature-pill"><i class="bi bi-people"></i> Join the collaboration tools after login</div>
+    </section>
+
+    <section class="login-panel">
+        <div class="auth-card auth-card-wide">
+            <a class="small d-inline-flex align-items-center gap-1 mb-3" href="{{ url_for('auth.login') }}"><i class="bi bi-arrow-left"></i> Back to login</a>
+            <h2>Create account</h2>
+            <p class="muted">Use your student details to start using StudySync.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="post" novalidate class="mt-4">
+                {{ register_form.hidden_tag() }}
+                <div class="row g-3">
+                    <div class="col-md-7">
+                        <label class="form-label">Full name</label>
+                        {{ register_form.name(class="form-control", placeholder="Your full name") }}
+                        {% for error in register_form.name.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label">UWA ID</label>
+                        {{ register_form.uwa_id(class="form-control", placeholder="24000000") }}
+                        {% for error in register_form.uwa_id.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Student email</label>
+                        {{ register_form.email(class="form-control", placeholder="you@student.uwa.edu.au") }}
+                        {% for error in register_form.email.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+                        {{ register_form.password(class="form-control", placeholder="Minimum 6 characters") }}
+                        {% for error in register_form.password.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm password</label>
+                        {{ register_form.confirm_password(class="form-control", placeholder="Repeat password") }}
+                        {% for error in register_form.confirm_password.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                </div>
+                <button class="btn btn-gradient w-100 mt-4" type="submit">Create Account <i class="bi bi-person-plus"></i></button>
+            </form>
+            <div class="demo-login text-center">Already have an account? <a href="{{ url_for('auth.login') }}">Sign in here</a>.</div>
+        </div>
+    </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
