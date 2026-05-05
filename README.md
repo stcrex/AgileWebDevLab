@@ -12,7 +12,7 @@ Minimal **Flask** web application for Agile Web Development coursework: study-gr
 
 | Area | Behaviour |
 |------|-----------|
-| **Study groups** | Two seeded users share a group. The server computes **common free time** for Monday–Friday and lets a member **book** a slot, persisting a personal **`CalendarEvent`** (`event_type=group_study`). |
+| **Study groups** | Seeded users share a **group workspace** (`/group/<id>`): **Messages**, **invite by email**, and **common free time** (Mon–Fri) with **book** → personal **`CalendarEvent`** (`event_type=group_study`). JSON APIs under `/api/groups/<id>/…`. |
 | **Exams** | Each user owns **exam sessions**. A session has many **`exam_resources`** (title + URL) with validation and JSON CRUD. |
 | **Sharing** | The exam owner may enable a random **`share_token`**. Visitors hit a **public read-only** URL without logging in; revoked or unknown tokens yield a generic **404** page. |
 | **Sign-in UX** | **Email + password** is the only working path on **`/login`**. OAuth-style tiles are **disabled** with clear copy; see `templates/login.html`, `static/css/auth_sso_facade.css`, and **`mock_pages/login.html`** for the parallel static mock. |
@@ -103,15 +103,35 @@ Alice owns a sample exam with one starter link; both users are in **Demo Lab Gro
 | `/courses` | Courses hub: exam course-code rollup + saved catalog |
 | `/reminders` | Personal reminders (create, due optional, mark done, delete) |
 | `/preferences` | Account profile: editable name, IDs, bio, skills, availability, accent |
-| `/group/1` | Group workspace for the seeded group |
+| `/group/<id>` | **Group workspace** (messages, invites, common free slots + booking) — demo uses `/group/1` |
+| `/group-chat` | Redirects to `/group/<id>` for your **first** membership row (or flashes and sends you to Exams if you have no group) |
 | `/exams/shared/<token>` | **Public** read-only exam (only when a share token exists) |
 
-### 3.6 Database and local files
+### 3.6 Using the Group workspace
+
+1. **Open the page**  
+   After login, use the **Group** link in the nav (where present) or go directly to **`/group/1`** for the seeded **Demo Lab Group** (`LABDEMO1`). You must be a **member** of that group (`GroupMember` row); otherwise the page responds with **404**.
+
+2. **Messages**  
+   Type text and **Send**. Posts are stored as `GroupMessage` rows for that group and shown in chronological order.
+
+3. **Invite a teammate**  
+   Enter an email (and optional display name). If the address is new, the app creates a user with password **`password123`** (lab-only; invitees should change it elsewhere if you extend the app). If they are already a member, nothing is duplicated and you see a flash saying so.
+
+4. **Book a common free slot**  
+   The lower section loads **merged** intervals when **no group member** has a `CalendarEvent` overlapping that time (Mon–Fri, 08:00–20:00, 30-minute grid for the **current calendar week**, `week_start` = Monday shown on the page). Click **Book** on a row; your browser POSTs JSON to **`/api/groups/<id>/book-free-slot`** (CSRF header on mutations). Success creates **your** `CalendarEvent` with `event_type=group_study`. Booking twice in the same interval returns **409** (overlap).
+
+5. **StudySync shell**  
+   In layouts that extend `app/templates/base.html`, **Group** points at **`/group-chat`**, which forwards you to the correct `/group/<id>` for your account.
+
+See **`tests/test_group_book.py`** for API and workspace behaviour (`pytest tests/test_group_book.py -v`).
+
+### 3.7 Database and local files
 
 - SQLite file: **`instance/lab.db`** (created automatically; the `instance/` directory is gitignored).
 - To **reset all data** (including schema migrations applied at runtime), stop the server, delete `instance/lab.db`, and start again so seeds re-run.
 
-### 3.7 Optional configuration
+### 3.8 Optional configuration
 
 | Variable | Meaning |
 |----------|---------|
@@ -195,13 +215,14 @@ After `pip install -r requirements.txt`, **`pytest -m "not selenium"`** should b
 
 | Path | Role |
 |------|------|
-| `app/` | Application package (`create_app`, models, blueprints, services) |
+| `app/` | Application package (`create_app`, models, blueprints, services — e.g. `app/blueprints/group_book.py`) |
 | `templates/` | Jinja HTML |
 | `static/js/` | Client scripts (jQuery + CSRF header on mutating calls) |
 | `static/css/auth_sso_facade.css` | Bulky, token-oriented stylesheet attached to the login page so disabled “social” controls stay visually subordinate |
 | `tests/` | Pytest modules (API/unit) |
 | `tests/selenium/` | Selenium E2E tests (live `werkzeug` server + Chrome) |
 | `mock_pages/` | Static HTML mocks (open files in a browser; not served by Flask). **Global sidebar** links for **Courses**, **Reminders**, and **Preferences** resolve to real placeholder files (`courses.html`, `reminders.html`, `preferences.html`) instead of `href="#"`. Optional audit log: `NAV_AUDIT.txt`. Regenerate bulky placeholders with `python3 scripts/generate_nav_placeholder_pages.py`. The timetable mock uses **grid-only** list control (disabled + hint). |
+| `app/services/group_workspace.py` | Group messages, member listing, invites (used by `group_book` blueprint) |
 | `source_pages/` | **Alias / audit hub** for brief terminology: points to the same static story as `mock_pages/`; see `source_pages/README.md` and the drift appendix. |
 | `docs/SOURCE_PAGES_DRIFT_AUDIT.md` | **Bulk drift matrix** (`mock_pages` ↔ `templates`) + synthetic checklist rows; regenerate via `python3 scripts/generate_source_pages_drift_audit.py`. |
 | `docs/SECURITY_PRE_RELEASE_CHECKLIST.md` | **Synthetic security sweep** (CSRF, passwords, secrets, auth routes); regenerate via `python3 scripts/generate_security_pre_release_pass.py`. Companion: `docs/SECURITY_AUDIT_LINES.txt`. |
@@ -225,4 +246,4 @@ For branching conventions, PR checklist, and Git attribution, see **[CONTRIBUTIN
 | `Address already in use` | Another process uses port 5000. Stop it or change the port in `run.py`. |
 | Old database missing new columns | Delete `instance/lab.db` and restart once, or rely on the small SQLite `ALTER` helpers in `app/__init__.py` where present. |
 | Login always fails | Use the **seeded** emails exactly (`alice@lab.local`), password `labdemo123`. |
-| Selenium tests skip | Install **Chrome**; run with `HEADLESS=0` to see errors; ensure no corporate proxy blocks driver download. |
+| Group page **404** | You must be in that study group (`GroupMember`). Seed demo puts **Alice** and **Bob** in group **1**. Use **`/group/1`** or **`/group-chat`** after login. |
