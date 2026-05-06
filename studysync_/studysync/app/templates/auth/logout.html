@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Log Out | StudySync{% endblock %}
+
+{% block content %}
+<section class="logout-page">
+    <div class="logout-card card-panel">
+        <div class="logout-icon"><i class="bi bi-box-arrow-right"></i></div>
+        <h1>Log out of StudySync?</h1>
+        <p class="muted">
+            You are currently signed in as <strong>{{ current_user.name }}</strong>.
+            Logging out protects your timetable, messages, group work and profile on shared computers.
+        </p>
+
+        <div class="logout-summary">
+            <div class="avatar avatar-{{ current_user.avatar_color }}">{{ current_user.initials }}</div>
+            <div>
+                <strong>{{ current_user.name }}</strong><br>
+                <small>{{ current_user.email }}</small><br>
+                <small>{{ current_user.uwa_id }}</small>
+            </div>
+        </div>
+
+        <form method="post" class="d-grid gap-2 mt-4">
+            {{ logout_form.hidden_tag() }}
+            <button class="btn btn-danger btn-lg" type="submit">
+                Yes, log me out <i class="bi bi-box-arrow-right ms-1"></i>
+            </button>
+            <a class="btn btn-outline-light" href="{{ url_for('main.timetable') }}">
+                Cancel and return to timetable
+            </a>
+        </form>
+    </div>
+</section>
+{% endblock %}

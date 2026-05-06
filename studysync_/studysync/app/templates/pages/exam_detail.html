@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}{{ exam.title }} | StudySync{% endblock %}
+{% block content %}
+<header class="breadcrumb-bar">
+    <span><i class="bi bi-calendar3"></i> Timetable</span><i class="bi bi-chevron-right"></i><span>{{ exam.course.code if exam.course else 'Course' }}</span><i class="bi bi-chevron-right"></i><strong>Mid-semester Test</strong>
+    <div class="ms-auto d-flex gap-2">
+        <button class="btn btn-sm btn-outline-light" type="button" id="shareExamButton" data-exam-id="{{ exam.id }}">
+            <i class="bi bi-share"></i> Share
+        </button>
+    </div>
+</header>
+<div class="detail-layout">
+    <section>
+        <div class="hero-exam">
+            <span class="badge badge-danger-soft"><i class="bi bi-exclamation-triangle-fill"></i> EXAM</span>
+            <h1>{{ exam.title }}</h1>
+            <div class="exam-meta">
+                <span><i class="bi bi-calendar3"></i> {{ exam.starts_at.strftime('%A, %d %B %Y') }}</span>
+                <span><i class="bi bi-clock"></i> {{ exam.starts_at.strftime('%I:%M %p') }} – {{ exam.ends_at.strftime('%I:%M %p') }}</span>
+                <span><i class="bi bi-geo-alt-fill"></i> {{ exam.room }}</span>
+                <span><i class="bi bi-award-fill"></i> {{ exam.weight }}% of final grade</span>
+            </div>
+            <div class="countdown-row" data-countdown="{{ exam.starts_at.isoformat() }}">
+                <div><strong data-days>0</strong><span>Days</span></div>
+                <div><strong data-hours>0</strong><span>Hours</span></div>
+                <div><strong data-minutes>0</strong><span>Minutes</span></div>
+            </div>
+        </div>
+
+        <div class="card-panel mt-4">
+            <h3><i class="bi bi-graph-up"></i> Revision Progress</h3>
+            {% for area, topics in progress_by_area.items() %}
+                {% set completed = topics|selectattr('status','equalto','Done')|list|length %}
+                {% set pct = (completed / (topics|length) * 100)|round|int %}
+                <div class="skill-row">
+                    <div><span>{{ area }}</span><strong>{{ pct }}%</strong></div>
+                    <div class="progress thin"><div class="progress-bar {{ 'bg-success' if pct >= 80 else 'bg-warning' if pct >= 50 else 'bg-danger' }}" style="width: {{ pct }}%"></div></div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="card-panel mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3><i class="bi bi-list-check"></i> Topics to Revise</h3>
+                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#addTopic">+ Add topic</button>
+            </div>
+            <div class="collapse mb-3" id="addTopic">
+                <form class="mini-form" method="post" action="{{ url_for('api.add_topic', exam_id=exam.id) }}">
+                    {{ topic_form.hidden_tag() }}
+                    <div class="row g-2">
+                        <div class="col-md-5">{{ topic_form.title(class="form-control", placeholder="Topic title") }}</div>
+                        <div class="col-md-3">{{ topic_form.area(class="form-control", placeholder="Area") }}</div>
+                        <div class="col-md-2">{{ topic_form.status(class="form-select") }}</div>
+                        <div class="col-md-2"><button class="btn btn-primary w-100">Add</button></div>
+                    </div>
+                </form>
+            </div>
+            <div class="topic-list">
+                {% for topic in exam.topics %}
+                <div class="topic-item" data-topic-id="{{ topic.id }}">
+                    <button class="check-button {{ 'checked' if topic.status == 'Done' }}" data-action="topic-toggle"><i class="bi bi-check-lg"></i></button>
+                    <span class="{{ 'text-decoration-line-through muted' if topic.status == 'Done' }}">{{ topic.title }}</span>
+                    <span class="status-pill status-{{ topic.status|lower|replace(' ', '-') }} ms-auto">{{ topic.status }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card-panel mt-4">
+            <h3><i class="bi bi-chat-left-text-fill"></i> Personal Notes</h3>
+            <pre class="notes-box">{{ exam.notes }}</pre>
+        </div>
+    </section>
+
+    <aside>
+        <div class="card-panel ai-suggestion">
+            <h3><i class="bi bi-robot"></i> AI Study Suggestion</h3>
+            <p>You have weak areas in Flask and SQLAlchemy. Based on progress, focus on routes, Jinja templates and model relationships first.</p>
+            <a class="btn btn-gradient w-100" href="{{ url_for('main.ai_planner') }}">Ask AI for more help</a>
+        </div>
+
+        <div class="card-panel mt-4">
+            <h3><i class="bi bi-link-45deg"></i> Resources</h3>
+            {% for resource in exam.resources %}
+                <a class="resource-row" href="{{ resource.url }}">
+                    <span class="resource-icon resource-{{ resource.kind|lower }}"><i class="bi bi-file-earmark-text"></i></span>
+                    <span><strong>{{ resource.title }}</strong><small>{{ resource.kind }}</small></span>
+                </a>
+            {% endfor %}
+            <button class="btn btn-sm btn-outline-primary mt-3" data-bs-toggle="collapse" data-bs-target="#addResource">+ Add resource</button>
+            <div class="collapse mt-3" id="addResource">
+                <form method="post" action="{{ url_for('api.add_resource', exam_id=exam.id) }}">
+                    {{ resource_form.hidden_tag() }}
+                    {{ resource_form.title(class="form-control mb-2", placeholder="Resource title") }}
+                    {{ resource_form.kind(class="form-select mb-2") }}
+                    {{ resource_form.url(class="form-control mb-2", placeholder="https://...") }}
+                    <button class="btn btn-primary btn-sm w-100">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card-panel mt-4">
+            <h3><i class="bi bi-people-fill"></i> Group Members' Status</h3>
+            <div class="member-status"><span class="mini-avatar orange">TL</span><div><strong>Tom Liu</strong><div class="progress mini"><div class="progress-bar bg-success" style="width:80%"></div></div></div><span>80%</span></div>
+            <div class="member-status"><span class="mini-avatar purple">AK</span><div><strong>Amy Kim</strong><div class="progress mini"><div class="progress-bar bg-warning" style="width:45%"></div></div></div><span>45%</span></div>
+            <div class="member-status"><span class="mini-avatar green">RZ</span><div><strong>Ryan Zhang</strong><div class="progress mini"><div class="progress-bar" style="width:60%"></div></div></div><span>60%</span></div>
+        </div>
+    </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/exam.js') }}"></script>{% endblock %}
