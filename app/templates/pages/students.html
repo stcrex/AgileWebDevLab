@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Students · StudySync{% endblock %}
+
+{% block content %}
+<div class="topbar">
+    <div>
+        <h1>Student Profiles</h1>
+        <p class="muted mb-0">View your project group members, skills, availability and contribution progress.</p>
+    </div>
+    <div class="ms-auto student-search">
+        <i class="bi bi-search"></i>
+        <input id="student-search" type="search" placeholder="Search name, role or skill">
+    </div>
+</div>
+
+{% if not group %}
+    <div class="empty-state large card-panel">
+        <i class="bi bi-people"></i>
+        <h2>No group found</h2>
+        <p class="muted">Create or join a project group to view student profiles.</p>
+        <a class="btn btn-outline-light" href="{{ url_for('main.group') }}">Create or join a group</a>
+    </div>
+{% else %}
+    <section class="card-panel gradient-card mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h2 class="mb-1">{{ group.name }}</h2>
+                <p class="muted mb-0">Group code: {{ group.code }} · {{ members|length }} members</p>
+            </div>
+            <a class="btn btn-outline-light" href="{{ url_for('main.group_chat') }}"><i class="bi bi-chat-square-text"></i> Open group chat</a>
+        </div>
+    </section>
+
+    <div class="student-grid" id="student-grid">
+        {% for member in members %}
+            {% set student = member.user %}
+            {% set stats = member_stats[student.id] %}
+            <article class="student-card" data-search="{{ (student.name ~ ' ' ~ member.role ~ ' ' ~ student.skills ~ ' ' ~ student.program)|lower }}">
+                <div class="student-card-top">
+                    <div class="avatar big avatar-{{ student.avatar_color }}">{{ student.initials }}</div>
+                    <div>
+                        <h2>{{ student.name }}</h2>
+                        <p class="muted mb-1">{{ student.program or 'Program not added' }}</p>
+                        <span class="status-pill status-in-progress">{{ member.role }}</span>
+                    </div>
+                </div>
+                <p class="student-bio">{{ student.bio or 'This student has not added a bio yet.' }}</p>
+                <div class="skill-chip-row">
+                    {% for skill in student.skill_list[:4] %}
+                        <span class="skill-chip">{{ skill }}</span>
+                    {% else %}
+                        <span class="muted">No skills listed</span>
+                    {% endfor %}
+                </div>
+                <div class="student-mini-stats">
+                    <div><strong>{{ member.progress }}%</strong><span>Group progress</span></div>
+                    <div><strong>{{ stats.completed_tasks }}/{{ stats.total_tasks }}</strong><span>Tasks</span></div>
+                    <div><strong>{{ stats.messages_sent }}</strong><span>Messages</span></div>
+                </div>
+                <div class="student-actions">
+                    <a class="btn btn-sm btn-gradient" href="{{ url_for('main.student_profile', user_id=student.id) }}">View Profile</a>
+                    {% if student.id != current_user.id %}
+                        <a class="btn btn-sm btn-outline-light" href="{{ url_for('main.messages', contact=student.id) }}">Message</a>
+                    {% else %}
+                        <a class="btn btn-sm btn-outline-light" href="{{ url_for('main.profile') }}">Edit Mine</a>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('student-search')?.addEventListener('input', (event) => {
+    const term = event.target.value.toLowerCase().trim();
+    document.querySelectorAll('.student-card').forEach((card) => {
+        card.style.display = card.dataset.search.includes(term) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}

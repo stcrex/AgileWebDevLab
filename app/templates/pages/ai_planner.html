@@ -1,129 +1,52 @@
-﻿{% extends "base.html" %}
-
-{% block title %}AI Planner - StudySync{% endblock %}
-
+{% extends "base.html" %}
+{% block title %}AI Planner | StudySync{% endblock %}
 {% block content %}
-<div class="page-header">
-    <div>
-        <h1>AI Planner</h1>
-        <p>Ask StudySync for a smart study plan based on your timetable, exams and reminders.</p>
-    </div>
-
-    <form method="POST" action="/ai-planner/clear-history">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button class="btn" type="submit">Clear History</button>
-    </form>
-</div>
-
-<div class="grid grid-3">
-    <div class="card">
-        <span class="badge">Next Exam</span>
-        <div class="stat-number-small">{{ upcoming_exam_title if upcoming_exam_title else "None" }}</div>
-        <p class="muted">{{ upcoming_exam_date }}</p>
-    </div>
-
-    <div class="card">
-        <span class="badge">This Week</span>
-        <div class="stat-number-small">{{ week_event_count }}</div>
-        <p class="muted">Upcoming timetable events in the next 7 days</p>
-    </div>
-
-    <div class="card">
-        <span class="badge">Reminders</span>
-        <div class="stat-number-small">{{ reminder_count }}</div>
-        <p class="muted">Upcoming reminders saved in your planner</p>
-    </div>
-</div>
-
-<br>
-
-<div class="card">
-    <h2>Quick prompts</h2>
-
-    <div class="quick-prompt-row">
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="prompt" value="Build a study plan for this week">
-            <button class="btn" type="submit">Study plan</button>
+<div class="chat-shell">
+    <header class="chat-header">
+        <div class="bot-icon"><i class="bi bi-robot"></i></div>
+        <div><h1>StudySync AI</h1><p><span class="online-dot"></span> Online · Context-aware planner with optional Ollama/LM Studio support</p></div>
+        <div class="ms-auto d-flex gap-2">
+            <button class="btn btn-sm btn-outline-light" type="button" id="clearAiHistory"><i class="bi bi-trash"></i> Clear</button>
+            <button class="btn btn-sm btn-outline-light" type="button" id="showAiHistory" data-bs-toggle="modal" data-bs-target="#historyModal"><i class="bi bi-clock-history"></i> History</button>
+        </div>
+    </header>
+    <main class="chat-messages" id="chatMessages">
+        {% for message in messages %}
+            <div class="chat-row {{ message.role }}">
+                <div class="message-bubble"><pre>{{ message.content }}</pre></div>
+            </div>
+        {% endfor %}
+    </main>
+    <div class="chat-controls">
+        <div class="suggestion-chips">
+            <button data-suggest="Generate my study plan from my timetable and weak topics">🧠 Smart study plan</button>
+            <button data-suggest="What are my weak exam topics?">📊 Weak topics</button>
+            <button data-suggest="Give me one MCQ practice question">📝 Practice MCQ</button>
+            <button data-suggest="What group project tasks are pending?">👥 Group tasks</button>
+            <button data-suggest="Explain SQLAlchemy relationships quickly">🔗 SQLAlchemy</button>
+        </div>
+        <form class="chat-input" id="chatForm">
+            <input id="chatText" placeholder="Ask about your timetable, exams, or study plan..." autocomplete="off">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-send-fill"></i></button>
         </form>
-
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="prompt" value="What does my timetable look like this week?">
-            <button class="btn" type="submit">This week</button>
-        </form>
-
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="prompt" value="How should I prepare for my next exam?">
-            <button class="btn" type="submit">Exam prep</button>
-        </form>
-
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <input type="hidden" name="prompt" value="Show my upcoming reminders and tasks">
-            <button class="btn" type="submit">Tasks</button>
-        </form>
+        <div class="chat-footer">StudySync AI can see your timetable and exam schedule through the backend database.</div>
     </div>
 </div>
 
-<br>
 
-<div class="grid grid-2">
-    <div class="card">
-        <h2>Ask StudySync AI</h2>
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <p class="badge">{{ message }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <form method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-            <label>Your question</label>
-            <textarea class="form-input" name="prompt" rows="6" placeholder="Example: Build a study plan for my next exam"></textarea>
-
-            <br><br>
-            <button class="btn btn-primary" type="submit">Generate Plan</button>
-        </form>
-    </div>
-
-    <div class="card">
-        <h2>Recent AI history</h2>
-
-        {% if history %}
-            {% for item in history %}
-                <div class="history-item">
-                    <strong>{{ item.heading }}</strong>
-                    <p>{{ item.prompt }}</p>
-                    <span class="muted">{{ item.created_at }}</span>
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="muted">No AI planner history yet.</p>
-        {% endif %}
+<div class="modal fade" id="historyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content glass-modal">
+            <div class="modal-header border-0">
+                <h5 class="modal-title"><i class="bi bi-clock-history"></i> AI Planner History</h5>
+                <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body" id="aiHistoryList">
+                <p class="muted">Click History to load your saved planner messages.</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<br>
-
-{% if response %}
-<div class="card planner-response">
-    <h2>{{ response.heading }}</h2>
-    <p>{{ response.summary }}</p>
-
-    {% if response.bullets %}
-        <ul class="planner-list">
-            {% for bullet in response.bullets %}
-                <li>{{ bullet }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-</div>
-{% endif %}
 {% endblock %}
-
+{% block scripts %}<script src="{{ url_for('static', filename='js/ai.js') }}"></script>{% endblock %}

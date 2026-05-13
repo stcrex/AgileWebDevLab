@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Reminders | StudySync{% endblock %}
+{% block content %}
+<header class="topbar">
+    <div><h1>Reminders</h1><p class="muted">Upcoming reminders from your timetable and study planner.</p></div>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addReminderForm"><i class="bi bi-plus-lg"></i> Add Reminder</button>
+</header>
+
+<div class="card-panel mb-4 collapse show" id="addReminderForm">
+    <form class="row g-3" method="post" action="{{ url_for('api.create_reminder') }}">
+        {{ form.hidden_tag() }}
+        <div class="col-md-7">
+            <label class="form-label">Reminder</label>
+            {{ form.title(class="form-control", placeholder="e.g. Revise Flask routes") }}
+        </div>
+        <div class="col-md-5">
+            <label class="form-label">Due</label>
+            {{ form.due_at(class="form-control", value=default_due_value) }}
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Save reminder</button>
+        </div>
+    </form>
+</div>
+
+<div class="card-panel">
+    {% if reminders %}
+        <div class="task-list">
+            {% for reminder in reminders %}
+                <div class="reminder-row" data-reminder-id="{{ reminder.id }}">
+                    <button class="check-button {{ 'checked' if reminder.is_done }}" data-action="reminder-toggle" type="button"><i class="bi bi-check2"></i></button>
+                    <div class="flex-grow-1">
+                        <strong>{{ reminder.title }}</strong>
+                        <small>Due {{ reminder.due_at.strftime('%a %d %b %Y · %I:%M %p').replace(' 0', ' ') }}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#editReminder{{ reminder.id }}">Edit</button>
+                    <form method="post" action="{{ url_for('api.delete_reminder', reminder_id=reminder.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                </div>
+                <div class="collapse mt-2 mb-3" id="editReminder{{ reminder.id }}">
+                    <form class="card-panel" method="post" action="{{ url_for('api.update_reminder', reminder_id=reminder.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="form-label">Reminder</label>
+                                <input class="form-control" name="title" maxlength="160" value="{{ reminder.title }}" required>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label">Due</label>
+                                <input class="form-control" type="datetime-local" name="due_at" value="{{ reminder.due_at.strftime('%Y-%m-%dT%H:%M') }}" required>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-primary btn-sm" type="submit">Update reminder</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state large">
+            <i class="bi bi-bell"></i>
+            <h2>No reminders yet</h2>
+            <p>Create your first reminder to keep deadlines, study tasks, and meetings visible.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
