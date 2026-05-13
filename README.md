@@ -21,7 +21,7 @@ The design is based on a dark StudySync dashboard with:
 
 ## Group Members
 
-Replace these demo rows with your real group details before submission.
+These are demo names used in project not real names.
 
 | UWA ID | Name | GitHub Username |
 |---|---|---|
@@ -82,8 +82,8 @@ The application uses JavaScript Fetch/AJAX for:
 - Saving profile updates with AJAX
 - Filtering the student directory in the browser
 
-### 6. AI Planner Without Paid API Keys
-The AI planner is implemented as a rule-based backend recommender. It reads the student's weak topics from the database and generates a practical study plan. This avoids needing paid Claude/OpenAI API credits while still demonstrating backend logic and personalised responses.
+### 6. AI Planner With Paid API Keys
+The AI planner is implemented as a rule-based backend recommender. It reads the student's weak topics from the database and generates a practical study plan. This needs paid Claude/OpenAI API credits while still demonstrating backend logic and personalised responses.
 
 ### 7. Group Collaboration
 The group page lets users view other group members' progress, shared project tasks, and common free meeting slots. This satisfies the requirement that users can view data from other users.
@@ -274,7 +274,7 @@ git commit -m "Add unit tests for AI planner endpoint"
 - SQLAlchemy models store users, events, exams, topics, resources, reminders, groups, tasks, direct messages, group chat messages, and student profiles.
 - Passwords are hashed and forms use CSRF protection.
 - AJAX is used for interactive topic/task/reminder updates, AI chat, student-to-student messenger messages, group chat messages, and profile updates.
-- The AI planner does not rely on paid external APIs; it reads database progress and generates a personalised plan.
+- The AI planner does rely on paid external APIs; it reads database progress and generates a personalised plan.
 - The project includes more than five Pytest tests and five Selenium UI test cases.
 - The UI is responsive and uses Bootstrap plus custom CSS.
 
@@ -329,13 +329,6 @@ The project includes a direct messaging system between students.
 - Shows unread message counts.
 - Protects the route so users can only message students in their own group.
 
-### Demo explanation
-
-You can say:
-
-> The messenger feature demonstrates client-server interaction. The frontend uses JavaScript Fetch to POST a new message to `/api/messages/<contact_id>`, and the Flask backend validates that the receiver is in the same group before saving the message in SQLite. The conversation is then updated in the DOM without a page refresh.
-
-
 ## Group Chat Feature
 
 The project also includes a shared group chat room for group project coordination.
@@ -350,13 +343,6 @@ The project also includes a shared group chat room for group project coordinatio
 - Protects the backend so only logged-in students who belong to a group can post.
 - Gives a clear demonstration of user-to-user interaction and persisted group data.
 
-### Demo explanation
-
-You can say:
-
-> The Group Chat feature is a shared project-room chat for all members of the current group. The frontend posts messages with JavaScript Fetch to `/api/group-chat/messages`. The Flask backend checks the logged-in user's group membership, stores the message with SQLAlchemy, and returns JSON so the DOM can update instantly without a full page reload.
-
-
 ## Student Profile Feature
 
 The project includes full student profile pages for both the logged-in user and other students in the same project group.
@@ -370,12 +356,6 @@ The project includes full student profile pages for both the logged-in user and 
 - Uses AJAX on the profile page through `/api/profile` so the user can quick-save profile changes without a full page refresh.
 - Protects student profile pages so users can only view students who belong to their own group.
 - Links profiles to Messenger so a user can quickly contact a teammate.
-
-### Demo explanation
-
-You can say:
-
-> The profile feature extends the user model with study-focused fields such as skills, availability and study goals. The current user can update their profile using a normal Flask form or AJAX. The Student Profiles directory only shows members in the same project group, which demonstrates secure user-to-user data sharing and persistent profile data stored in SQLite.
 
 ### Authentication pages
 
@@ -404,7 +384,7 @@ The latest version connects the visible buttons to real frontend/backend behavio
 
 ## AI Planner Fix / How the AI Works
 
-The AI Planner no longer returns one default message. The backend endpoint `/api/ai/message` now reads the logged-in user's exams, revision topics, timetable events, reminders and group tasks from SQLite using SQLAlchemy, then generates a contextual response.
+The AI Planner doesn't return one default message. The backend endpoint `/api/ai/message` now reads the logged-in user's exams, revision topics, timetable events, reminders and group tasks from SQLite using SQLAlchemy, then generates a contextual response.
 
 Supported prompts include:
 
@@ -415,29 +395,9 @@ Supported prompts include:
 - `Explain SQLAlchemy relationships`
 - `What should I study today?`
 
-By default it uses the built-in local study planner, so the project works without paid API keys. Optional local LLM support is also included.
-
-### Optional Ollama mode
-
-```bash
-# in .env
-AI_PROVIDER=ollama
-OLLAMA_MODEL=llama3.2
-```
-
-Start Ollama separately, then run the Flask app. If Ollama is not running, StudySync automatically falls back to the local planner.
-
-### Optional LM Studio mode
-
-```bash
-# in .env
-AI_PROVIDER=openai_compatible
-OPENAI_COMPATIBLE_BASE_URL=http://127.0.0.1:1234/v1
-OPENAI_COMPATIBLE_MODEL=local-model
-```
+By default it uses the built-in local study planner, so the project works with and without paid API keys. It can also support open AI keys.
 
 Start an OpenAI-compatible local server in LM Studio, then run the Flask app.
-
 
 ### Course card buttons and details
 
