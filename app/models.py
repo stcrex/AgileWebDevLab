@@ -1,48 +1,41 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from app.extensions import db, login_manager
+from .extensions import db, login_manager
+
+
+def utcnow() -> datetime:
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class User(UserMixin, db.Model):
-    __tablename__ = "users"
-
     id = db.Column(db.Integer, primary_key=True)
-    full_name = db.Column(db.String(120), nullable=False)
-    email = db.Column(db.String(255), unique=True, nullable=False, index=True)
-    uwa_id = db.Column(db.String(30), nullable=True)
-    program = db.Column(db.String(120), nullable=True)
-    bio = db.Column(db.Text, nullable=True)
-    skills = db.Column(db.String(250), nullable=True)
-    availability = db.Column(db.String(250), nullable=True)
-    avatar_colour = db.Column(db.String(30), default="purple")
-    password_hash = db.Column(db.String(256), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    name = db.Column(db.String(80), nullable=False)
+    uwa_id = db.Column(db.String(20), nullable=False, default="")
+    email = db.Column(db.String(120), nullable=False, unique=True, index=True)
+    password_hash = db.Column(db.String(255), nullable=False)
+    avatar_color = db.Column(db.String(30), default="primary")
+    program = db.Column(db.String(120), default="Master of Information Technology")
+    year_level = db.Column(db.String(40), default="Postgraduate")
+    bio = db.Column(db.Text, default="")
+    skills = db.Column(db.String(255), default="")
+    study_goal = db.Column(db.String(255), default="")
+    availability = db.Column(db.String(255), default="")
+    preferred_contact = db.Column(db.String(120), default="StudySync Messenger")
+    show_email = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=utcnow)
 
-    calendar_events = db.relationship(
-        "CalendarEvent",
-        backref="user",
-        lazy="dynamic",
-        cascade="all, delete-orphan",
-    )
-
-    group_memberships = db.relationship(
-        "GroupMember",
-        back_populates="user",
-        lazy="dynamic",
-        cascade="all, delete-orphan",
-    )
-
-    exam_sessions = db.relationship(
-        "ExamSession",
-        backref="user",
-        lazy="dynamic",
-        cascade="all, delete-orphan",
-    )
+    events = db.relationship("Event", back_populates="owner", cascade="all, delete-orphan")
+    exams = db.relationship("Exam", back_populates="owner", cascade="all, delete-orphan")
+    reminders = db.relationship("Reminder", back_populates="owner", cascade="all, delete-orphan")
+    chat_messages = db.relationship("ChatMessage", back_populates="owner", cascade="all, delete-orphan")
+    sent_messages = db.relationship("DirectMessage", foreign_keys="DirectMessage.sender_id", back_populates="sender", cascade="all, delete-orphan")
+    received_messages = db.relationship("DirectMessage", foreign_keys="DirectMessage.receiver_id", back_populates="receiver", cascade="all, delete-orphan")
+    group_messages = db.relationship("GroupMessage", back_populates="sender", cascade="all, delete-orphan")
 
     def set_password(self, password: str) -> None:
         self.password_hash = generate_password_hash(password)
@@ -50,260 +43,213 @@ class User(UserMixin, db.Model):
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
+    @property
+    def initials(self) -> str:
+        parts = [p[0].upper() for p in self.name.split() if p]
+        return "".join(parts[:2]) or "U"
 
-class Course(db.Model):
-    __tablename__ = "courses"
+    @property
+    def skill_list(self) -> list[str]:
+        return [skill.strip() for skill in (self.skills or "").split(",") if skill.strip()]
 
-    id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(20), nullable=False)
-    title = db.Column(db.String(160), nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-
-    owner = db.relationship("User", backref="courses")
-
-
-class TimetableEvent(db.Model):
-    __tablename__ = "timetable_events"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(160), nullable=False)
-    event_type = db.Column(db.String(40), nullable=False)
-    location = db.Column(db.String(120), nullable=True)
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
-    is_group_event = db.Column(db.Boolean, default=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey("courses.id"), nullable=True)
-
-    owner = db.relationship("User", backref="timetable_events")
-    course = db.relationship("Course", backref="events")
-
-
-class CalendarEvent(db.Model):
-    __tablename__ = "calendar_events"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
-    title = db.Column(db.String(200), nullable=False)
-    event_type = db.Column(db.String(32), nullable=False, default="other", index=True)
-    start_at = db.Column(db.DateTime, nullable=False, index=True)
-    end_at = db.Column(db.DateTime, nullable=False, index=True)
-    notes = db.Column(db.Text, nullable=True)
-
-    def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "title": self.title,
-            "event_type": self.event_type,
-            "start_at": self.start_at.isoformat(timespec="minutes"),
-            "end_at": self.end_at.isoformat(timespec="minutes"),
-            "notes": self.notes or "",
-        }
-
-
-class Exam(db.Model):
-    __tablename__ = "exams"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(160), nullable=False)
-    exam_date = db.Column(db.DateTime, nullable=False)
-    location = db.Column(db.String(120), nullable=True)
-    weight_percent = db.Column(db.Integer, default=0)
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey("courses.id"), nullable=True)
-
-    owner = db.relationship("User", backref="exams")
-    course = db.relationship("Course", backref="exams")
-
-
-class RevisionTopic(db.Model):
-    __tablename__ = "revision_topics"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(160), nullable=False)
-    progress = db.Column(db.Integer, default=0)
-    status = db.Column(db.String(40), default="Not Started")
-    exam_id = db.Column(db.Integer, db.ForeignKey("exams.id"), nullable=False)
-
-    exam = db.relationship("Exam", backref="topics")
-
-
-class StudyGroup(db.Model):
-    __tablename__ = "study_groups"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-
-    # Old main branch field
-    group_code = db.Column(db.String(40), unique=True, nullable=True)
-    description = db.Column(db.Text, nullable=True)
-
-    # PR branch fields
-    join_code = db.Column(db.String(16), unique=True, nullable=True, index=True)
-    created_by_user_id = db.Column(
-        db.Integer,
-        db.ForeignKey("users.id"),
-        nullable=True,
-        index=True,
-    )
-
-    members = db.relationship(
-        "GroupMember",
-        back_populates="group",
-        lazy="dynamic",
-        cascade="all, delete-orphan",
-    )
-
-    def to_dict(self, *, include_join_code: bool = True) -> dict:
-        data = {
-            "id": self.id,
-            "name": self.name,
-            "created_by_user_id": self.created_by_user_id,
-            "member_count": self.members.count(),
-        }
-
-        if include_join_code:
-            data["join_code"] = self.join_code
-
-        return data
-
-
-class GroupMember(db.Model):
-    __tablename__ = "group_members"
-    __table_args__ = (
-        db.UniqueConstraint("group_id", "user_id", name="uq_group_member_user"),
-    )
-
-    id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(80), default="member")
-    status = db.Column(db.String(40), default="Online")
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
-    group_id = db.Column(db.Integer, db.ForeignKey("study_groups.id"), nullable=False, index=True)
-
-    user = db.relationship("User", back_populates="group_memberships")
-    group = db.relationship("StudyGroup", back_populates="members")
-
-
-class GroupTask(db.Model):
-    __tablename__ = "group_tasks"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(160), nullable=False)
-    status = db.Column(db.String(40), default="Not Started")
-    due_date = db.Column(db.DateTime, nullable=True)
-    assigned_to_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
-    group_id = db.Column(db.Integer, db.ForeignKey("study_groups.id"), nullable=False)
-
-    assigned_to = db.relationship("User", backref="assigned_tasks")
-    group = db.relationship("StudyGroup", backref="tasks")
-
-
-class GroupMessage(db.Model):
-    __tablename__ = "group_messages"
-
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey("study_groups.id"), nullable=False)
-
-    sender = db.relationship("User", backref="group_messages")
-    group = db.relationship("StudyGroup", backref="messages")
-
-
-class DirectMessage(db.Model):
-    __tablename__ = "direct_messages"
-
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
-    is_read = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-
-    sender = db.relationship("User", foreign_keys=[sender_id], backref="sent_messages")
-    receiver = db.relationship("User", foreign_keys=[receiver_id], backref="received_messages")
-
-
-class Reminder(db.Model):
-    __tablename__ = "reminders"
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(160), nullable=False)
-    due_at = db.Column(db.DateTime, nullable=True)
-    is_done = db.Column(db.Boolean, default=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-
-    owner = db.relationship("User", backref="reminders")
-
-
-class HandbookSubject(db.Model):
-    __tablename__ = "handbook_subjects"
-
-    id = db.Column(db.Integer, primary_key=True)
-    code = db.Column(db.String(20), unique=True, nullable=False)
-    title = db.Column(db.String(160), nullable=False)
-    school = db.Column(db.String(160), nullable=True)
-    level = db.Column(db.String(40), nullable=True)
-    semester = db.Column(db.String(80), nullable=True)
-    credit_points = db.Column(db.Integer, default=6)
-
-
-class ExamSession(db.Model):
-    __tablename__ = "exam_sessions"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False, index=True)
-    title = db.Column(db.String(200), nullable=False)
-    course_code = db.Column(db.String(32), nullable=True)
-    starts_at = db.Column(db.DateTime, nullable=False, index=True)
-    ends_at = db.Column(db.DateTime, nullable=False)
-    notes = db.Column(db.Text, nullable=True)
-    share_token = db.Column(db.String(64), nullable=True, unique=True, index=True)
-
-    resources = db.relationship(
-        "ExamResource",
-        backref="exam",
-        lazy="dynamic",
-        cascade="all, delete-orphan",
-        order_by="ExamResource.sort_order",
-    )
-
-    def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "title": self.title,
-            "course_code": self.course_code or "",
-            "starts_at": self.starts_at.isoformat(timespec="minutes"),
-            "ends_at": self.ends_at.isoformat(timespec="minutes"),
-            "notes": self.notes or "",
-        }
-
-
-class ExamResource(db.Model):
-    __tablename__ = "exam_resources"
-
-    id = db.Column(db.Integer, primary_key=True)
-    exam_id = db.Column(db.Integer, db.ForeignKey("exam_sessions.id"), nullable=False, index=True)
-    title = db.Column(db.String(200), nullable=False)
-    url = db.Column(db.String(2048), nullable=False)
-    sort_order = db.Column(db.Integer, nullable=False, default=0)
-    created_at = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-
-    def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "exam_id": self.exam_id,
-            "title": self.title,
-            "url": self.url,
-            "sort_order": self.sort_order,
-        }
+    @property
+    def public_email(self) -> str:
+        return self.email if self.show_email else "Hidden"
 
 
 @login_manager.user_loader
 def load_user(user_id: str) -> User | None:
-    if not user_id:
-        return None
+    return db.session.get(User, int(user_id)) if user_id.isdigit() else None
 
-    return db.session.get(User, int(user_id))
+
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(20), nullable=False, index=True)
+    title = db.Column(db.String(120), nullable=False)
+    colour = db.Column(db.String(30), default="blue")
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+
+    events = db.relationship("Event", back_populates="course")
+    exams = db.relationship("Exam", back_populates="course")
+
+    def label(self) -> str:
+        return f"{self.code} — {self.title}"
+
+
+class HandbookSubject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    code = db.Column(db.String(20), nullable=False, unique=True, index=True)
+    title = db.Column(db.String(180), nullable=False, index=True)
+    credit_points = db.Column(db.Integer, default=6)
+    coordinator = db.Column(db.String(180), default="")
+    level_of_study = db.Column(db.String(80), default="")
+    school = db.Column(db.String(140), default="")
+    field_of_education = db.Column(db.String(140), default="")
+    availability = db.Column(db.String(120), default="")
+    location = db.Column(db.String(120), default="")
+    description = db.Column(db.Text, default="")
+    handbook_url = db.Column(db.String(255), default="")
+    source_year = db.Column(db.Integer, default=2026)
+    imported_at = db.Column(db.DateTime, default=utcnow)
+
+    @property
+    def short_label(self) -> str:
+        return f"{self.code} — {self.title}"
+
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=True)
+    title = db.Column(db.String(120), nullable=False)
+    event_type = db.Column(db.String(30), nullable=False, default="Lecture")
+    location = db.Column(db.String(100), default="")
+    starts_at = db.Column(db.DateTime, nullable=False)
+    ends_at = db.Column(db.DateTime, nullable=False)
+    group_visible = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    owner = db.relationship("User", back_populates="events")
+    course = db.relationship("Course", back_populates="events")
+
+    @property
+    def duration_minutes(self) -> int:
+        return int((self.ends_at - self.starts_at).total_seconds() // 60)
+
+
+class Exam(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey("course.id"), nullable=True)
+    title = db.Column(db.String(120), nullable=False)
+    room = db.Column(db.String(80), default="")
+    weight = db.Column(db.Integer, default=0)
+    starts_at = db.Column(db.DateTime, nullable=False)
+    ends_at = db.Column(db.DateTime, nullable=False)
+    notes = db.Column(db.Text, default="")
+
+    owner = db.relationship("User", back_populates="exams")
+    course = db.relationship("Course", back_populates="exams")
+    topics = db.relationship("RevisionTopic", back_populates="exam", cascade="all, delete-orphan")
+    resources = db.relationship("Resource", back_populates="exam", cascade="all, delete-orphan")
+
+    @property
+    def progress(self) -> int:
+        if not self.topics:
+            return 0
+        done_count = sum(1 for topic in self.topics if topic.status == "Done")
+        return round(done_count / len(self.topics) * 100)
+
+    @property
+    def weak_topics(self):
+        return [topic for topic in self.topics if topic.status != "Done"]
+
+
+class RevisionTopic(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    exam_id = db.Column(db.Integer, db.ForeignKey("exam.id"), nullable=False)
+    title = db.Column(db.String(180), nullable=False)
+    area = db.Column(db.String(80), default="General")
+    status = db.Column(db.String(30), nullable=False, default="Not Started")
+    confidence = db.Column(db.Integer, default=0)
+
+    exam = db.relationship("Exam", back_populates="topics")
+
+
+class Resource(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    exam_id = db.Column(db.Integer, db.ForeignKey("exam.id"), nullable=False)
+    title = db.Column(db.String(120), nullable=False)
+    kind = db.Column(db.String(30), default="Link")
+    url = db.Column(db.String(255), default="")
+
+    exam = db.relationship("Exam", back_populates="resources")
+
+
+class Reminder(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    title = db.Column(db.String(160), nullable=False)
+    due_at = db.Column(db.DateTime, nullable=False)
+    is_done = db.Column(db.Boolean, default=False)
+
+    owner = db.relationship("User", back_populates="reminders")
+
+
+class Group(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), nullable=False)
+    code = db.Column(db.String(40), nullable=False, unique=True)
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    memberships = db.relationship("GroupMember", back_populates="group", cascade="all, delete-orphan")
+    tasks = db.relationship("ProjectTask", back_populates="group", cascade="all, delete-orphan")
+    messages = db.relationship("GroupMessage", back_populates="group", cascade="all, delete-orphan")
+
+
+class GroupMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    role = db.Column(db.String(40), default="Member")
+    progress = db.Column(db.Integer, default=0)
+    last_seen = db.Column(db.String(40), default="Online")
+
+    group = db.relationship("Group", back_populates="memberships")
+    user = db.relationship("User")
+
+
+class ProjectTask(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=False)
+    assigned_to_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
+    title = db.Column(db.String(160), nullable=False)
+    status = db.Column(db.String(30), default="Not Started")
+    due_date = db.Column(db.Date, nullable=True)
+
+    group = db.relationship("Group", back_populates="tasks")
+    assigned_to = db.relationship("User")
+
+
+class GroupMessage(db.Model):
+    """Message posted into a project group chat room."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=False, index=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    body = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow, index=True)
+
+    group = db.relationship("Group", back_populates="messages")
+    sender = db.relationship("User", back_populates="group_messages")
+
+    def preview(self, limit: int = 80) -> str:
+        clean = " ".join(self.body.split())
+        return clean if len(clean) <= limit else clean[: limit - 1] + "…"
+
+
+class ChatMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    role = db.Column(db.String(20), nullable=False)  # user / assistant
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow)
+
+    owner = db.relationship("User", back_populates="chat_messages")
+
+
+class DirectMessage(db.Model):
+    """One-to-one messenger message between two students in the same StudySync group."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    receiver_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False, index=True)
+    body = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.DateTime, default=utcnow, index=True)
+
+    sender = db.relationship("User", foreign_keys=[sender_id], back_populates="sent_messages")
+    receiver = db.relationship("User", foreign_keys=[receiver_id], back_populates="received_messages")
+
+    def belongs_to_conversation(self, first_user_id: int, second_user_id: int) -> bool:
+        return {self.sender_id, self.receiver_id} == {first_user_id, second_user_id}

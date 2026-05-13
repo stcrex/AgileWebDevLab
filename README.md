@@ -1,249 +1,475 @@
-# AgileWebDevLab
+# StudySync
 
-Minimal **Flask** web application for Agile Web Development coursework: study-group scheduling, exam preparation resources, and optional read-only exam sharing. This document is written so a marker or new teammate can **clone the repo once** and follow **sections 3–5** without guesswork.
+StudySync is a Flask web application for university students who need one place to manage timetables, exams, revision plans, reminders, and group project collaboration.
 
----
+The design is based on a dark StudySync dashboard with:
 
-## 1. Purpose and design
+- Login and registration
+- Weekly timetable with event creation
+- Exam and task tracker
+- Revision progress dashboard
+- Topic checklist with AJAX updates
+- Resource links for each exam
+- Personal notes
+- Rule-based AI study planner chat
+- Group page showing member progress, shared tasks, and common free slots
+- Messenger for direct student-to-student messages
+- Group chat room for project-wide discussion
+- Student profile pages for each group member
+- Student directory with search, skills, availability and profile actions
+- Logout and profile/preferences page
 
-**Purpose:** give students a small but coherent **client–server** example: HTML templates and jQuery on the browser, JSON APIs with **CSRF** protection, **Flask-Login** sessions, and **SQLite** persistence via **SQLAlchemy**.
+## Group Members
 
-**Design (high level):**
+Replace these demo rows with your real group details before submission.
 
-| Area | Behaviour |
-|------|-----------|
-| **Study groups** | Seeded users share a **group workspace** (`/group/<id>`): **Messages**, **invite by email**, and **common free time** (Mon–Fri) with **book** → personal **`CalendarEvent`** (`event_type=group_study`). JSON APIs under `/api/groups/<id>/…`. |
-| **Exams** | Each user owns **exam sessions**. A session has many **`exam_resources`** (title + URL) with validation and JSON CRUD. |
-| **Sharing** | The exam owner may enable a random **`share_token`**. Visitors hit a **public read-only** URL without logging in; revoked or unknown tokens yield a generic **404** page. |
-| **Sign-in UX** | **Email + password** is the only working path on **`/login`**. OAuth-style tiles are **disabled** with clear copy; see `templates/login.html`, `static/css/auth_sso_facade.css`, and **`mock_pages/login.html`** for the parallel static mock. |
+| UWA ID | Name | GitHub Username |
+|---|---|---|
+| 23456789 | Jane Smith | jane-demo |
+| 23112233 | Tom Liu | tom-demo |
+| 23888881 | Amy Kim | amy-demo |
+| 23777774 | Ryan Zhang | ryan-demo |
 
-**Who uses it:** demo markers and the project group for checkpoints and final submission. **Not** intended for production deployment; default `SECRET_KEY` is for local use only.
+## Technologies Used
 
----
+- HTML5
+- CSS3
+- JavaScript with Fetch/AJAX
+- Bootstrap 5
+- Flask
+- Jinja templates
+- Flask-Login
+- Flask-WTF CSRF protection
+- Flask-SQLAlchemy
+- SQLite
+- Flask-Migrate
+- Pytest
+- Selenium
 
-## 2. Group members
+No React, Angular, MySQL, Sass, or disallowed core technologies are used.
 
-Replace the placeholder rows below with your **actual** group data before final submission (UWA policy: use the identifiers your unit expects).
+## Main Features
 
-| UWA ID | Full name | GitHub username |
-|--------|-----------|-------------------|
-| *e.g. 12345678* | *Replace with legal name* | *@github-handle* |
-| *e.g. 23456789* | *Replace* | *@github-handle* |
-| *e.g. 34567890* | *Replace* | *@github-handle* |
+### 1. Authentication
+Users can create an account, log in, and log out. Passwords are stored as salted hashes using Werkzeug, not plain text.
 
-If your group has fewer than three people, delete extra rows. If you have four, add another row.
+### 2. Persistent User Data
+Timetable events, exams, reminders, AI chat messages, direct messenger messages, group chat messages, profile details, topics, resources, and group tasks are stored in SQLite through SQLAlchemy models.
 
----
+### 3. Timetable
+The timetable page shows a weekly grid with lectures, labs, tutorials, exams, assignments, and workshops. It now uses 15-minute time slots so events line up correctly with their real start/end times. Users can move to previous/future weeks, click any timetable event to view full details, delete events from the detail modal, filter by event type, and create new events through a Bootstrap modal form. After a new event is saved, the timetable automatically opens the correct week so the event is visible immediately.
 
-## 3. How to launch the application
+### 4. Exams & Revision Tracker
+Each exam has a detail page with:
 
-### 3.1 Prerequisites
+- Exam date, time, room, and weighting
+- Countdown timer
+- Revision progress by topic area
+- Topic checklist
+- Resources
+- Personal notes
+- AI study suggestion panel
 
-- **Python 3.11+** (development verified on Python 3.13).
-- A terminal and a modern browser.
+### 5. AJAX Interactions
+The application uses JavaScript Fetch/AJAX for:
 
-### 3.2 First-time setup (virtual environment + dependencies)
+- Marking revision topics as done/in progress
+- Sending AI planner chat messages
+- Updating group task status
+- Toggling reminders
+- Sending and refreshing student-to-student messenger messages
+- Sending and refreshing project group chat messages
+- Saving profile updates with AJAX
+- Filtering the student directory in the browser
 
-From the repository root:
+### 6. AI Planner Without Paid API Keys
+The AI planner is implemented as a rule-based backend recommender. It reads the student's weak topics from the database and generates a practical study plan. This avoids needing paid Claude/OpenAI API credits while still demonstrating backend logic and personalised responses.
 
-**macOS / Linux**
+### 7. Group Collaboration
+The group page lets users view other group members' progress, shared project tasks, and common free meeting slots. This satisfies the requirement that users can view data from other users.
+
+### 8. Student Messenger
+
+The Messenger page lets students send one-to-one messages to other members of their project group. Messages are saved in the database using the `DirectMessage` model and loaded through AJAX without refreshing the page. The backend checks that the receiver belongs to the same group before allowing a message to be sent.
+
+### 9. Security
+Security features include:
+
+- Hashed passwords
+- Login-required routes
+- CSRF tokens for forms and AJAX requests
+- Environment variables through `.env`
+- Database access through SQLAlchemy models instead of raw SQL in routes
+
+## User Stories
+
+1. As a student, I want to register an account so that my timetable is saved.
+2. As a student, I want to log in and log out so that my data is private.
+3. As a student, I want to add timetable events so that I can track weekly classes.
+4. As a student, I want to see upcoming exams so that I know what to prepare for.
+5. As a student, I want to track revision topics so that I can identify weak areas.
+6. As a student, I want to mark topics as complete without reloading the page so that the app feels fast.
+7. As a student, I want a study plan generated from weak topics so that I can revise efficiently.
+8. As a student, I want to save exam notes so that I can quickly review important points.
+9. As a group member, I want to see my teammates' progress so that we can coordinate project work.
+10. As a group member, I want to update project task statuses so that the group knows what is done.
+11. As a student, I want reminders so that I do not forget exams or group meetings.
+12. As a student, I want a polished mobile-responsive interface so that I can use it on different screens.
+13. As a group member, I want to send direct messages to teammates so that we can coordinate project work quickly.
+14. As a group member, I want a shared group chat room so that the whole team can coordinate checkpoint work and project tasks.
+15. As a student, I want to create a profile with my skills and availability so that teammates know how to collaborate with me.
+16. As a group member, I want to view teammate profiles so that I can message the right person for a project task.
+
+## Folder Structure
+
+```text
+studysync/
+├── app/
+│   ├── routes/
+│   │   ├── auth.py
+│   │   ├── main.py
+│   │   └── api.py
+│   ├── static/
+│   │   ├── css/styles.css
+│   │   └── js/
+│   │       ├── app.js
+│   │       ├── ai.js
+│   │       ├── exam.js
+│   │       ├── group.js
+│   │       ├── messages.js
+│   │       ├── group_chat.js
+│   │       └── profile.js
+│   ├── templates/
+│   │   ├── auth/login.html
+│   │   ├── base.html
+│   │   └── pages/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── extensions.py
+│   ├── forms.py
+│   ├── models.py
+│   └── seed.py
+├── tests/
+│   ├── test_core.py
+│   └── selenium/test_ui.py
+├── migrations/README.md
+├── run.py
+├── requirements.txt
+├── .env.example
+└── README.md
+```
+
+## Setup Instructions
+
+### 1. Create and activate a virtual environment
+
+Windows PowerShell:
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+macOS/Linux:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
+```
+
+### 2. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-**Windows (PowerShell)**
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-**Windows (cmd.exe)**
-
-```cmd
-python -m venv .venv
-.venv\Scripts\activate.bat
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-### 3.3 Start the development server
-
-With the virtual environment **activated**:
+### 3. Create the database with demo data
 
 ```bash
-python run.py
+flask --app run.py init-db
 ```
 
-You should see logging similar to `Running on http://127.0.0.1:5000`.
-
-Open **http://127.0.0.1:5000/** in the browser. Unauthenticated visitors are sent to the **login** page; after sign-in you land on **Exams**.
-
-### 3.4 Demo accounts (seeded on first run)
-
-| Email | Password |
-|-------|----------|
-| `alice@lab.local` | `labdemo123` |
-| `bob@lab.local` | `labdemo123` |
-
-Alice owns a sample exam with one starter link; both users are in **Demo Lab Group** (`LABDEMO1`) with calendar events so **Group → common free slots** is non-empty.
-
-### 3.5 Useful URLs (after login)
-
-| Path | Description |
-|------|-------------|
-| `/exams` | List of your exam sessions |
-| `/exams/<id>` | Exam detail: resources + share link controls |
-| `/courses` | Courses hub: exam course-code rollup + saved catalog |
-| `/reminders` | Personal reminders (create, due optional, mark done, delete) |
-| `/preferences` | Account profile: editable name, IDs, bio, skills, availability, accent |
-| `/group/<id>` | **Group workspace** (messages, invites, common free slots + booking) — demo uses `/group/1` |
-| `/group-chat` | Redirects to `/group/<id>` for your **first** membership row (or flashes and sends you to Exams if you have no group) |
-| `/exams/shared/<token>` | **Public** read-only exam (only when a share token exists) |
-
-### 3.6 Using the Group workspace
-
-1. **Open the page**  
-   After login, use the **Group** link in the nav (where present) or go directly to **`/group/1`** for the seeded **Demo Lab Group** (`LABDEMO1`). You must be a **member** of that group (`GroupMember` row); otherwise the page responds with **404**.
-
-2. **Messages**  
-   Type text and **Send**. Posts are stored as `GroupMessage` rows for that group and shown in chronological order.
-
-3. **Invite a teammate**  
-   Enter an email (and optional display name). If the address is new, the app creates a user with password **`password123`** (lab-only; invitees should change it elsewhere if you extend the app). If they are already a member, nothing is duplicated and you see a flash saying so.
-
-4. **Book a common free slot**  
-   The lower section loads **merged** intervals when **no group member** has a `CalendarEvent` overlapping that time (Mon–Fri, 08:00–20:00, 30-minute grid for the **current calendar week**, `week_start` = Monday shown on the page). Click **Book** on a row; your browser POSTs JSON to **`/api/groups/<id>/book-free-slot`** (CSRF header on mutations). Success creates **your** `CalendarEvent` with `event_type=group_study`. Booking twice in the same interval returns **409** (overlap).
-
-5. **StudySync shell**  
-   In layouts that extend `app/templates/base.html`, **Group** points at **`/group-chat`**, which forwards you to the correct `/group/<id>` for your account.
-
-See **`tests/test_group_book.py`** for API and workspace behaviour (`pytest tests/test_group_book.py -v`).
-
-### 3.7 Database and local files
-
-- SQLite file: **`instance/lab.db`** (created automatically; the `instance/` directory is gitignored).
-- To **reset all data** (including schema migrations applied at runtime), stop the server, delete `instance/lab.db`, and start again so seeds re-run.
-
-### 3.8 Optional configuration
-
-| Variable | Meaning |
-|----------|---------|
-| `SECRET_KEY` | Flask session signing. Set in production; defaults to an insecure dev value in code. |
-
-Example (Unix):
+### 4. Run the application
 
 ```bash
-export SECRET_KEY="choose-a-long-random-string"
-python run.py
+flask --app run.py run
 ```
 
----
+Open:
 
-## 4. How to run the tests
+```text
+http://127.0.0.1:5000
+```
 
-There are two layers:
+Demo login:
 
-| Layer | Location | What it checks |
-|--------|----------|----------------|
-| **Unit / API** | `tests/test_*.py` | Flask test client, isolated SQLite per `tmp_path`, CSRF **disabled** for speed. |
-| **Browser (Selenium)** | `tests/selenium/` | A **real HTTP server** in a background thread + **Chrome** driving the UI (CSRF **enabled** on that app instance). |
+```text
+Email: you@student.uwa.edu.au
+Password: password123
+```
 
-### 4.1 Unit and API tests (default, no browser)
+## Running Tests
 
-Activate the same `.venv` as in section 3, then from the repo root:
+### Unit tests
 
 ```bash
-pytest
+pytest tests/test_core.py
 ```
 
-Run only non-browser tests:
+### Selenium tests
+
+Start the server first:
 
 ```bash
-pytest -m "not selenium"
+flask --app run.py init-db
+flask --app run.py run
 ```
 
-Single-file examples:
+Then open a second terminal and run:
 
 ```bash
-pytest tests/test_exam_share.py -v
-pytest tests/test_group_book.py -v
+RUN_SELENIUM=1 pytest tests/selenium
 ```
 
-`tests/conftest.py` builds the app with **`TESTING=True`**, **`WTF_CSRF_ENABLED=False`**, and a **temporary SQLite** file so tests never touch your personal `instance/lab.db`.
-
-### 4.2 Selenium end-to-end tests (live server)
-
-**Prerequisites:** Google **Chrome** or **Chromium** installed on the machine running tests. Selenium **4.6+** resolves a matching **ChromeDriver** automatically in most setups.
-
-From the repo root:
+On Windows PowerShell:
 
 ```bash
-pytest tests/selenium -v
+$env:RUN_SELENIUM="1"
+pytest tests/selenium
 ```
 
-What is covered today:
+## Database Migrations
 
-- **Happy path:** open `/login`, sign in as `alice@lab.local` / `labdemo123`, expect the **Exams** page (`<title>` contains “Exams”, heading “My exam sessions”).
-- **Auth failure:** wrong password → **danger** flash on the login page; visiting **`/exams`** afterwards redirects to **`/login`** (still unauthenticated).
-
-Optional: run the browser **visibly** (debugging):
+Flask-Migrate is already configured. If you want to generate migrations:
 
 ```bash
-HEADLESS=0 pytest tests/selenium -v
+flask --app run.py db init
+flask --app run.py db migrate -m "initial schema"
+flask --app run.py db upgrade
 ```
 
-If Chrome or the driver cannot start, the affected tests **`pytest.skip`** with a short reason so headless CI without a browser can still run **`pytest -m "not selenium"`** cleanly.
+## GitHub Workflow Recommendation
 
-### 4.3 Configuration
+Use this workflow to show Agile development:
 
-**`pytest.ini`** sets `pythonpath = .` and registers the **`selenium`** marker (see `@pytest.mark.selenium` on browser tests).
+1. Create GitHub issues for each feature or bug.
+2. Create a branch for each issue.
+3. Commit small, meaningful changes.
+4. Open a pull request.
+5. Ask a teammate to review it.
+6. Merge only after review.
 
-### 4.4 Expected result
+Example commit messages:
 
-After `pip install -r requirements.txt`, **`pytest -m "not selenium"`** should be fully green on any machine. **`pytest tests/selenium`** should be green on a workstation with Chrome available; otherwise those tests **skip** instead of failing the job, unless you treat skips as failures in your own CI policy.
+```bash
+git commit -m "Add login and registration forms"
+git commit -m "Implement AJAX topic status updates"
+git commit -m "Add unit tests for AI planner endpoint"
+```
 
----
+## Presentation Talking Points
 
-## 5. Repository layout (quick reference)
+- StudySync solves student time-management and group-collaboration problems.
+- The backend is Flask with a proper app factory structure.
+- SQLAlchemy models store users, events, exams, topics, resources, reminders, groups, tasks, direct messages, group chat messages, and student profiles.
+- Passwords are hashed and forms use CSRF protection.
+- AJAX is used for interactive topic/task/reminder updates, AI chat, student-to-student messenger messages, group chat messages, and profile updates.
+- The AI planner does not rely on paid external APIs; it reads database progress and generates a personalised plan.
+- The project includes more than five Pytest tests and five Selenium UI test cases.
+- The UI is responsive and uses Bootstrap plus custom CSS.
 
-| Path | Role |
-|------|------|
-| `app/` | Application package (`create_app`, models, blueprints, services — e.g. `app/blueprints/group_book.py`) |
-| `templates/` | Jinja HTML |
-| `static/js/` | Client scripts (jQuery + CSRF header on mutating calls) |
-| `static/css/auth_sso_facade.css` | Bulky, token-oriented stylesheet attached to the login page so disabled “social” controls stay visually subordinate |
-| `tests/` | Pytest modules (API/unit) |
-| `tests/selenium/` | Selenium E2E tests (live `werkzeug` server + Chrome) |
-| `mock_pages/` | Static HTML mocks (open files in a browser; not served by Flask). **Global sidebar** links for **Courses**, **Reminders**, and **Preferences** resolve to real placeholder files (`courses.html`, `reminders.html`, `preferences.html`) instead of `href="#"`. Optional audit log: `NAV_AUDIT.txt`. Regenerate bulky placeholders with `python3 scripts/generate_nav_placeholder_pages.py`. The timetable mock uses **grid-only** list control (disabled + hint). |
-| `app/services/group_workspace.py` | Group messages, member listing, invites (used by `group_book` blueprint) |
-| `source_pages/` | **Alias / audit hub** for brief terminology: points to the same static story as `mock_pages/`; see `source_pages/README.md` and the drift appendix. |
-| `docs/SOURCE_PAGES_DRIFT_AUDIT.md` | **Bulk drift matrix** (`mock_pages` ↔ `templates`) + synthetic checklist rows; regenerate via `python3 scripts/generate_source_pages_drift_audit.py`. |
-| `docs/SECURITY_PRE_RELEASE_CHECKLIST.md` | **Synthetic security sweep** (CSRF, passwords, secrets, auth routes); regenerate via `python3 scripts/generate_security_pre_release_pass.py`. Companion: `docs/SECURITY_AUDIT_LINES.txt`. |
-| `scripts/` | Helper generators (`generate_nav_placeholder_pages.py`, `generate_source_pages_drift_audit.py`, …). |
-| `run.py` | Dev entrypoint |
-| `requirements.txt` | Python dependencies |
+## UWA Handbook Catalogue Feature
 
----
+The project now includes a local UWA Handbook subject catalogue.
 
-## 6. Contributor guide
+### What it does
 
-For branching conventions, PR checklist, and Git attribution, see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
+- Adds a new **UWA Handbook** page in the sidebar.
+- Stores official-style Handbook unit records in the SQLite database through the `HandbookSubject` model.
+- Lets students search by unit code, title, coordinator, school or field of education.
+- Lets students filter by semester, level and school.
+- Lets students click **Add to Courses**, which uses AJAX to save that unit into their personal StudySync course list.
+- Includes a bundled 2026 seed catalogue so the feature works even without internet during the demo.
+- Includes a refresh importer that can download/parse current public UWA Handbook search results.
 
----
+### Refreshing Handbook units
 
-## 7. Troubleshooting
+The database is seeded automatically when you run:
 
-| Problem | Things to try |
-|---------|----------------|
-| `ModuleNotFoundError: No module named 'app'` | Run `pytest` from the **repository root**, or use `pytest` (not `python -m pytest` from a wrong cwd). `pytest.ini` sets `pythonpath`. |
-| `Address already in use` | Another process uses port 5000. Stop it or change the port in `run.py`. |
-| Old database missing new columns | Delete `instance/lab.db` and restart once, or rely on the small SQLite `ALTER` helpers in `app/__init__.py` where present. |
-| Login always fails | Use the **seeded** emails exactly (`alice@lab.local`), password `labdemo123`. |
-| Group page **404** | You must be in that study group (`GroupMember`). Seed demo puts **Alice** and **Bob** in group **1**. Use **`/group/1`** or **`/group-chat`** after login. |
+```bash
+flask --app run.py init-db
+```
+
+To refresh the Handbook catalogue from UWA public search pages, run either:
+
+```bash
+flask --app run.py import-uwa-handbook
+```
+
+or:
+
+```bash
+python scripts/import_uwa_handbook.py
+```
+
+The importer uses UWA Handbook unit search pages and stores the results locally, so the app can search quickly without repeatedly calling the website.
+
+
+## Messenger Feature
+
+The project includes a direct messaging system between students.
+
+### What it does
+
+- Adds a new **Messenger** page in the sidebar.
+- Shows all students in the current user's group as contacts.
+- Stores every message in SQLite using the `DirectMessage` model.
+- Uses AJAX to send messages without refreshing the page.
+- Uses AJAX polling to refresh the open conversation every few seconds.
+- Shows unread message counts.
+- Protects the route so users can only message students in their own group.
+
+### Demo explanation
+
+You can say:
+
+> The messenger feature demonstrates client-server interaction. The frontend uses JavaScript Fetch to POST a new message to `/api/messages/<contact_id>`, and the Flask backend validates that the receiver is in the same group before saving the message in SQLite. The conversation is then updated in the DOM without a page refresh.
+
+
+## Group Chat Feature
+
+The project also includes a shared group chat room for group project coordination.
+
+### What it does
+
+- Adds a new **Group Chat** page in the sidebar.
+- Displays the current project group name, group code, and all group members.
+- Stores every chat message in SQLite using the `GroupMessage` model.
+- Uses AJAX to send messages without refreshing the page.
+- Uses AJAX polling to refresh the room every few seconds.
+- Protects the backend so only logged-in students who belong to a group can post.
+- Gives a clear demonstration of user-to-user interaction and persisted group data.
+
+### Demo explanation
+
+You can say:
+
+> The Group Chat feature is a shared project-room chat for all members of the current group. The frontend posts messages with JavaScript Fetch to `/api/group-chat/messages`. The Flask backend checks the logged-in user's group membership, stores the message with SQLAlchemy, and returns JSON so the DOM can update instantly without a full page reload.
+
+
+## Student Profile Feature
+
+The project includes full student profile pages for both the logged-in user and other students in the same project group.
+
+### What it does
+
+- Adds a new **My Profile** page where the logged-in user can edit their name, UWA ID, program, year level, bio, skills, study goal, availability, preferred contact method, avatar colour, and email visibility.
+- Adds a **Student Profiles** directory page showing all group members.
+- Adds individual public profile pages at `/students/<id>`.
+- Uses the existing `User` model with additional profile fields, so profile information is persisted between sessions.
+- Uses AJAX on the profile page through `/api/profile` so the user can quick-save profile changes without a full page refresh.
+- Protects student profile pages so users can only view students who belong to their own group.
+- Links profiles to Messenger so a user can quickly contact a teammate.
+
+### Demo explanation
+
+You can say:
+
+> The profile feature extends the user model with study-focused fields such as skills, availability and study goals. The current user can update their profile using a normal Flask form or AJAX. The Student Profiles directory only shows members in the same project group, which demonstrates secure user-to-user data sharing and persistent profile data stored in SQLite.
+
+### Authentication pages
+
+StudySync includes a complete authentication flow:
+
+- `/login` — dedicated login page with demo login and quick create-account tab.
+- `/register` — full student account creation page.
+- `/logout` — confirmation page that logs out using a CSRF-protected POST form instead of a plain logout link.
+
+This supports the project requirement that users can login and logout, while also demonstrating good security practice for session handling.
+
+
+## Fully wired button actions
+
+The latest version connects the visible buttons to real frontend/backend behaviour:
+
+- **Forgot password** opens a reset request page.
+- **AI Planner → Clear** deletes saved chat history from the database.
+- **AI Planner → History** loads saved AI messages from `/api/ai/history`.
+- **Exam Detail → Share** generates a shareable exam summary and copies it to the clipboard.
+- **My Group → Invite Member** prepares an invite, copies the invite text, and records the action in group chat.
+- **Common Free Slot → Book** creates group study events for the project group and posts a group chat announcement.
+- **Task status dropdowns** save instantly through AJAX.
+- **Reminder check buttons** toggle completion through AJAX.
+
+
+## AI Planner Fix / How the AI Works
+
+The AI Planner no longer returns one default message. The backend endpoint `/api/ai/message` now reads the logged-in user's exams, revision topics, timetable events, reminders and group tasks from SQLite using SQLAlchemy, then generates a contextual response.
+
+Supported prompts include:
+
+- `Generate my study plan`
+- `What are my weak topics?`
+- `Give me one MCQ practice question`
+- `What group tasks are pending?`
+- `Explain SQLAlchemy relationships`
+- `What should I study today?`
+
+By default it uses the built-in local study planner, so the project works without paid API keys. Optional local LLM support is also included.
+
+### Optional Ollama mode
+
+```bash
+# in .env
+AI_PROVIDER=ollama
+OLLAMA_MODEL=llama3.2
+```
+
+Start Ollama separately, then run the Flask app. If Ollama is not running, StudySync automatically falls back to the local planner.
+
+### Optional LM Studio mode
+
+```bash
+# in .env
+AI_PROVIDER=openai_compatible
+OPENAI_COMPATIBLE_BASE_URL=http://127.0.0.1:1234/v1
+OPENAI_COMPATIBLE_MODEL=local-model
+```
+
+Start an OpenAI-compatible local server in LM Studio, then run the Flask app.
+
+
+### Course card buttons and details
+
+The **Courses** page is now interactive:
+
+- Click any course card to open a quick details modal.
+- Use **Details** to open a full course page.
+- Use **Event** to create a lecture/lab/tutorial/workshop linked to that course.
+- Use **Exam** to create a course exam linked to Exams & Tasks.
+- New course events are saved in SQLite and then appear automatically in the Timetable.
+
+## UI polish update
+
+This version includes an upgraded user interface layer:
+
+- animated aurora background and soft grain overlay
+- glassmorphism cards with hover glow
+- reveal-on-scroll page animations
+- ripple effects on buttons, navigation items and filter chips
+- subtle 3D tilt effect on important cards
+- animated gradient buttons and improved progress-bar shine
+- polished timetable/event cards, modals, chat bubbles, profile cards and login page
+- custom dark scrollbars and stronger visual hierarchy for demo presentation
+
+These effects are implemented with plain CSS and JavaScript only, so they stay within the allowed project technology stack.
+
+## Latest usability fixes
+
+This build includes a final timetable and modal usability patch:
+
+- Close buttons now use a hard cleanup helper, so Invite/Create/Event Detail modals do not get stuck behind a dark overlay.
+- The timetable has explicit scroll buttons for left, right, earlier time, later time, and jump-to-9-AM.
+- The timetable panel has its own scroll area with mouse-wheel/touchpad support.
+- Shift + mouse wheel scrolls the timetable sideways.
+- The Create Event button uses the same safe modal helper, and saved events still appear in the correct week.

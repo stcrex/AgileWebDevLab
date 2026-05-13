@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Messenger | StudySync{% endblock %}
+{% block content %}
+<header class="topbar">
+    <div>
+        <h1>Messenger</h1>
+        <p class="muted mb-0">Send direct messages to students in your project group.</p>
+    </div>
+    <a class="btn btn-outline-light ms-auto" href="{{ url_for('main.group') }}"><i class="bi bi-people"></i> Back to group</a>
+</header>
+
+<div class="messenger-layout" data-selected-contact="{{ selected_contact.id if selected_contact else '' }}">
+    <aside class="card-panel messenger-contacts">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h3 class="mb-0"><i class="bi bi-chat-dots"></i> Students</h3>
+            <span class="small-pill">{{ contacts|length }} contacts</span>
+        </div>
+
+        {% if contacts %}
+            {% for contact in contacts %}
+                {% set latest = latest_messages.get(contact.id) %}
+                {% set unread = unread_counts.get(contact.id, 0) %}
+                <a href="{{ url_for('main.messages', contact=contact.id) }}"
+                   class="messenger-contact {{ 'active' if selected_contact and contact.id == selected_contact.id }}"
+                   data-contact-id="{{ contact.id }}"
+                   data-contact-name="{{ contact.name }}"
+                   data-contact-initials="{{ contact.initials }}">
+                    <span class="mini-avatar avatar-{{ contact.avatar_color }}">{{ contact.initials }}</span>
+                    <span class="contact-copy">
+                        <strong>{{ contact.name }}</strong>
+                        <small>{{ latest.body if latest else 'No messages yet — say hello!' }}</small>
+                    </span>
+                    {% if unread %}
+                        <span class="unread-badge">{{ unread }}</span>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="bi bi-person-x"></i>
+                <p>You are not in a group yet, so there are no students to message.</p>
+                <a class="btn btn-outline-light mt-2" href="{{ url_for('main.group') }}">Create or join a group</a>
+            </div>
+        {% endif %}
+    </aside>
+
+    <section class="card-panel messenger-panel">
+        {% if selected_contact %}
+            <div class="messenger-header">
+                <a class="avatar avatar-{{ selected_contact.avatar_color }}" href="{{ url_for('main.student_profile', user_id=selected_contact.id) }}">{{ selected_contact.initials }}</a>
+                <div>
+                    <h2 id="conversationName"><a href="{{ url_for('main.student_profile', user_id=selected_contact.id) }}">{{ selected_contact.name }}</a></h2>
+                    <p class="muted mb-0"><span class="online-dot"></span> Group member · Messages are stored in SQLite</p>
+                </div>
+            </div>
+
+            <div class="messenger-thread" id="messageThread">
+                {% for message in messages %}
+                    <div class="dm-row {{ 'mine' if message.sender_id == current_user.id else 'theirs' }}">
+                        <div class="dm-bubble">
+                            <p>{{ message.body }}</p>
+                            <small>{{ message.created_at.strftime('%I:%M %p').lstrip('0') }} · {{ 'You' if message.sender_id == current_user.id else message.sender.name }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <form class="dm-input" id="messageForm">
+                <input id="messageBody" maxlength="1000" placeholder="Type a message to {{ selected_contact.name }}..." autocomplete="off">
+                <button class="btn btn-primary" type="submit"><i class="bi bi-send-fill"></i></button>
+            </form>
+            <p class="chat-footer mb-0">AJAX sends and refreshes messages without reloading the page.</p>
+        {% else %}
+            <div class="empty-state large">
+                <i class="bi bi-chat-square-text"></i>
+                <h2>No conversation selected</h2>
+                <p>{% if contacts %}Choose a contact from the left to open the conversation.{% else %}Add group members first, then you can message them here.{% endif %}</p>
+                {% if not contacts %}<a class="btn btn-outline-light" href="{{ url_for('main.group') }}">Create or join a group</a>{% endif %}
+            </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/messages.js') }}"></script>{% endblock %}

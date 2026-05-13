@@ -1,192 +1,109 @@
-from flask import Blueprint, flash, redirect, render_template_string, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
-from app.extensions import db
-from app.models import User
+from ..extensions import db
+from ..forms import ForgotPasswordForm, LoginForm, LogoutForm, RegisterForm
+from ..models import User
 
 auth_bp = Blueprint("auth", __name__)
 
 
+def _create_user_from_form(register_form: RegisterForm) -> User | None:
+    """Create a user from a valid registration form, or flash an error."""
+    email = register_form.email.data.lower().strip()
+    if User.query.filter_by(email=email).first():
+        flash("That email is already registered.", "danger")
+        return None
+
+    user = User(
+        name=register_form.name.data.strip(),
+        uwa_id=register_form.uwa_id.data.strip(),
+        email=email,
+    )
+    user.set_password(register_form.password.data)
+    db.session.add(user)
+    db.session.commit()
+    return user
+
+
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+    """Dedicated login page.
+
+    The template still includes a small registration tab so new users can create
+    an account from the same screen during a demo.
+    """
     if current_user.is_authenticated:
-        return redirect(url_for("main.dashboard"))
+        return redirect(url_for("main.timetable"))
 
-    if request.method == "POST":
-        email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
+    login_form = LoginForm(prefix="login")
+    register_form = RegisterForm(prefix="register")
 
-        user = User.query.filter_by(email=email).first()
+    if request.method == "POST" and request.form.get("form-name") == "login" and login_form.validate_on_submit():
+        user = User.query.filter_by(email=login_form.email.data.lower().strip()).first()
+        if user and user.check_password(login_form.password.data):
+            login_user(user, remember=login_form.remember.data)
+            flash("Welcome back to StudySync.", "success")
+            return redirect(request.args.get("next") or url_for("main.timetable"))
+        flash("Invalid email or password.", "danger")
 
-        if user and user.check_password(password):
+    if request.method == "POST" and request.form.get("form-name") == "register" and register_form.validate_on_submit():
+        user = _create_user_from_form(register_form)
+        if user:
             login_user(user)
-            return redirect(url_for("main.dashboard"))
+            flash("Account created. Start planning your week!", "success")
+            return redirect(url_for("main.timetable"))
 
-        flash("Invalid email or password.")
-
-    return render_template_string("""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Login - StudySync</title>
-        <style>
-            body { font-family: Arial; background:#0f172a; color:white; padding:40px; }
-            .card { max-width:420px; background:#111827; padding:28px; border-radius:16px; border:1px solid #243047; }
-            label { display:block; margin-top:14px; color:#bfdbfe; }
-            input { width:100%; padding:12px; margin-top:6px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:white; }
-            button { margin-top:20px; width:100%; padding:12px; border:0; border-radius:8px; background:#6366f1; color:white; font-weight:bold; cursor:pointer; }
-            a { color:#93c5fd; }
-            .message { background:#1e293b; padding:10px; border-radius:8px; margin-bottom:12px; }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h1>Login to StudySync</h1>
-
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="message">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <form method="POST">
-                <label>Email address</label>
-                <input type="email" name="email" value="you@student.uwa.edu.au" required>
-
-                <label>Password</label>
-                <input type="password" name="password" value="password123" required>
-
-                <button type="submit">Sign In</button>
-            </form>
-
-            <p>Demo login: you@student.uwa.edu.au / password123</p>
-            <p><a href="/register">Create account</a> | <a href="/">Back home</a></p>
-        </div>
-    </body>
-    </html>
-    """)
+    return render_template("auth/login.html", login_form=login_form, register_form=register_form)
 
 
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
+    """Separate create-account page for a cleaner authentication flow."""
     if current_user.is_authenticated:
-        return redirect(url_for("main.dashboard"))
+        return redirect(url_for("main.timetable"))
 
-    if request.method == "POST":
-        full_name = request.form.get("full_name", "").strip()
-        email = request.form.get("email", "").strip().lower()
-        uwa_id = request.form.get("uwa_id", "").strip()
-        program = request.form.get("program", "").strip()
-        password = request.form.get("password", "")
-        confirm_password = request.form.get("confirm_password", "")
+    register_form = RegisterForm()
+    if register_form.validate_on_submit():
+        user = _create_user_from_form(register_form)
+        if user:
+            login_user(user)
+            flash("Account created. Start planning your week!", "success")
+            return redirect(url_for("main.timetable"))
 
-        if not full_name or not email or not password:
-            flash("Full name, email and password are required.")
-            return redirect(url_for("auth.register"))
+    return render_template("auth/register.html", register_form=register_form)
 
-        if password != confirm_password:
-            flash("Passwords do not match.")
-            return redirect(url_for("auth.register"))
 
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
-            flash("An account with this email already exists.")
-            return redirect(url_for("auth.register"))
+@auth_bp.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    """Demo password-reset page.
 
-        user = User(full_name=full_name, email=email, uwa_id=uwa_id, program=program, avatar_colour="purple")
-        user.set_password(password)
-        db.session.add(user)
-        db.session.commit()
+    In a production app this would email a secure reset token. For this
+    university project demo it records the request and shows safe next steps
+    without exposing whether the email exists.
+    """
+    if current_user.is_authenticated:
+        return redirect(url_for("main.timetable"))
 
-        flash("Account created successfully. You can now login.")
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        flash("Demo mode: if that student email exists, a production app would send a reset link. In this project build, please contact the project owner to reset access manually.", "info")
         return redirect(url_for("auth.login"))
-
-    return render_template_string("""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Register - StudySync</title>
-        <style>
-            body { font-family: Arial; background:#0f172a; color:white; padding:40px; }
-            .card { max-width:480px; background:#111827; padding:28px; border-radius:16px; border:1px solid #243047; }
-            label { display:block; margin-top:14px; color:#bfdbfe; }
-            input { width:100%; padding:12px; margin-top:6px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:white; }
-            button { margin-top:20px; width:100%; padding:12px; border:0; border-radius:8px; background:#6366f1; color:white; font-weight:bold; cursor:pointer; }
-            a { color:#93c5fd; }
-            .message { background:#1e293b; padding:10px; border-radius:8px; margin-bottom:12px; }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h1>Create StudySync Account</h1>
-
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="message">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <form method="POST">
-                <label>Full name</label>
-                <input type="text" name="full_name" required>
-
-                <label>Email address</label>
-                <input type="email" name="email" required>
-
-                <label>UWA student ID</label>
-                <input type="text" name="uwa_id">
-
-                <label>Program</label>
-                <input type="text" name="program">
-
-                <label>Password</label>
-                <input type="password" name="password" required>
-
-                <label>Confirm password</label>
-                <input type="password" name="confirm_password" required>
-
-                <button type="submit">Create Account</button>
-            </form>
-
-            <p><a href="/login">Already have an account?</a> | <a href="/">Back home</a></p>
-        </div>
-    </body>
-    </html>
-    """)
+    return render_template("auth/forgot_password.html", form=form)
 
 
 @auth_bp.route("/logout", methods=["GET", "POST"])
 @login_required
 def logout():
-    if request.method == "POST":
+    """Logout confirmation page.
+
+    GET shows a proper logout page. POST performs the logout using a CSRF-
+    protected form, which avoids logging users out through a plain link.
+    """
+    logout_form = LogoutForm()
+    if logout_form.validate_on_submit():
         logout_user()
+        flash("You have been logged out safely.", "info")
         return redirect(url_for("auth.login"))
 
-    return render_template_string("""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Logout - StudySync</title>
-        <style>
-            body { font-family: Arial; background:#0f172a; color:white; padding:40px; }
-            .card { max-width:420px; background:#111827; padding:28px; border-radius:16px; border:1px solid #243047; }
-            button { padding:12px 18px; border:0; border-radius:8px; background:#ef4444; color:white; font-weight:bold; cursor:pointer; }
-            a { color:#93c5fd; margin-left:12px; }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h1>Logout</h1>
-            <p>Are you sure you want to logout?</p>
-            <form method="POST">
-                <button type="submit">Yes, logout</button>
-                <a href="/dashboard">Cancel</a>
-            </form>
-        </div>
-    </body>
-    </html>
-    """)
+    return render_template("auth/logout.html", logout_form=logout_form)
